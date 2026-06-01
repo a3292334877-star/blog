@@ -1,0 +1,32 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "海平的博客 - VitePress + Sakura 🌸",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.18.2",
+    "@nolebase/vitepress-plugin-git-changelog": "^2.18.2",
+    "@nolebase/vitepress-plugin-inline-link-preview": "^2.18.2",
+    "markdown-it-mathjax3": "^4.3.2",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-comment-with-giscus": "^1.1.15",
+    "vitepress-plugin-group-icons": "^1.7.5",
+    "vitepress-plugin-lightbox": "^1.0.3",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vitepress-plugin-rss": "^0.4.4",
+    "vitepress-plugin-tabs": "^0.9.0",
+    "vitepress-theme-sakura": "^0.5.1"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.100.0"
+  }
+}
