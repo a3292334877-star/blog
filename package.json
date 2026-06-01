@@ -2,14 +2,14 @@
   "name": "blog",
   "version": "1.0.0",
   "type": "module",
-  "description": "海平的博客 - VitePress",
+  "description": "Sakikoの博客 - VitePress",
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
   "keywords": [],
-  "author": "谭海平",
+  "author": "Sakiko",
   "license": "MIT",
   "dependencies": {
     "gray-matter": "^4.0.3",

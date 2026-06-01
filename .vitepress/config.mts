@@ -4,14 +4,14 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   base: '/blog/',
   lang: 'zh-CN',
-  title: '海平的博客',
+  title: 'Sakikoの博客',
   description: '一个热爱ACGN的程序员小窝',
 
   head: [
     ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#fe9600' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: '海平的博客' }],
+    ['meta', { property: 'og:title', content: 'Sakikoの博客' }],
     ['meta', { property: 'og:description', content: '一个热爱ACGN的程序员小窝' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
@@ -24,7 +24,7 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: '/blog/favicon.ico',
-    siteTitle: '🌸 海平的博客',
+    siteTitle: '🌸 Sakiko',
 
     nav: [
       { text: '首页', link: '/' },
@@ -45,12 +45,12 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/TanHaiping' },
+      { icon: 'github', link: 'https://github.com/a3292334877-star' },
     ],
 
     footer: {
       message: '用 ❤️ 和 VitePress 构建',
-      copyright: '© 2026 谭海平 | 至死不渝',
+      copyright: '© 2026 Sakiko | 至死不渝',
     },
 
     // 文档页编辑链接

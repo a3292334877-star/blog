@@ -1,9 +1,9 @@
 # 关于我 👤
 
-## 谭海平
+## Sakiko
 
 - 🎂 2007.03.08，重庆出生，广东长大
-- 🏫 人工智能学院，25计应2班
+- 🏫 人工智能学院
 - 🎯 目标：升学 + Java + 编程能力提升
 
 ## 技能
@@ -22,7 +22,7 @@
 
 ## 联系
 
-- GitHub: [TanHaiping](https://github.com/TanHaiping)
+- GitHub: [Sakiko](https://github.com/a3292334877-star)
 
 ---
 
