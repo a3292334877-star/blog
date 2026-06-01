@@ -68,11 +68,23 @@ const isArticle = computed(() => {
 /* ===== 全局基础样式 ===== */
 @import './base.scss';
 
-html {
-  scroll-behavior: smooth;
+:root {
+  --global-font: "Noto Serif SC", "Microsoft YaHei", "PingFang SC", serif;
+  --color-accent: #fe9600;
+  --color-gray: #666;
+  --color-text: #02111d;
+  --color-background: #f5f5f5;
+  --color-border: #d0d7de;
+  --code-line-height: 24px;
+  --code-font-family: monospace;
+  --code-font-size: 15px;
   --sakura-pink: #ffb7c5;
   --sakura-deep: #e88a9a;
   --sakura-light: #fff0f3;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
