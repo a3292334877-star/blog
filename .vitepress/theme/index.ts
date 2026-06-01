@@ -1,10 +1,18 @@
+import DefaultTheme from 'vitepress/theme'
 import Layout from './Layout.vue'
-import './styles/vars.css'
-import './styles/base.css'
-import './styles/markdown.css'
+import HomeHero from './components/HomeHero.vue'
+import BlogList from './components/BlogList.vue'
+import BlogTimeline from './components/BlogTimeline.vue'
+import TagCloud from './components/TagCloud.vue'
+import './custom.css'
 
 export default {
+  extends: DefaultTheme,
   Layout,
-  NotFound: () => '404 - 页面找不到了呢~ 🍂',
-  enhanceApp({ app, router, siteData }) {},
+  enhanceApp({ app }) {
+    app.component('HomeHero', HomeHero)
+    app.component('BlogList', BlogList)
+    app.component('BlogTimeline', BlogTimeline)
+    app.component('TagCloud', TagCloud)
+  },
 }

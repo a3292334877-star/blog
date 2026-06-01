@@ -2,16 +2,4 @@
 layout: home
 ---
 
-# 海平的博客 🌸
-
-> 一个热爱ACGN与编程的小窝
-
-欢迎来到我的博客！这里记录我的学习笔记、技术分享和生活感悟。
-
----
-
-### 🚀 快速导航
-
-- [📝 所有文章](/posts/)
-- [🏷️ 按标签浏览](/tags/)
-- [👤 关于我](/about/)
+<!-- HomeHero + BlogList + BlogTimeline 通过 home-hero-before / home-hero-after 插槽注入 -->

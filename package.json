@@ -2,7 +2,7 @@
   "name": "blog",
   "version": "1.0.0",
   "type": "module",
-  "description": "海平的博客 - VitePress + Sakura 🌸",
+  "description": "海平的博客 - VitePress",
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
@@ -14,9 +14,7 @@
   "dependencies": {
     "gray-matter": "^4.0.3",
     "markdown-it-mathjax3": "^4.3.2",
-    "vitepress": "^1.6.4",
-    "vitepress-plugin-group-icons": "^1.7.5",
-    "vitepress-plugin-tabs": "^0.9.0"
+    "vitepress": "^1.6.4"
   },
   "devDependencies": {
     "sass-embedded": "^1.100.0"

@@ -1,96 +1,59 @@
 <template>
-  <!-- 阅读进度条 (文章页) -->
-  <ReadingProgress v-if="frontmatter.layout === 'article'" />
-
-  <!-- 樱花飘落背景 (首页) -->
-  <SakuraDrop v-if="frontmatter.layout === 'home'" :count="15" />
-
-  <!-- 自定义导航栏 -->
-  <CustomNav />
-
-  <main>
-    <!-- 首页: Hero + 文章列表 + 时间线 -->
-    <template v-if="frontmatter.layout === 'home'">
-      <HeroBanner />
-      <BlogList :posts="posts" />
-      <Timeline />
+  <DefaultTheme.Layout>
+    <template #layout-top>
+      <SakuraPetals />
     </template>
 
-    <!-- 标签页 -->
-    <TagPage v-else-if="frontmatter.layout === 'tags'" />
+    <template #home-hero-before>
+      <HomeHero />
+    </template>
 
-    <!-- 文章页 -->
-    <ArticlePage v-else-if="frontmatter.layout === 'article'" />
+    <template #home-hero-after>
+      <BlogList />
+      <BlogTimeline />
+    </template>
 
-    <!-- 其他页面 (about, posts/index 等) -->
-    <div v-else class="page-wrapper">
-      <Content class="markdown-body" />
-    </div>
-  </main>
-
-  <!-- 自定义页脚 -->
-  <CustomFooter />
-
-  <!-- 回到顶部 -->
-  <BackToTop />
+    <template #doc-before>
+      <div class="doc-banner" :style="docBannerStyle" v-if="docBannerStyle">
+        <h1 class="doc-title">{{ frontmatter.title }}</h1>
+        <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
+          <span v-if="frontmatter.date" class="doc-date">{{ formatDate(frontmatter.date) }}</span>
+          <span v-if="frontmatter.tags" class="doc-tags">
+            <a v-for="t in frontmatter.tags" :key="t" :href="`/blog/tags/?q=${t}`">{{ t }}</a>
+          </span>
+        </div>
+      </div>
+    </template>
+  </DefaultTheme.Layout>
 </template>
 
 <script setup lang="ts">
+import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
-import { data as posts } from '../posts.data.mjs'
-
-// 组件导入
+import { computed } from 'vue'
+import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
-import CustomNav from './components/CustomNav.vue'
-import CustomFooter from './components/CustomFooter.vue'
-import HeroBanner from './components/HeroBanner.vue'
-import ArticlePage from './components/ArticlePage.vue'
-import TagPage from './components/TagPage.vue'
-import Timeline from './components/Timeline.vue'
-import BackToTop from './components/BackToTop.vue'
-import ReadingProgress from './components/ReadingProgress.vue'
-import SakuraDrop from './components/SakuraDrop.vue'
+import BlogTimeline from './components/BlogTimeline.vue'
+import SakuraPetals from './components/SakuraPetals.vue'
 
-const { frontmatter } = useData()
-</script>
+const { frontmatter, page } = useData()
 
-<style lang="scss">
-/* ===== 暗黑模式覆盖 ===== */
-html.dark {
-  --color-text: #e0e0e0;
-  --color-background: #1a1a1a;
-  --color-gray: #999;
-  --color-border: #333;
-
-  body {
-    background: var(--color-background);
-    color: var(--color-text);
+// 文章页顶部横幅样式
+const docBannerStyle = computed(() => {
+  if (!frontmatter.value.title) return ''
+  const cover = frontmatter.value.cover
+  if (cover) {
+    return `background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url(${cover}); background-size: cover; background-position: center;`
   }
+  return 'background: linear-gradient(135deg, var(--sakura-pink), var(--sakura-warm));'
+})
 
-  .markdown-body {
-    color: var(--color-text);
-
-    blockquote {
-      background: rgba(255, 183, 197, 0.08);
-      color: #aaa;
-    }
-
-    code {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    table th {
-      background: rgba(255, 183, 197, 0.1);
-    }
-
-    a {
-      color: var(--color-accent);
-    }
-  }
-
-  ::selection {
-    background: rgba(255, 183, 197, 0.2);
-    color: #fff;
-  }
+function formatDate(d: string | Date): string {
+  if (!d) return ''
+  return new Date(d).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 }
-</style>
+</script>

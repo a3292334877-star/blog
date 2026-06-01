@@ -1,144 +1,117 @@
 <template>
-  <div class="bloglist">
-    <div class="section">
-      📖 文章列表
-      <hr />
-    </div>
-    <article class="card blog-item" v-for="p in posts" :key="p.href">
-      <div class="info">
-        <div class="date">
-          🕐 发布于 {{ formatDate(p.create) }}
-        </div>
-        <a :href="base + p.href">
-          <div class="title">{{ p.title }}</div>
-        </a>
-        <div class="content" v-html="p.excerpt"></div>
-        <div v-if="click" class="tags">
-          <a v-for="t in p.tags" :key="t" href="#" @click.prevent="click(t)">
-            🏷️ {{ t }}
-          </a>
-        </div>
-        <div v-else class="tags">
-          <a v-for="t in p.tags" :key="t" :href="`${base}tags/?q=${t}`">
-            🏷️ {{ t }}
-          </a>
+  <section class="blog-list-section">
+    <h2 class="section-heading">
+      <span class="icon">📖</span> 文章列表
+    </h2>
+
+    <article
+      v-for="p in posts"
+      :key="p.href"
+      class="post-card"
+    >
+      <div class="card-body">
+        <time class="card-date">{{ fmtDate(p.create) }}</time>
+        <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
+        <div class="card-excerpt" v-html="p.excerpt"></div>
+        <div class="card-tags" v-if="p.tags?.length">
+          <a
+            v-for="t in p.tags"
+            :key="t"
+            :href="withBase(`tags/?q=${t}`)"
+            class="card-tag"
+          >🏷️ {{ t }}</a>
         </div>
       </div>
     </article>
-  </div>
+
+    <div v-if="!posts.length" class="empty">还没有文章~</div>
+  </section>
 </template>
 
 <script setup lang="ts">
 import { useData } from 'vitepress'
+import { data as posts } from '../../posts.data.mjs'
 
-interface PostData {
-  title: string
-  href: string
-  create: number
-  update: number
-  tags?: string[]
-  cover?: string
-  excerpt: string
+const { site } = useData()
+const base = site.value.base
+
+function withBase(p: string) {
+  return base + p.replace(/^\//, '')
 }
 
-const base = useData().site.value.base
-
-const { posts, click = null } = defineProps<{
-  posts: PostData[]
-  click?: ((tag: string) => void) | null
-}>()
-
-function formatDate(ts: number): string {
+function fmtDate(ts: number) {
   return new Date(ts).toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: 'numeric', month: 'long', day: 'numeric',
   })
 }
 </script>
 
-<style lang="scss" scoped>
-.bloglist {
+<style scoped>
+.blog-list-section {
   max-width: 800px;
-  margin: auto;
-  padding: 0 24px;
-
-  .section {
-    padding-top: 24px;
-    font-size: 20px;
-    font-weight: 600;
-  }
-
-  .date {
-    font-size: 14px;
-    color: var(--color-gray);
-    margin-bottom: 8px;
-  }
-
-  .tags {
-    margin-top: 12px;
-    font-size: 14px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-
-    a {
-      color: var(--color-gray);
-      transition: color 0.2s ease-out;
-
-      &:hover {
-        color: var(--color-accent);
-      }
-    }
-  }
-
-  .card {
-    color: var(--color-gray);
-    margin: 20px 0;
-    padding: 24px;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    html.dark & {
-      background: #1e1e1e;
-    }
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(254, 150, 0, 0.15);
-    }
-  }
-
-  .title {
-    color: #333;
-    font-size: 24px;
-    margin: 20px 0;
-    transition: color 0.2s ease-out;
-
-    html.dark & {
-      color: #e0e0e0;
-    }
-
-    &:hover {
-      color: var(--color-accent);
-    }
-  }
+  margin: 0 auto;
+  padding: 48px 24px;
 }
 
-@media (max-width: 720px) {
-  .bloglist {
-    .card {
-      margin: 0;
-      border-radius: 0;
-      box-shadow: none;
+.section-heading {
+  font-size: 22px;
+  margin-bottom: 28px;
+}
 
-      &:hover {
-        box-shadow: none;
-        transform: none;
-      }
-    }
-  }
+.post-card {
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(254,150,0,0.15);
+  border-color: var(--sakura-pink);
+}
+
+.card-date {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+.card-title {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 10px 0;
+  color: var(--vp-c-text-1);
+  transition: color 0.2s;
+}
+.card-title:hover { color: var(--accent-color); }
+
+.card-excerpt {
+  font-size: 15px;
+  color: var(--vp-c-text-2);
+  line-height: 1.7;
+}
+.card-excerpt :deep(p) { margin: 0; }
+
+.card-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.card-tag {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  transition: color 0.2s;
+}
+.card-tag:hover { color: var(--accent-color); }
+
+.empty {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--vp-c-text-3);
 }
 </style>
