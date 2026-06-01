@@ -70,6 +70,7 @@ export default defineConfig({
   },
 
   // ==================== 构建配置 ====================
+  base: '/blog/',
   srcDir: '.',
   outDir: '.vitepress/dist',
   cleanUrls: true,
