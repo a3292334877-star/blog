@@ -1,8 +1,4 @@
 import { defineConfig } from 'vitepress'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   // ==================== 站点元数据 ====================
@@ -14,21 +10,30 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#fe9600' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: '海平的博客' }],
+    ['meta', { property: 'og:description', content: '一个热爱ACGN的程序员小窝 🌸' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap' }],
   ],
 
+  // ==================== 外观 ====================
+  appearance: true,  // 使用 VitePress 原生暗黑模式
+
+  // ==================== 搜索 ====================
+  search: {
+    provider: 'local',
+  },
+
   // ==================== 主题配置 ====================
   themeConfig: {
-    // Sakura 覆盖配置
+    // 博客自定义数据 (被组件使用)
     hello: 'Hello, 海平 🌸',
     motto: '至死不渝地追逐清华梦 🩷',
     name: '谭海平',
     cover: '',
-    social: [
-      { icon: 'fa-github', url: 'https://github.com/TanHaiping' },
-    ],
 
     nav: [
       { text: '🏠 首页', link: '/' },
@@ -40,7 +45,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/TanHaiping' },
     ],
     footer: {
-      message: '用 ❤️ 和 VitePress + Sakura 构建',
+      message: '用 ❤️ 和 VitePress 构建',
       copyright: `© ${new Date().getFullYear()} 谭海平 | 至死不渝 🩷`,
     },
   },
@@ -61,34 +66,6 @@ export default defineConfig({
       // 分组图标
       const groupIcons = await import('vitepress-plugin-group-icons')
       md.use(groupIcons.groupIconMdPlugin)
-    },
-  },
-
-  // ==================== Vite 配置 ====================
-  vite: {
-    resolve: {
-      alias: {
-        // 主题路径别名
-        'sakura-posts-data': path.resolve(
-          __dirname,
-          'posts.data.mjs'
-        ),
-        'vitepress-theme-sakura/BlogList.vue': path.resolve(
-          __dirname,
-          '../node_modules/vitepress-theme-sakura/.vitepress/theme/BlogList.vue'
-        ),
-        'vitepress-theme-sakura/GlitchText.vue': path.resolve(
-          __dirname,
-          '../node_modules/vitepress-theme-sakura/.vitepress/theme/GlitchText.vue'
-        ),
-        'vitepress-theme-sakura/ToTop.vue': path.resolve(
-          __dirname,
-          '../node_modules/vitepress-theme-sakura/.vitepress/theme/ToTop.vue'
-        ),
-      },
-    },
-    ssr: {
-      noExternal: ['vitepress-theme-sakura'],
     },
   },
 

@@ -3,6 +3,7 @@ title: 你好，世界
 date: 2026-06-01
 tags: [生活, 博客]
 cover: https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800
+layout: article
 ---
 
 # 你好，世界 🌸

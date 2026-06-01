@@ -1,70 +1,61 @@
-// from https://github.com/vuejs/blog
+/**
+ * 文章数据加载器
+ * 扫描 posts/ 目录，解析 frontmatter，提供文章列表数据
+ */
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
-import { fileURLToPath } from 'url';
 import { createMarkdownRenderer } from 'vitepress'
 
+/** @typedef {object} PostData */
+/** @typedef {PostData[]} Posts */
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const cwd = process.cwd()
+const cache = new Map()
 
 export default {
-  watch: path.relative(__dirname, cwd + '/posts/*.md').replace(/\\/g, '/'),
+  watch: 'posts/*.md',
   async load(asFeed = false) {
+    const cwd = process.cwd()
     const md = await createMarkdownRenderer(cwd)
     const postDir = path.join(cwd, 'posts')
-    checkTags()
+
     return fs
       .readdirSync(postDir)
       .filter((file) => file.endsWith('.md'))
       .map((file) => getPost(md, file, postDir, asFeed))
+      .filter(Boolean)
       .sort((a, b) => b.create - a.create)
-  }
+  },
 }
 
-const cache = new Map()
-
 function getPost(md, file, postDir, asFeed = false) {
-  const fullePath = path.join(postDir, file)
-  const timestamp = Math.floor(fs.statSync(fullePath).mtimeMs)
+  const fullPath = path.join(postDir, file)
+  const timestamp = Math.floor(fs.statSync(fullPath).mtimeMs)
 
-  const cached = cache.get(fullePath)
+  const cached = cache.get(fullPath)
   if (cached && timestamp === cached.timestamp) {
     return cached.post
   }
 
-  const src = fs.readFileSync(fullePath, 'utf-8')
+  const src = fs.readFileSync(fullPath, 'utf-8')
   const { data, excerpt } = matter(src, { excerpt: true })
+
+  // 跳过分页索引文件
+  if (!data.title) return null
 
   const post = {
     title: data.title,
     href: `posts/${file.replace(/\.md$/, '.html')}`,
     create: +new Date(data.date) || timestamp,
     update: timestamp,
-    tags: data.tags,
-    cover: data.cover,
-    excerpt: md.render(excerpt)
+    tags: data.tags || [],
+    cover: data.cover || '',
+    excerpt: md.render(excerpt || ''),
   }
   if (asFeed) {
-    // only attach these when building the RSS feed to avoid bloating the
-    // client bundle size
     post.data = data
   }
 
-  cache.set(fullePath, {
-    timestamp,
-    post
-  })
+  cache.set(fullPath, { timestamp, post })
   return post
-}
-
-function checkTags() {
-  const dir = path.join(cwd, 'tags')
-  if (!fs.existsSync(dir)) {
-    console.log('Creating page: /tags')
-    fs.mkdirSync(dir)
-    fs.writeFileSync('tags/index.md', '---\ntitle: 标签\n---\n')
-  }
 }

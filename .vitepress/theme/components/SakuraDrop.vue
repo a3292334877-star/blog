@@ -1,10 +1,10 @@
 <template>
   <div class="sakura-drop" aria-hidden="true">
     <svg
-      v-for="i in count"
-      :key="i"
+      v-for="p in petals"
+      :key="p.i"
       class="sakura-petal-svg"
-      :style="petalStyle(i)"
+      :style="p.style"
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -14,29 +14,32 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
-  count?: number
-}>(), {
-  count: 12,
-})
+import { ref, onMounted } from 'vue'
 
-function petalStyle(i: number) {
-  const left = Math.random() * 100
-  const delay = Math.random() * 15
-  const duration = 10 + Math.random() * 15
-  const size = 10 + Math.random() * 14
-  const opacity = 0.15 + Math.random() * 0.3
-  const hue = 340 + Math.random() * 20 // 粉色系
-  return {
-    left: `${left}%`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
-    width: `${size}px`,
-    height: `${size}px`,
-    opacity,
-    color: `hsl(${hue}, 70%, 70%)`,
-  }
+const props = withDefaults(defineProps<{ count?: number }>(), { count: 12 })
+
+interface PetalData {
+  i: number
+  style: Record<string, string>
 }
+
+// SSR安全: 客户端才生成随机位置
+const petals = ref<PetalData[]>([])
+
+onMounted(() => {
+  petals.value = Array.from({ length: props.count }, (_, i) => ({
+    i,
+    style: {
+      left: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 15}s`,
+      animationDuration: `${10 + Math.random() * 15}s`,
+      width: `${10 + Math.random() * 14}px`,
+      height: `${10 + Math.random() * 14}px`,
+      opacity: String(0.15 + Math.random() * 0.3),
+      color: `hsl(${340 + Math.random() * 20}, 70%, 70%)`,
+    },
+  }))
+})
 </script>
 
 <style lang="scss" scoped>
@@ -60,12 +63,8 @@ function petalStyle(i: number) {
     transform: translateY(-30px) rotate(0deg) translateX(0);
     opacity: 0;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 0.6;
-  }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
   100% {
     transform: translateY(105vh) rotate(540deg) translateX(80px);
     opacity: 0;

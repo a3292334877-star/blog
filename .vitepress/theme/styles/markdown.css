@@ -1,0 +1,98 @@
+/* ========== Markdown 内容样式 ========== */
+.markdown-body {
+  color: var(--color-text);
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.markdown-body h1 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.markdown-body h2 {
+  font-size: 24px;
+  margin-top: 36px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.markdown-body h3 {
+  font-size: 20px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.markdown-body p {
+  margin-bottom: 16px;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.markdown-body li {
+  margin-bottom: 6px;
+}
+
+.markdown-body a {
+  color: #e58700;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.markdown-body a:hover {
+  color: var(--color-accent);
+}
+
+.markdown-body blockquote {
+  margin: 16px 0;
+  padding: 12px 20px;
+  border-left: 4px solid var(--sakura-pink);
+  background: var(--sakura-light);
+  border-radius: 0 8px 8px 0;
+  color: #666;
+}
+
+.markdown-body code {
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 2px 6px;
+  background: rgba(27, 31, 35, 0.05);
+}
+
+.markdown-body pre {
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.markdown-body th {
+  background: var(--sakura-light);
+  font-weight: 600;
+}
+
+.markdown-body tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.markdown-body img {
+  border-radius: 12px;
+  max-width: 100%;
+}

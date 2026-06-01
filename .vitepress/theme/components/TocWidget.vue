@@ -17,7 +17,9 @@
 
     <!-- 回到顶部 -->
     <button class="back-to-top" @click="scrollToTop" title="回到顶部">
-      <i class="fa fa-arrow-up"></i>
+      <svg class="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
     </button>
   </div>
 </template>
@@ -101,7 +103,9 @@ function scrollToTop() {
 }
 
 .back-to-top {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   margin-top: 16px;
   padding: 8px;
@@ -116,5 +120,10 @@ function scrollToTop() {
     color: var(--color-accent);
     border-color: var(--color-accent);
   }
+}
+
+.arrow-up {
+  width: 18px;
+  height: 18px;
 }
 </style>

@@ -21,14 +21,14 @@
       </div>
     </section>
 
-    <!-- 按选中标签筛选的文章 -->
+    <!-- 按选中标签筛选 -->
     <BlogList
       v-if="activeTag"
       :posts="tagMap[activeTag]"
       :click="selectTag"
     />
 
-    <!-- 未选中标签: 显示全部分组 -->
+    <!-- 全部分组 -->
     <template v-else>
       <div v-for="(tagPosts, tag) in tagMap" :key="tag" class="tag-section">
         <h2 class="tag-section-title">
@@ -54,15 +54,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useData } from 'vitepress'
-import { data as posts, type PostData } from 'sakura-posts-data'
-import BlogList from 'vitepress-theme-sakura/BlogList.vue'
+import { data as posts } from '../../posts.data.mjs'
+import BlogList from './BlogList.vue'
 
 const base = useData().site.value.base
 const activeTag = ref<string | null>(null)
 
 // 构建标签->文章映射
 const tagMap = computed(() => {
-  const map: Record<string, PostData[]> = {}
+  const map: Record<string, any[]> = {}
   for (const post of posts) {
     if (!post.tags) continue
     for (const tag of post.tags) {
@@ -78,7 +78,8 @@ function selectTag(tag: string) {
 }
 
 function tagStyle(count: number) {
-  const max = Math.max(...Object.values(tagMap.value).map(a => a.length))
+  const lengths = Object.values(tagMap.value).map((a: any) => a.length)
+  const max = Math.max(...lengths)
   const scale = 0.8 + (count / max) * 0.5
   return { fontSize: `${scale}rem` }
 }
@@ -135,6 +136,10 @@ function formatDate(ts: number): string {
   transition: all 0.2s;
   user-select: none;
 
+  html.dark & {
+    background: #1e1e1e;
+  }
+
   &:hover {
     color: var(--color-accent);
     border-color: var(--color-accent);
@@ -160,7 +165,6 @@ function formatDate(ts: number): string {
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* 按标签分组 */
 .tag-section {
   margin-bottom: 36px;
 }

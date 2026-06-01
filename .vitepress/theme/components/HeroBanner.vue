@@ -5,7 +5,7 @@
       <div class="hero-overlay"></div>
       <!-- 浮动樱花粒子 -->
       <div class="sakura-particles" aria-hidden="true">
-        <span v-for="i in 20" :key="i" class="petal" :style="petalStyle(i)"></span>
+        <span v-for="p in petals" :key="p.i" class="petal" :style="p.style"></span>
       </div>
     </div>
 
@@ -16,16 +16,15 @@
 
       <!-- 副标题卡片 -->
       <div class="hero-card">
-        <!-- 打字机效果 -->
         <p class="hero-motto">
-          <i class="fa fa-quote-left"></i>
+          <span class="quote-mark">"</span>
           <TypeWriter
             :texts="mottos"
             :typingSpeed="100"
             :deleteSpeed="50"
             :pauseDuration="2000"
           />
-          <i class="fa fa-quote-right"></i>
+          <span class="quote-mark">"</span>
         </p>
 
         <!-- 状态标签行 -->
@@ -47,7 +46,9 @@
             :aria-label="s.name"
             class="hero-social-link"
           >
-            <i :class="s.iconClass"></i>
+            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
             <span>{{ s.name }}</span>
           </a>
         </div>
@@ -56,15 +57,16 @@
       <!-- 向下滚动提示 -->
       <div class="scroll-hint" @click="scrollDown">
         <span>往下看</span>
-        <i class="fa fa-chevron-down bounce"></i>
+        <svg class="chevron bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useData } from 'vitepress'
-import GlitchText from 'vitepress-theme-sakura/GlitchText.vue'
+import GlitchText from './GlitchText.vue'
 import TypeWriter from './TypeWriter.vue'
 
 const { theme } = useData()
@@ -86,24 +88,25 @@ const tags = [
 ]
 
 const socials = [
-  { name: 'GitHub', url: 'https://github.com/TanHaiping', iconClass: 'fab fa-github' },
+  { name: 'GitHub', url: 'https://github.com/TanHaiping' },
 ]
 
-function petalStyle(i: number) {
-  const left = Math.random() * 100
-  const delay = Math.random() * 10
-  const duration = 8 + Math.random() * 12
-  const size = 8 + Math.random() * 16
-  const opacity = 0.3 + Math.random() * 0.5
-  return {
-    left: `${left}%`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
-    width: `${size}px`,
-    height: `${size}px`,
-    opacity,
-  }
-}
+// SSR安全: 客户端生成随机花瓣位置
+const petals = ref<Array<{ i: number; style: Record<string, string> }>>([])
+
+onMounted(() => {
+  petals.value = Array.from({ length: 20 }, (_, i) => ({
+    i,
+    style: {
+      left: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 10}s`,
+      animationDuration: `${8 + Math.random() * 12}s`,
+      width: `${8 + Math.random() * 16}px`,
+      height: `${8 + Math.random() * 16}px`,
+      opacity: String(0.3 + Math.random() * 0.5),
+    },
+  }))
+})
 
 function scrollDown() {
   window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
@@ -158,9 +161,7 @@ function scrollDown() {
     transform: translateY(-20px) rotate(0deg) scale(1);
     opacity: 1;
   }
-  80% {
-    opacity: 0.6;
-  }
+  80% { opacity: 0.6; }
   100% {
     transform: translateY(105vh) rotate(720deg) scale(0.3);
     opacity: 0;
@@ -200,8 +201,10 @@ function scrollDown() {
   margin-bottom: 20px;
   min-height: 54px;
 
-  .fa-quote-left { margin-right: 6px; color: var(--sakura-deep); }
-  .fa-quote-right { margin-left: 6px; color: var(--sakura-deep); }
+  .quote-mark {
+    color: var(--sakura-deep);
+    font-size: 18px;
+  }
 }
 
 .hero-tags {
@@ -256,6 +259,11 @@ function scrollDown() {
   }
 }
 
+.social-svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* 向下滚动 */
 .scroll-hint {
   position: absolute;
@@ -271,9 +279,13 @@ function scrollDown() {
 
   &:hover { color: rgba(0, 0, 0, 0.6); }
 
+  .chevron {
+    width: 24px;
+    height: 24px;
+  }
+
   .bounce {
     animation: bounce-down 2s infinite;
-    font-size: 18px;
   }
 }
 
@@ -288,9 +300,6 @@ function scrollDown() {
     padding: 24px 20px;
     margin: 16px 16px 0;
   }
-
-  .hero-motto {
-    font-size: 14px;
-  }
+  .hero-motto { font-size: 14px; }
 }
 </style>

@@ -43,13 +43,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useData } from 'vitepress'
-import { data as posts, type PostData } from 'sakura-posts-data'
+import { data as posts } from '../../posts.data.mjs'
 
 const base = useData().site.value.base
 
 // 按年份分组
 const groupedPosts = computed(() => {
-  const map: Record<string, PostData[]> = {}
+  const map: Record<string, any[]> = {}
   for (const post of posts) {
     const year = new Date(post.create).getFullYear().toString()
     if (!map[year]) map[year] = []
