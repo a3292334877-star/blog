@@ -38,7 +38,7 @@ function getPost(md, file, postDir, asFeed = false) {
   }
 
   const src = fs.readFileSync(fullPath, 'utf-8')
-  const { data, excerpt } = matter(src, { excerpt: true })
+  const { data, excerpt } = matter(src, { excerpt: true, excerpt_separator: '<!-- more -->' })
 
   // 跳过分页索引文件
   if (!data.title) return null

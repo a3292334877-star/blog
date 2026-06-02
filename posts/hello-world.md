@@ -9,6 +9,8 @@ cover: https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800
 
 这是我的第一篇博客文章！
 
+<!-- more -->
+
 ## 关于这个博客
 
 使用了 VitePress 构建，樱花风格的静态博客。

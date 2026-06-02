@@ -9,6 +9,8 @@ cover: https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=800
 
 Git 是程序员最常用的版本控制工具。这篇笔记整理了日常高频命令和一些实用技巧。
 
+<!-- more -->
+
 ## 基础配置
 
 装好 Git 后先配置身份信息：

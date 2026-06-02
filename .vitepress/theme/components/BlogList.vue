@@ -13,6 +13,7 @@
         <time class="card-date">{{ fmtDate(p.create) }}</time>
         <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
         <div class="card-excerpt" v-html="p.excerpt"></div>
+        <a :href="withBase(p.href)" class="card-more">阅读全文 →</a>
         <div class="card-tags" v-if="p.tags?.length">
           <a
             v-for="t in p.tags"
@@ -94,6 +95,16 @@ function fmtDate(ts: number) {
   line-height: 1.7;
 }
 .card-excerpt :deep(p) { margin: 0; }
+
+.card-more {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--accent-color);
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.card-more:hover { opacity: 0.7; }
 
 .card-tags {
   display: flex;
