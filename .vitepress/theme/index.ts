@@ -4,6 +4,7 @@ import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
 import BlogTimeline from './components/BlogTimeline.vue'
 import TagCloud from './components/TagCloud.vue'
+import SiteStats from './components/SiteStats.vue'
 import './custom.css'
 
 export default {
@@ -14,5 +15,6 @@ export default {
     app.component('BlogList', BlogList)
     app.component('BlogTimeline', BlogTimeline)
     app.component('TagCloud', TagCloud)
+    app.component('SiteStats', SiteStats)
   },
 }

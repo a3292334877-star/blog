@@ -11,6 +11,7 @@
     <template #home-hero-after>
       <BlogList />
       <BlogTimeline />
+      <SiteStats />
     </template>
 
     <template #doc-before>
