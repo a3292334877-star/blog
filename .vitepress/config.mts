@@ -31,6 +31,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '文章', link: '/posts/' },
       { text: '标签', link: '/tags/' },
+      { text: '项目', link: '/projects/' },
       { text: '关于', link: '/about/' },
     ],
 
