@@ -9,9 +9,9 @@
         v-for="(count, tag) in tagMap"
         :key="tag"
         :class="['tag', { active: active === tag }]"
-        :style="{ fontSize: 0.8 + (count / maxCount) * 0.5 + 'rem' }"
+        :style="{ fontSize: 0.8 + (count.length / maxCount) * 0.5 + 'rem' }"
         @click="select(tag)"
-      >{{ tag }} <span class="n">{{ count }}</span></button>
+      >{{ tag }} <span class="n">{{ count.length }}</span></button>
     </div>
 
     <!-- 筛选文章 -->
