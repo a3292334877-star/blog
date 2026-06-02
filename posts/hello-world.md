@@ -7,7 +7,7 @@ cover: https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800
 
 # 你好，世界 🌸
 
-这是我的第一篇博客文章！
+这是我的第一篇博客文章！请多多指教！未来我还会写更多文章
 
 <!-- more -->
 
