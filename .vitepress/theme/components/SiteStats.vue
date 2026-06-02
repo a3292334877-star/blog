@@ -5,18 +5,20 @@
     </h2>
 
     <div class="stats-grid">
-      <!-- 来访人数 / 访问次数 (不蒜子) -->
+      <!-- 来访人数 / 访问次数 -->
       <div class="stat-card">
         <div class="stat-label">👥 来访人数</div>
         <div class="stat-value">
-          <span id="busuanzi_value_site_uv">-</span>
+          <template v-if="uv !== null">{{ fmtNum(uv) }}</template>
+          <template v-else>-</template>
           <span class="stat-unit">人次</span>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-label">👁️ 访问次数</div>
         <div class="stat-value">
-          <span id="busuanzi_value_site_pv">-</span>
+          <template v-if="pv !== null">{{ fmtNum(pv) }}</template>
+          <template v-else>-</template>
           <span class="stat-unit">次</span>
         </div>
       </div>
@@ -70,6 +72,9 @@
 
 <script setup lang="ts">
 import { data as stats } from '../../site.data.mjs'
+import { useVisitorCounter } from '../composables/useVisitorCounter'
+
+const { uv, pv } = useVisitorCounter()
 
 function fmtNum(n: number) {
   return n.toLocaleString('zh-CN')
