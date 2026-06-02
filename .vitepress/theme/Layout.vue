@@ -1,6 +1,7 @@
 <template>
   <DefaultTheme.Layout>
     <template #layout-top>
+      <ReadingProgress />
       <SakuraPetals />
     </template>
 
@@ -25,6 +26,13 @@
         </div>
       </div>
     </template>
+    <template #doc-after>
+      <GiscusComment />
+    </template>
+
+    <template #layout-bottom>
+      <BackToTop />
+    </template>
   </DefaultTheme.Layout>
 </template>
 
@@ -36,6 +44,9 @@ import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
 import BlogTimeline from './components/BlogTimeline.vue'
 import SakuraPetals from './components/SakuraPetals.vue'
+import ReadingProgress from './components/ReadingProgress.vue'
+import BackToTop from './components/BackToTop.vue'
+import GiscusComment from './components/GiscusComment.vue'
 
 const { frontmatter, page } = useData()
 

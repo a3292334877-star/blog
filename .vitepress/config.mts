@@ -1,7 +1,8 @@
 import { defineConfig } from 'vitepress'
+import { withPwa } from '@vite-pwa/vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withPwa(defineConfig({
   base: '/blog/',
   lang: 'zh-CN',
   title: 'Sakikoの博客',
@@ -22,6 +23,11 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
 
+  // Sitemap
+  sitemap: {
+    hostname: 'https://a3292334877-star.github.io',
+  },
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: '/blog/favicon.ico',
@@ -32,6 +38,9 @@ export default defineConfig({
       { text: '文章', link: '/posts/' },
       { text: '标签', link: '/tags/' },
       { text: '项目', link: '/projects/' },
+      { text: '追番', link: '/anime/' },
+      { text: '说说', link: '/shuoshuo/' },
+      { text: '学习', link: '/learn/' },
       { text: '关于', link: '/about/' },
     ],
 
@@ -111,4 +120,26 @@ export default defineConfig({
 
   // Vite 配置
   vite: {},
+}), {
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'Sakikoの博客',
+      short_name: 'Sakiko',
+      description: '一个热爱ACGN的程序员小窝',
+      theme_color: '#fe9600',
+      background_color: '#ffffff',
+      display: 'standalone',
+      icons: [
+        {
+          src: '/blog/favicon.ico',
+          sizes: '64x64 32x32 24x24 16x16',
+          type: 'image/x-icon',
+        },
+      ],
+    },
+    workbox: {
+      globPatterns: ['**/*.{css,js,html,svg,png,ico,woff,woff2,jpg,webp}'],
+    },
+  },
 })

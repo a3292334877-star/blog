@@ -5,15 +5,17 @@
   "description": "Sakikoの博客 - VitePress",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
+    "build": "vitepress build && node .vitepress/generate-rss.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],
   "author": "Sakiko",
   "license": "MIT",
   "dependencies": {
+    "@vite-pwa/vitepress": "^1.1.0",
     "gray-matter": "^4.0.3",
     "markdown-it-mathjax3": "^4.3.2",
+    "medium-zoom": "^1.1.0",
     "vitepress": "^1.6.4"
   },
   "devDependencies": {
