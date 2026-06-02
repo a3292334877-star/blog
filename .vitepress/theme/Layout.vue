@@ -38,8 +38,9 @@
 
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
-import { useData } from 'vitepress'
-import { computed } from 'vue'
+import { useData, useRoute } from 'vitepress'
+import { computed, watch, nextTick, onMounted } from 'vue'
+import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
 import BlogTimeline from './components/BlogTimeline.vue'
@@ -48,7 +49,20 @@ import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
 import GiscusComment from './components/GiscusComment.vue'
 
-const { frontmatter, page } = useData()
+const { frontmatter } = useData()
+const route = useRoute()
+
+// Image lightbox — re-attach on route change
+onMounted(() => {
+  watch(
+    () => route.path,
+    () => nextTick(() => mediumZoom('.main img', {
+      background: 'var(--vp-c-bg)',
+      margin: 24,
+    })),
+    { immediate: true },
+  )
+})
 
 // 文章页顶部横幅样式
 const docBannerStyle = computed(() => {
