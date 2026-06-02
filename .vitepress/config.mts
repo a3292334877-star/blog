@@ -42,6 +42,7 @@ export default defineConfig({
             { text: '你好，世界', link: '/posts/hello-world' },
             { text: 'C++ 哈希 Map 应用与竞赛技巧', link: '/posts/hashmap-in-cpp' },
             { text: 'C++ 高精度算法详解与竞赛模板', link: '/posts/bigint-in-cpp' },
+            { text: '数据结构基础：从数组到并查集', link: '/posts/data-structure-basics' },
           ],
         },
       ],
