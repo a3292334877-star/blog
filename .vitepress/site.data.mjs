@@ -44,6 +44,15 @@ export default {
     const weekNew = posts.filter((p) => p.date >= weekAgo).length
     const monthNew = posts.filter((p) => p.date >= monthAgo).length
 
+    // 项目数量
+    const projectDir = path.join(cwd, 'projects')
+    let projectCount = 0
+    try {
+      projectCount = fs
+        .readdirSync(projectDir)
+        .filter((f) => f.endsWith('.md') && f !== 'index.md').length
+    } catch { /* 目录不存在时忽略 */ }
+
     return {
       totalWords,
       runDays,
@@ -51,6 +60,7 @@ export default {
       weekNew,
       monthNew,
       lastUpdate: Math.max(...posts.map((p) => p.date)),
+      projectCount,
     }
   },
 }

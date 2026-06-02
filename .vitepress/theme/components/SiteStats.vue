@@ -66,6 +66,15 @@
           <span class="stat-unit">篇</span>
         </div>
       </div>
+
+      <!-- 项目数量 -->
+      <div class="stat-card">
+        <div class="stat-label">🚀 项目数量</div>
+        <div class="stat-value">
+          {{ stats.projectCount }}
+          <span class="stat-unit">个</span>
+        </div>
+      </div>
     </div>
   </section>
 </template>
