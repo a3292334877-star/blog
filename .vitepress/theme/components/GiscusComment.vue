@@ -18,9 +18,9 @@ import { useData } from 'vitepress'
 // ============================================================
 
 const REPO = 'a3292334877-star/blog'
-const REPO_ID = ''
+const REPO_ID = 'R_kgDOStv0cA'
 const CATEGORY = 'General'
-const CATEGORY_ID = ''
+const CATEGORY_ID = 'DIC_kwDOStv0cM4C-XEc'
 
 const giscusContainer = ref<HTMLElement>()
 const { isDark, frontmatter } = useData()
