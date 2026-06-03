@@ -34,27 +34,15 @@ async function initAndPlay(): Promise<void> {
     audio.loop = true
     audio.src = MUSIC_URL
 
-    await new Promise<void>((resolve, reject) => {
-      if (!audio) return reject()
-      const onCanPlay = () => {
-        audio!.removeEventListener('canplaythrough', onCanPlay)
-        audio!.removeEventListener('error', onErr)
-        resolve()
-      }
-      const onErr = () => {
-        audio!.removeEventListener('canplaythrough', onCanPlay)
-        audio!.removeEventListener('error', onErr)
-        reject(new Error('加载失败'))
-      }
-      audio.addEventListener('canplaythrough', onCanPlay)
-      audio.addEventListener('error', onErr)
-      audio.load()
-    })
-
     audio.addEventListener('play', () => { isPlaying.value = true })
     audio.addEventListener('pause', () => { isPlaying.value = false })
     audio.addEventListener('ended', () => { isPlaying.value = false })
+    audio.addEventListener('error', () => {
+      isPlaying.value = false
+      if (audio) { audio.src = ''; audio = null }
+    })
 
+    // 直接 play()，不 await 任何东西，保持用户手势上下文
     await audio.play()
   } catch {
     console.error('BGM 加载失败')
