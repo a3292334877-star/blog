@@ -7,14 +7,6 @@
   >
     <span class="music-icon">♪</span>
   </button>
-  <audio
-    ref="audio"
-    :src="audioSrc"
-    loop
-    @play="onPlay"
-    @pause="isPlaying = false"
-    @error="onError"
-  />
 </template>
 
 <script setup lang="ts">
@@ -24,23 +16,19 @@ const MUSIC_JSON = '/blog/music.json'
 
 interface Song { name: string; artist: string; proxyUrl: string }
 
-const audio = ref<HTMLAudioElement | null>(null)
 const isPlaying = ref(false)
 const isLoading = ref(false)
-const audioSrc = ref('')
 const songName = ref('春日影')
+let audio: HTMLAudioElement | null = null
 
 const titleText = computed(() => {
   if (isLoading.value) return '加载中...'
   if (isPlaying.value) return `♪ 暂停: ${songName.value}`
-  if (audioSrc.value) return `♪ 播放: ${songName.value}`
+  if (audio) return `♪ 播放: ${songName.value}`
   return '♪ 开启音乐'
 })
 
-// 运行时动态解析 mp3 地址 → 下载为 blob → 创建本地 URL
-// 这样彻底绕过 CDN 鉴权 token 过期的问题
-async function resolveMp3(): Promise<void> {
-  if (audioSrc.value) return
+async function resolveAndPlay(): Promise<void> {
   isLoading.value = true
 
   try {
@@ -50,50 +38,67 @@ async function resolveMp3(): Promise<void> {
     const song: Song = await metaRes.json()
     songName.value = song.name
 
-    // 2. 通过代理链接获取真实 mp3（fetch 跟随重定向，下载完整文件）
-    const audioRes = await fetch(song.proxyUrl)
-    if (!audioRes.ok) throw new Error('音频加载失败')
+    // 2. 创建 audio 元素，直接用代理链接（浏览器自动跟踪302）
+    if (!audio) {
+      audio = new Audio()
+      audio.loop = true
+      audio.addEventListener('play', () => { isPlaying.value = true })
+      audio.addEventListener('pause', () => { isPlaying.value = false })
+      audio.addEventListener('ended', () => { isPlaying.value = false })
+      audio.addEventListener('error', () => {
+        isPlaying.value = false
+        isLoading.value = false
+      })
+    }
 
-    // 3. 转为 blob → 创建本地 URL（纯内存，不走 CDN 鉴权）
-    const blob = await audioRes.blob()
-    audioSrc.value = URL.createObjectURL(blob)
+    // 每次播放前设 src（代理链接每次访问给出最新CDN地址，token不会过期）
+    if (!audio.src || audio.paused) {
+      audio.src = song.proxyUrl
+    }
+
+    // 等音频加载到能播放
+    await new Promise<void>((resolve, reject) => {
+      if (!audio) return reject()
+      const onCanPlay = () => {
+        audio!.removeEventListener('canplaythrough', onCanPlay)
+        audio!.removeEventListener('error', onErr)
+        resolve()
+      }
+      const onErr = () => {
+        audio!.removeEventListener('canplaythrough', onCanPlay)
+        audio!.removeEventListener('error', onErr)
+        reject(new Error('音频加载失败'))
+      }
+      audio.addEventListener('canplaythrough', onCanPlay)
+      audio.addEventListener('error', onErr)
+      audio.load()
+    })
+
+    await audio.play()
   } catch (e) {
     console.error('BGM 加载失败:', e)
-    throw e
+    if (audio) {
+      audio.src = ''
+      audio = null
+    }
+    isPlaying.value = false
   } finally {
     isLoading.value = false
   }
 }
 
-function onPlay() {
-  isPlaying.value = true
-}
-
-function onError() {
-  isPlaying.value = false
-  // blob URL 通常在页面生命周期内不会出错，出错就释放重来
-  if (audioSrc.value) {
-    URL.revokeObjectURL(audioSrc.value)
-    audioSrc.value = ''
-  }
-}
-
 async function toggle(): Promise<void> {
-  if (!audio.value) return
-
-  // 首次点击：加载歌曲（运行时解析 → blob）
-  if (!audioSrc.value) {
-    try {
-      await resolveMp3()
-    } catch {
-      return
-    }
+  // 首次点击或出错重置后：加载并播放
+  if (!audio || !audio.src) {
+    await resolveAndPlay()
+    return
   }
 
-  if (audio.value.paused) {
-    audio.value.play().catch(() => {})
+  // 已加载：切换播放/暂停
+  if (audio.paused) {
+    audio.play().catch(() => {})
   } else {
-    audio.value.pause()
+    audio.pause()
   }
 }
 </script>
