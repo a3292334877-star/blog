@@ -22,8 +22,7 @@ import { onMounted } from 'vue'
 // ============================================================
 
 // 默认使用 CDN 模型作为占位（你有祥子模型后替换这个路径）
-const MODEL_PATH = 'https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/model/hibiki/hibiki.model.json'
-const TIPS_PATH = '/blog/live2d/waifu-tips.json'
+const MODEL_PATH = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/model/hibiki/hibiki.model.json'
 
 declare global {
   interface Window {

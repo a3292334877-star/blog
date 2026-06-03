@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { useData, useRoute } from 'vitepress'
 
 // ============================================================
@@ -68,7 +68,7 @@ watch(
   () => route.path,
   () => {
     if (typeof window === 'undefined') return
-    loadGiscus()
+    nextTick(() => loadGiscus())
   },
 )
 </script>

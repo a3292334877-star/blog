@@ -48,6 +48,9 @@ async function resolveAndPlay(): Promise<void> {
       audio.addEventListener('error', () => {
         isPlaying.value = false
         isLoading.value = false
+        // 播放器出错后重置，下次点击重新加载
+        audio!.src = ''
+        audio = null
       })
     }
 
@@ -88,6 +91,9 @@ async function resolveAndPlay(): Promise<void> {
 }
 
 async function toggle(): Promise<void> {
+  // 加载中不响应二次点击
+  if (isLoading.value) return
+
   // 首次点击或出错重置后：加载并播放
   if (!audio || !audio.src) {
     await resolveAndPlay()
