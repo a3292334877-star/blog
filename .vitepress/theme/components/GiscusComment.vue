@@ -27,9 +27,11 @@ const { isDark, frontmatter } = useData()
 
 function loadGiscus() {
   if (!giscusContainer.value) return
-  if (frontmatter.value.comments === false) return
 
+  // 始终清空容器（SPA 导航从有评论页切到无评论页时需清除残留）
   giscusContainer.value.innerHTML = ''
+
+  if (frontmatter.value.comments === false) return
 
   const script = document.createElement('script')
   script.src = 'https://giscus.app/client.js'
