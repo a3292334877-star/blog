@@ -15,18 +15,44 @@ import { ref } from 'vue'
 const SRC = '/blog/music.mp3'
 const isPlaying = ref(false)
 let audio: HTMLAudioElement | null = null
+let loadFailed = false
 
 function toggle(): void {
+  // 如果之前加载失败过，重置
+  if (loadFailed) {
+    audio = null
+    loadFailed = false
+  }
+
   if (!audio) {
-    audio = new Audio(SRC)
+    audio = new Audio()
+    audio.preload = 'auto'
     audio.loop = true
+    audio.src = SRC
+
     audio.addEventListener('play', () => { isPlaying.value = true })
     audio.addEventListener('pause', () => { isPlaying.value = false })
     audio.addEventListener('ended', () => { isPlaying.value = false })
+    audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e)
+      loadFailed = true
+      isPlaying.value = false
+    })
+
+    // 添加加载反馈
+    audio.addEventListener('canplaythrough', () => {
+      console.log('Audio ready')
+    })
   }
 
   if (audio.paused) {
-    audio.play().catch(() => {})
+    const p = audio.play()
+    if (p) {
+      p.catch((err) => {
+        console.error('Play failed:', err.name, err.message)
+        loadFailed = true
+      })
+    }
   } else {
     audio.pause()
   }
