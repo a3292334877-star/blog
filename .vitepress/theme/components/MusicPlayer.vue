@@ -7,7 +7,7 @@
   >
     <span class="music-icon">♪</span>
   </button>
-  <audio ref="audioEl" :src="src" loop style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" />
+  <audio ref="audioEl" :src="src" loop @play="playing = true" @pause="playing = false" @ended="playing = false" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" />
 </template>
 
 <script setup lang="ts">
@@ -21,14 +21,12 @@ function toggle() {
   const a = audioEl.value
   if (!a) return
 
-  // 先确保有 load 过
   if (a.readyState === 0) a.load()
 
   if (a.paused) {
-    a.play().then(() => { playing.value = true }).catch(() => { playing.value = false })
+    a.play().catch(() => { playing.value = false })
   } else {
     a.pause()
-    playing.value = false
   }
 }
 </script>

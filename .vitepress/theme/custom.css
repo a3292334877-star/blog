@@ -156,6 +156,16 @@ body {
   background: var(--vp-c-brand-2) !important;
 }
 
+/* ========== 文章增强 ========== */
+.vp-doc .steps {
+  border-left: 3px solid var(--sakura-pink);
+  padding-left: 16px;
+  margin: 16px 0;
+  font-size: 15px;
+  color: var(--vp-c-text-1);
+}
+.vp-doc .steps p { margin: 6px 0; }
+
 /* ========== Live2D 看板娘 ========== */
 #live2d-widget,
 #live2d-widget canvas,

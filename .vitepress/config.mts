@@ -58,6 +58,7 @@ export default withPwa(defineConfig({
             { text: 'C++ 哈希 Map 应用与竞赛技巧', link: '/posts/hashmap-in-cpp' },
             { text: 'C++ 高精度算法详解与竞赛模板', link: '/posts/bigint-in-cpp' },
             { text: '数据结构基础：从数组到并查集', link: '/posts/data-structure-basics' },
+            { text: '矩阵入门：从高斯消元到特征值', link: '/posts/matrix-basics' },
           ],
         },
       ],
