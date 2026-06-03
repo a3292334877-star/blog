@@ -1,8 +1,8 @@
 <template>
   <button
     class="music-toggle"
-    :class="{ playing: isPlaying }"
-    :title="isPlaying ? '暂停' : '♪ 播放'"
+    :class="{ playing: playing }"
+    :title="playing ? '暂停' : '♪ 播放'"
     @click.stop="toggle"
   >
     <span class="music-icon">♪</span>
@@ -13,46 +13,24 @@
 import { ref } from 'vue'
 
 const SRC = '/blog/music.mp3'
-const isPlaying = ref(false)
+const playing = ref(false)
 let audio: HTMLAudioElement | null = null
-let loadFailed = false
 
-function toggle(): void {
-  // 如果之前加载失败过，重置
-  if (loadFailed) {
-    audio = null
-    loadFailed = false
-  }
-
+function toggle() {
   if (!audio) {
-    audio = new Audio()
-    audio.preload = 'auto'
+    audio = new Audio(SRC)
     audio.loop = true
-    audio.src = SRC
-
-    audio.addEventListener('play', () => { isPlaying.value = true })
-    audio.addEventListener('pause', () => { isPlaying.value = false })
-    audio.addEventListener('ended', () => { isPlaying.value = false })
-    audio.addEventListener('error', (e) => {
-      console.error('Audio error:', e)
-      loadFailed = true
-      isPlaying.value = false
-    })
-
-    // 添加加载反馈
-    audio.addEventListener('canplaythrough', () => {
-      console.log('Audio ready')
-    })
+    audio.onplay = () => { playing.value = true }
+    audio.onpause = () => { playing.value = false }
+    audio.onended = () => { playing.value = false }
+    audio.onerror = () => {
+      playing.value = false
+      audio = null
+    }
   }
 
   if (audio.paused) {
-    const p = audio.play()
-    if (p) {
-      p.catch((err) => {
-        console.error('Play failed:', err.name, err.message)
-        loadFailed = true
-      })
-    }
+    audio.play().catch(() => { playing.value = false; audio = null })
   } else {
     audio.pause()
   }
