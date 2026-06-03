@@ -70,7 +70,7 @@ function initWidget(): void {
       superSample: 2,
       width: 200,
       height: 300,
-      position: 'right',
+      position: 'left',
       hOffset: 0,
       vOffset: -20,
     },
