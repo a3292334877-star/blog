@@ -1,5 +1,5 @@
 <template>
-  <div class="giscus-wrapper">
+  <div v-if="frontmatter.comments !== false" class="giscus-wrapper">
     <div ref="giscusContainer" class="giscus" />
   </div>
 </template>
