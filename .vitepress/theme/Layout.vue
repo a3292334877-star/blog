@@ -3,6 +3,7 @@
     <template #layout-top>
       <ReadingProgress />
       <SakuraPetals />
+      <MusicPlayer />
     </template>
 
     <template #home-hero-before>
@@ -48,6 +49,7 @@ import SakuraPetals from './components/SakuraPetals.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
 import GiscusComment from './components/GiscusComment.vue'
+import MusicPlayer from './components/MusicPlayer.vue'
 
 const { frontmatter } = useData()
 const route = useRoute()
