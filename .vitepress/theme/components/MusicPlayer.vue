@@ -7,7 +7,7 @@
   >
     <span class="music-icon">♪</span>
   </button>
-  <audio ref="audioEl" :src="src" loop hidden />
+  <audio ref="audioEl" :src="src" loop style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" />
 </template>
 
 <script setup lang="ts">
