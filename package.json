@@ -4,8 +4,8 @@
   "type": "module",
   "description": "Sakikoの博客 - VitePress",
   "scripts": {
-    "dev": "vitepress dev",
-    "build": "vitepress build && node .vitepress/generate-rss.mjs",
+    "dev": "node .vitepress/generate-music.mjs && vitepress dev",
+    "build": "node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],

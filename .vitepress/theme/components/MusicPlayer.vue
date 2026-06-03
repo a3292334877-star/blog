@@ -27,10 +27,9 @@
 import { ref, onMounted } from 'vue'
 
 // ============================================================
-// 歌曲配置
+// 歌曲数据（构建时预取到 public/music.json）
 // ============================================================
-const SONG_ID = '2097486090'
-const API_BASE = 'https://api.injahow.cn/meting/'
+const MUSIC_JSON = '/blog/music.json'
 
 declare global {
   interface Window {
@@ -46,35 +45,32 @@ const playerContainer = ref<HTMLElement | null>(null)
 
 let ap: any = null
 
-// --- 加载 APlayer ---
+// --- 加载 APlayer（本地文件，不走 CDN）---
 async function loadAPlayer(): Promise<void> {
   if (window.APlayer) return
 
   if (!document.querySelector('link[data-music="aplayer"]')) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = 'https://cdn.bootcdn.net/ajax/libs/aplayer/1.10.1/APlayer.min.css'
+    link.href = '/blog/aplayer/APlayer.min.css'
     link.setAttribute('data-music', 'aplayer')
     document.head.appendChild(link)
   }
 
   await new Promise<void>((resolve, reject) => {
     const script = document.createElement('script')
-    script.src = 'https://cdn.bootcdn.net/ajax/libs/aplayer/1.10.1/APlayer.min.js'
+    script.src = '/blog/aplayer/APlayer.min.js'
     script.onload = () => resolve()
-    script.onerror = () => reject(new Error('CDN 加载失败'))
+    script.onerror = () => reject(new Error('APlayer 加载失败'))
     document.head.appendChild(script)
   })
 }
 
-// --- 获取歌曲 ---
+// --- 获取歌曲数据 ---
 async function fetchSong(): Promise<any> {
-  const url = `${API_BASE}?server=netease&type=song&id=${SONG_ID}`
-  const res = await fetch(url)
+  const res = await fetch(MUSIC_JSON)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const data = await res.json()
-  if (!Array.isArray(data) || data.length === 0) throw new Error('空数据')
-  return data[0]
+  return res.json()
 }
 
 // --- 初始化 ---
@@ -96,10 +92,10 @@ async function init(): Promise<void> {
       mutex: true,
       lrcType: 0,
       audio: [{
-        name: song.name || song.title || '春日影',
-        artist: song.artist || song.author || 'MyGO!!!!!',
+        name: song.name || '春日影',
+        artist: song.artist || 'MyGO!!!!!',
         url: song.url,
-        cover: song.cover || song.pic,
+        cover: song.cover || '',
         lrc: song.lrc || '',
       }],
     })
