@@ -9,6 +9,9 @@ export default withPwa(defineConfig({
   description: '一个热爱ACGN的程序员小窝',
 
   head: [
+    // 强制注销旧 Service Worker（解决 PWA 缓存死锁）
+    ['script', {},
+      `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>{for(const r of rs)r.unregister()})}`],
     ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#fe9600' }],
     ['meta', { property: 'og:type', content: 'website' }],
