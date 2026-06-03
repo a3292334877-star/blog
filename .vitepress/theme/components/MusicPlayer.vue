@@ -88,7 +88,7 @@ async function init(): Promise<void> {
 
     ap = new window.APlayer({
       container: playerContainer.value,
-      mini: true,
+      mini: false,
       loop: 'one',
       volume: 0.7,
       preload: 'auto',
@@ -190,7 +190,7 @@ onMounted(() => {
   bottom: 88px;
   right: 24px;
   z-index: 102;
-  width: 320px;
+  width: 360px;
   min-height: 80px;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
@@ -254,8 +254,9 @@ onMounted(() => {
 .music-panel :deep(.aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-loaded) { background: var(--sakura-light); }
 .music-panel :deep(.aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-played) { background: var(--sakura-deep); }
 .music-panel :deep(.aplayer .aplayer-icon:hover) { color: var(--sakura-deep); }
-.music-panel :deep(.aplayer.aplayer-withlrc .aplayer-pic) { height: 56px; width: 56px; }
-.music-panel :deep(.aplayer.aplayer-withlrc .aplayer-info) { margin-left: 56px; }
+.music-panel :deep(.aplayer .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume) {
+  background: var(--sakura-deep);
+}
 
 /* 深色模式 */
 :global(.dark) .music-panel { background: rgba(30, 30, 30, 0.95); }
