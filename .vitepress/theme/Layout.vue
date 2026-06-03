@@ -32,6 +32,7 @@
     </template>
 
     <template #layout-bottom>
+      <Live2DWidget />
       <BackToTop />
     </template>
   </DefaultTheme.Layout>
@@ -50,6 +51,7 @@ import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
 import GiscusComment from './components/GiscusComment.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
+import Live2DWidget from './components/Live2DWidget.vue'
 
 const { frontmatter } = useData()
 const route = useRoute()
