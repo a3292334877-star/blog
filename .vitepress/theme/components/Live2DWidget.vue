@@ -14,6 +14,7 @@ declare global {
 }
 
 async function loadResources(): Promise<void> {
+  // Font Awesome（live2d-widget 依赖）
   if (!document.querySelector('link[data-live2d="fa"]')) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
@@ -22,6 +23,7 @@ async function loadResources(): Promise<void> {
     document.head.appendChild(link)
   }
 
+  // L2Dwidget JS
   if (!window.L2Dwidget) {
     await new Promise<void>((resolve, reject) => {
       const script = document.createElement('script')
