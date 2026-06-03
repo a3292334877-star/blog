@@ -1,8 +1,8 @@
 {
   "name": "春日影 (MyGO!!!!! ver.)",
   "artist": "MyGO!!!!!",
-  "url": "https://m802.music.126.net/20260603190537/e742d141cb34970b5e92b1de0e91bbb2/jd-musicrep-ts/f83f/c23b/0a87/744e905dfe2151b9496c85bc6604bb79.mp3?vuutv=8sjgCgLSsZvQBUNnipq2fE/DAcTpp6TqqDzA1afA+pZx/3jA1lAuGvh0JfrxlpMzaiNNgB0ix3eLrEJwbWsq3fGz5ViH2hBkXnS2mXiNROI=",
+  "proxyUrl": "https://api.injahow.cn/meting/?server=netease&type=url&id=2097486090",
   "cover": "https://api.injahow.cn/meting/?server=netease&type=pic&id=109951170225711695",
   "lrc": "https://api.injahow.cn/meting/?server=netease&type=lrc&id=2097486090",
-  "generated": "2026-06-03T10:44:58.080Z"
+  "generated": "2026-06-03T10:50:25.500Z"
 }

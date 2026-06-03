@@ -7,19 +7,22 @@
   >
     <span class="music-icon">♪</span>
   </button>
-  <audio ref="audio" :src="audioSrc" preload="auto" loop @play="isPlaying = true" @pause="isPlaying = false" @ended="isPlaying = false" />
+  <audio
+    ref="audio"
+    :src="audioSrc"
+    loop
+    @play="onPlay"
+    @pause="isPlaying = false"
+    @error="onError"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-// ============================================================
-// 歌曲数据由构建时预取到 public/music.json
-// generate-music.mjs 生成音频代理链接
-// ============================================================
 const MUSIC_JSON = '/blog/music.json'
 
-interface Song { name: string; artist: string; url: string; cover: string; lrc?: string }
+interface Song { name: string; artist: string; proxyUrl: string }
 
 const audio = ref<HTMLAudioElement | null>(null)
 const isPlaying = ref(false)
@@ -29,39 +32,63 @@ const songName = ref('春日影')
 
 const titleText = computed(() => {
   if (isLoading.value) return '加载中...'
-  if (audioSrc.value && !isPlaying.value) return `播放: ${songName.value}`
-  if (isPlaying.value) return `暂停: ${songName.value}`
+  if (isPlaying.value) return `♪ 暂停: ${songName.value}`
+  if (audioSrc.value) return `♪ 播放: ${songName.value}`
   return '♪ 开启音乐'
 })
 
-// --- 加载歌曲数据 ---
-async function loadSong(): Promise<void> {
+// 运行时动态解析 mp3 地址 → 下载为 blob → 创建本地 URL
+// 这样彻底绕过 CDN 鉴权 token 过期的问题
+async function resolveMp3(): Promise<void> {
   if (audioSrc.value) return
   isLoading.value = true
 
   try {
-    const res = await fetch(MUSIC_JSON)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const song: Song = await res.json()
-    audioSrc.value = song.url
+    // 1. 获取歌曲元数据
+    const metaRes = await fetch(MUSIC_JSON)
+    if (!metaRes.ok) throw new Error('元数据加载失败')
+    const song: Song = await metaRes.json()
     songName.value = song.name
-  } catch {
-    console.error('歌曲数据加载失败')
+
+    // 2. 通过代理链接获取真实 mp3（fetch 跟随重定向，下载完整文件）
+    const audioRes = await fetch(song.proxyUrl)
+    if (!audioRes.ok) throw new Error('音频加载失败')
+
+    // 3. 转为 blob → 创建本地 URL（纯内存，不走 CDN 鉴权）
+    const blob = await audioRes.blob()
+    audioSrc.value = URL.createObjectURL(blob)
+  } catch (e) {
+    console.error('BGM 加载失败:', e)
+    throw e
   } finally {
     isLoading.value = false
   }
 }
 
-// --- 切换播放/暂停 ---
+function onPlay() {
+  isPlaying.value = true
+}
+
+function onError() {
+  isPlaying.value = false
+  // blob URL 通常在页面生命周期内不会出错，出错就释放重来
+  if (audioSrc.value) {
+    URL.revokeObjectURL(audioSrc.value)
+    audioSrc.value = ''
+  }
+}
+
 async function toggle(): Promise<void> {
   if (!audio.value) return
 
-  // 首次点击：加载歌曲
+  // 首次点击：加载歌曲（运行时解析 → blob）
   if (!audioSrc.value) {
-    await loadSong()
+    try {
+      await resolveMp3()
+    } catch {
+      return
+    }
   }
-
-  if (!audioSrc.value) return
 
   if (audio.value.paused) {
     audio.value.play().catch(() => {})
