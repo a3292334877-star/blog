@@ -18,16 +18,16 @@ async function loadResources(): Promise<void> {
   if (!document.querySelector('link[data-live2d="fa"]')) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = 'https://fastly.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css'
+    link.href = '/blog/live2d/font-awesome.min.css'
     link.setAttribute('data-live2d', 'fa')
     document.head.appendChild(link)
   }
 
-  // L2Dwidget JS
+  // L2Dwidget JS（本地化，不依赖 CDN）
   if (!window.L2Dwidget) {
     await new Promise<void>((resolve, reject) => {
       const script = document.createElement('script')
-      script.src = 'https://fastly.jsdelivr.net/npm/live2d-widget@3.0.4/lib/L2Dwidget.min.js'
+      script.src = '/blog/live2d/L2Dwidget.min.js'
       script.onload = () => resolve()
       script.onerror = () => reject(new Error('Live2D load failed'))
       document.head.appendChild(script)

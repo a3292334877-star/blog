@@ -19,6 +19,7 @@
     "vitepress": "^1.6.4"
   },
   "devDependencies": {
+    "live2d-widget": "^3.0.4",
     "sass-embedded": "^1.100.0"
   }
 }
