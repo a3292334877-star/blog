@@ -18,13 +18,14 @@ interface Song { name: string; artist: string; proxyUrl: string }
 
 const isPlaying = ref(false)
 const isLoading = ref(false)
+const hasAudio = ref(false)
 const songName = ref('春日影')
 let audio: HTMLAudioElement | null = null
 
 const titleText = computed(() => {
   if (isLoading.value) return '加载中...'
   if (isPlaying.value) return `♪ 暂停: ${songName.value}`
-  if (audio) return `♪ 播放: ${songName.value}`
+  if (hasAudio.value) return `♪ 播放: ${songName.value}`
   return '♪ 开启音乐'
 })
 
@@ -49,6 +50,7 @@ async function resolveAndPlay(): Promise<void> {
         isPlaying.value = false
         isLoading.value = false
         // 播放器出错后重置，下次点击重新加载
+        hasAudio.value = false
         audio!.src = ''
         audio = null
       })
@@ -78,9 +80,11 @@ async function resolveAndPlay(): Promise<void> {
     })
 
     await audio.play()
+    hasAudio.value = true
   } catch (e) {
     console.error('BGM 加载失败:', e)
     if (audio) {
+      hasAudio.value = false
       audio.src = ''
       audio = null
     }

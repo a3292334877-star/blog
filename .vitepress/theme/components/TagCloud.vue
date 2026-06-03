@@ -37,15 +37,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useData } from 'vitepress'
+import { ref, computed, onMounted } from 'vue'
+import { useData, useRoute } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
 const { site } = useData()
+const route = useRoute()
 const base = site.value.base
 function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const active = ref<string | null>(null)
+
+// 从 URL 参数读取预选标签
+onMounted(() => {
+  const q = route.query?.q
+  if (q && typeof q === 'string') {
+    active.value = q
+  }
+})
 
 const tagMap = computed(() => {
   const m: Record<string, typeof posts> = {}

@@ -18,7 +18,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('scroll', onScroll, { passive: true } as EventListenerOptions)
 })
 </script>
 
