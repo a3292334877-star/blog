@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 
 // ============================================================
 // Giscus 配置 — 用你自己的 GitHub 仓库信息替换
@@ -51,12 +51,24 @@ function loadGiscus() {
   giscusContainer.value.appendChild(script)
 }
 
+const route = useRoute()
+
 onMounted(loadGiscus)
 
+// 主题切换时重新加载 Giscus
 watch(isDark, () => {
   if (typeof window === 'undefined') return
   loadGiscus()
 })
+
+// SPA 路由切换时重新加载 Giscus（根据 pathname 映射到对应 Discussion）
+watch(
+  () => route.path,
+  () => {
+    if (typeof window === 'undefined') return
+    loadGiscus()
+  },
+)
 </script>
 
 <style scoped>
