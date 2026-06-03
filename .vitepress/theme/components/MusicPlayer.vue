@@ -12,56 +12,28 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const MUSIC_JSON = '/blog/music.json'
-
-interface Song { name: string; artist: string; proxyUrl: string }
+const MUSIC_URL = '/blog/music.mp3'
+const SONG_NAME = '春日影'
 
 const isPlaying = ref(false)
 const isLoading = ref(false)
-const hasAudio = ref(false)
-const songName = ref('春日影')
 let audio: HTMLAudioElement | null = null
 
 const titleText = computed(() => {
   if (isLoading.value) return '加载中...'
-  if (isPlaying.value) return `♪ 暂停: ${songName.value}`
-  if (hasAudio.value) return `♪ 播放: ${songName.value}`
+  if (isPlaying.value) return `♪ 暂停: ${SONG_NAME}`
+  if (audio) return `♪ 播放: ${SONG_NAME}`
   return '♪ 开启音乐'
 })
 
-async function resolveAndPlay(): Promise<void> {
+async function initAndPlay(): Promise<void> {
   isLoading.value = true
 
   try {
-    // 1. 获取歌曲元数据
-    const metaRes = await fetch(MUSIC_JSON)
-    if (!metaRes.ok) throw new Error('元数据加载失败')
-    const song: Song = await metaRes.json()
-    songName.value = song.name
+    audio = new Audio()
+    audio.loop = true
+    audio.src = MUSIC_URL
 
-    // 2. 创建 audio 元素，直接用代理链接（浏览器自动跟踪302）
-    if (!audio) {
-      audio = new Audio()
-      audio.loop = true
-      audio.addEventListener('play', () => { isPlaying.value = true })
-      audio.addEventListener('pause', () => { isPlaying.value = false })
-      audio.addEventListener('ended', () => { isPlaying.value = false })
-      audio.addEventListener('error', () => {
-        isPlaying.value = false
-        isLoading.value = false
-        // 播放器出错后重置，下次点击重新加载
-        hasAudio.value = false
-        audio!.src = ''
-        audio = null
-      })
-    }
-
-    // 每次播放前设 src（代理链接每次访问给出最新CDN地址，token不会过期）
-    if (!audio.src || audio.paused) {
-      audio.src = song.proxyUrl
-    }
-
-    // 等音频加载到能播放
     await new Promise<void>((resolve, reject) => {
       if (!audio) return reject()
       const onCanPlay = () => {
@@ -72,22 +44,21 @@ async function resolveAndPlay(): Promise<void> {
       const onErr = () => {
         audio!.removeEventListener('canplaythrough', onCanPlay)
         audio!.removeEventListener('error', onErr)
-        reject(new Error('音频加载失败'))
+        reject(new Error('加载失败'))
       }
       audio.addEventListener('canplaythrough', onCanPlay)
       audio.addEventListener('error', onErr)
       audio.load()
     })
 
+    audio.addEventListener('play', () => { isPlaying.value = true })
+    audio.addEventListener('pause', () => { isPlaying.value = false })
+    audio.addEventListener('ended', () => { isPlaying.value = false })
+
     await audio.play()
-    hasAudio.value = true
-  } catch (e) {
-    console.error('BGM 加载失败:', e)
-    if (audio) {
-      hasAudio.value = false
-      audio.src = ''
-      audio = null
-    }
+  } catch {
+    console.error('BGM 加载失败')
+    if (audio) { audio.src = ''; audio = null }
     isPlaying.value = false
   } finally {
     isLoading.value = false
@@ -95,16 +66,13 @@ async function resolveAndPlay(): Promise<void> {
 }
 
 async function toggle(): Promise<void> {
-  // 加载中不响应二次点击
   if (isLoading.value) return
 
-  // 首次点击或出错重置后：加载并播放
   if (!audio || !audio.src) {
-    await resolveAndPlay()
+    await initAndPlay()
     return
   }
 
-  // 已加载：切换播放/暂停
   if (audio.paused) {
     audio.play().catch(() => {})
   } else {
