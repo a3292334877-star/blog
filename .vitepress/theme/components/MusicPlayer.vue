@@ -100,52 +100,56 @@ async function loadScripts(): Promise<void> {
   }
 }
 
-// --- 使用 MetingJS 正确的 API 初始化播放器 ---
+// --- 使用 MetingJS 初始化播放器 ---
+// MetingJS CDN 版的构造函数自动拉取歌单并创建 APlayer，无需调用 render()
 function initPlayer(): void {
   if (!playerContainer.value) return
 
-  // MetingJS 的 render() 内部会创建 APlayer
-  const meting = new window.Meting({
-    server: MUSIC_CONFIG.server,
-    type: MUSIC_CONFIG.type,
-    id: MUSIC_CONFIG.id,
-    container: playerContainer.value,
-    mini: true,
-    loop: MUSIC_CONFIG.loop,
-    order: MUSIC_CONFIG.order,
-    volume: MUSIC_CONFIG.volume,
-    preload: MUSIC_CONFIG.preload,
-    autoplay: false,
-    mutex: true,
-    lrcType: 0,
-  })
+  try {
+    const meting = new window.Meting({
+      server: MUSIC_CONFIG.server,
+      type: MUSIC_CONFIG.type,
+      id: MUSIC_CONFIG.id,
+      container: playerContainer.value,
+      mini: true,
+      loop: MUSIC_CONFIG.loop,
+      order: MUSIC_CONFIG.order,
+      volume: MUSIC_CONFIG.volume,
+      preload: MUSIC_CONFIG.preload,
+      autoplay: false,
+      mutex: true,
+      lrcType: 0,
+    })
 
-  meting.render()
-
-  // render() 完成后 meting.aplayer 就是 APlayer 实例
-  // 需要等一小段时间让 APlayer 完成初始化
-  const check = setInterval(() => {
-    if (meting.aplayer) {
-      clearInterval(check)
-      ap = meting.aplayer
-      ap.on('play', () => { isPlaying.value = true })
-      ap.on('pause', () => { isPlaying.value = false })
-      status.value = 'ready'
-    }
-  }, 200)
-
-  // 超时处理
-  setTimeout(() => {
-    if (status.value !== 'ready') {
-      clearInterval(check)
+    // MetingJS 异步拉取歌单，轮询等待 APlayer 实例就绪
+    const check = setInterval(() => {
       if (meting.aplayer) {
+        clearInterval(check)
         ap = meting.aplayer
         ap.on('play', () => { isPlaying.value = true })
         ap.on('pause', () => { isPlaying.value = false })
         status.value = 'ready'
       }
-    }
-  }, 8000)
+    }, 200)
+
+    // 8 秒超时
+    setTimeout(() => {
+      if (status.value !== 'ready') {
+        clearInterval(check)
+        if (meting.aplayer) {
+          ap = meting.aplayer
+          ap.on('play', () => { isPlaying.value = true })
+          ap.on('pause', () => { isPlaying.value = false })
+          status.value = 'ready'
+        } else {
+          status.value = 'error'
+        }
+      }
+    }, 8000)
+  } catch (e) {
+    console.error('BGM 播放器初始化失败:', e)
+    status.value = 'error'
+  }
 }
 
 // --- 初始化（加载脚本 + 创建播放器）---
@@ -169,8 +173,13 @@ async function retry(): Promise<void> {
 
 // --- 切换面板 ---
 async function toggle(): Promise<void> {
+  // 首次点击或失败后重试
   if (status.value === 'idle' || status.value === 'error') {
-    await init()
+    showPanel.value = true  // 立刻展示面板（含加载/错误提示）
+    if (status.value === 'idle') {
+      await init()
+    }
+    return
   }
 
   if (status.value === 'ready') {
