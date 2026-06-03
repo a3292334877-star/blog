@@ -72,25 +72,6 @@ function initWidget(): void {
       border: false,
     },
   })
-
-  // 去虚线框 + 禁止拖拽
-  setTimeout(fixDOM, 800)
-}
-
-function fixDOM(): void {
-  const el = document.getElementById('live2d-widget')
-  if (!el) return
-
-  el.style.outline = 'none'
-  el.style.border = 'none'
-  el.style.boxShadow = 'none'
-
-  const canvas = el.querySelector('canvas')
-  if (canvas) {
-    canvas.style.outline = 'none'
-    canvas.style.border = 'none'
-    canvas.style.boxShadow = 'none'
-  }
 }
 
 onMounted(async () => {

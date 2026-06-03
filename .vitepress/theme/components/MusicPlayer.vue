@@ -7,32 +7,28 @@
   >
     <span class="music-icon">♪</span>
   </button>
+  <audio ref="audioEl" :src="src" loop hidden />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const SRC = '/blog/music.mp3'
+const src = '/blog/music.mp3'
+const audioEl = ref<HTMLAudioElement | null>(null)
 const playing = ref(false)
-let audio: HTMLAudioElement | null = null
 
 function toggle() {
-  if (!audio) {
-    audio = new Audio(SRC)
-    audio.loop = true
-    audio.onplay = () => { playing.value = true }
-    audio.onpause = () => { playing.value = false }
-    audio.onended = () => { playing.value = false }
-    audio.onerror = () => {
-      playing.value = false
-      audio = null
-    }
-  }
+  const a = audioEl.value
+  if (!a) return
 
-  if (audio.paused) {
-    audio.play().catch(() => { playing.value = false; audio = null })
+  // 先确保有 load 过
+  if (a.readyState === 0) a.load()
+
+  if (a.paused) {
+    a.play().then(() => { playing.value = true }).catch(() => { playing.value = false })
   } else {
-    audio.pause()
+    a.pause()
+    playing.value = false
   }
 }
 </script>
