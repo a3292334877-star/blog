@@ -1,15 +1,16 @@
 import { defineConfig } from 'vitepress'
-import { withPwa } from '@vite-pwa/vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default withPwa(defineConfig({
+export default defineConfig({
   base: '/blog/',
   lang: 'zh-CN',
   title: 'Sakikoの博客',
   description: '一个热爱ACGN的程序员小窝',
 
   head: [
-
+    // PWA 已关闭，此脚本清除旧 Service Worker
+    ['script', {},
+      `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
 
     ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#fe9600' }],
@@ -126,26 +127,4 @@ export default withPwa(defineConfig({
 
   // Vite 配置
   vite: {},
-}), {
-  pwa: {
-    registerType: 'autoUpdate',
-    manifest: {
-      name: 'Sakikoの博客',
-      short_name: 'Sakiko',
-      description: '一个热爱ACGN的程序员小窝',
-      theme_color: '#fe9600',
-      background_color: '#ffffff',
-      display: 'standalone',
-      icons: [
-        {
-          src: '/blog/favicon.ico',
-          sizes: '64x64 32x32 24x24 16x16',
-          type: 'image/x-icon',
-        },
-      ],
-    },
-    workbox: {
-      globPatterns: ['**/*.{css,js,html,svg,png,ico,woff,woff2,jpg,webp}'],
-    },
-  },
 })
