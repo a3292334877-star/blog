@@ -33,7 +33,7 @@ import { ref, computed, onMounted } from 'vue'
 const MUSIC_CONFIG = {
   server: 'netease',
   type: 'playlist',
-  id: '7256922436',
+  id: '4884101180',
   autoPlay: false,
   loop: 'all',
   order: 'random',
