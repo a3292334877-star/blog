@@ -115,24 +115,9 @@
         "file": "data/motions/idle01.mtn"
       }
     ],
-    "kandou01": [
-      {
-        "file": "data/motions/kandou01.mtn"
-      }
-    ],
-    "kandou02": [
-      {
-        "file": "data/motions/kandou02.mtn"
-      }
-    ],
     "kime01": [
       {
         "file": "data/motions/kime01.mtn"
-      }
-    ],
-    "kime02": [
-      {
-        "file": "data/motions/kime02.mtn"
       }
     ],
     "maskoff": [
@@ -579,16 +564,6 @@
       {
         "file": "data/motions/thinking02.mtn"
       }
-    ],
-    "thinking03": [
-      {
-        "file": "data/motions/thinking03.mtn"
-      }
-    ],
-    "wink01": [
-      {
-        "file": "data/motions/wink01.mtn"
-      }
     ]
   },
   "expressions": [
@@ -601,20 +576,8 @@
       "file": "data/expressions/angry02.exp.json"
     },
     {
-      "name": "angry03",
-      "file": "data/expressions/angry03.exp.json"
-    },
-    {
-      "name": "angry04",
-      "file": "data/expressions/angry04.exp.json"
-    },
-    {
       "name": "angry07",
       "file": "data/expressions/angry07.exp.json"
-    },
-    {
-      "name": "bye01",
-      "file": "data/expressions/bye01.exp.json"
     },
     {
       "name": "cry01",
@@ -641,20 +604,8 @@
       "file": "data/expressions/idle01.exp.json"
     },
     {
-      "name": "kandou01",
-      "file": "data/expressions/kandou01.exp.json"
-    },
-    {
-      "name": "kandou02",
-      "file": "data/expressions/kandou02.exp.json"
-    },
-    {
       "name": "kime01",
       "file": "data/expressions/kime01.exp.json"
-    },
-    {
-      "name": "kime02",
-      "file": "data/expressions/kime02.exp.json"
     },
     {
       "name": "odoodo01",
@@ -731,14 +682,6 @@
     {
       "name": "thinking02",
       "file": "data/expressions/thinking02.exp.json"
-    },
-    {
-      "name": "thinking03",
-      "file": "data/expressions/thinking03.exp.json"
-    },
-    {
-      "name": "wink01",
-      "file": "data/expressions/wink01.exp.json"
     }
   ]
 }

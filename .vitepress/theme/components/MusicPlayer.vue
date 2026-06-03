@@ -1,32 +1,36 @@
 <template>
   <button
     class="music-toggle"
-    :class="{ active: showPlayer }"
-    :title="showPlayer ? '收起播放器' : '♪ 开启音乐'"
-    @click.stop="showPlayer = !showPlayer"
+    :class="{ playing: isPlaying }"
+    :title="isPlaying ? '暂停' : '♪ 播放'"
+    @click.stop="toggle"
   >
     <span class="music-icon">♪</span>
   </button>
-  <div v-if="showPlayer" class="music-bar" @click.stop>
-    <iframe
-      id="music-iframe"
-      frameborder="no"
-      marginwidth="0"
-      marginheight="0"
-      width="280"
-      height="52"
-      :src="iframeSrc"
-    />
-  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const SONG_ID = 2097486090
-const iframeSrc = `https://music.163.com/outchain/player?type=2&id=${SONG_ID}&auto=0&height=32`
+const SRC = '/blog/music.mp3'
+const isPlaying = ref(false)
+let audio: HTMLAudioElement | null = null
 
-const showPlayer = ref(false)
+function toggle(): void {
+  if (!audio) {
+    audio = new Audio(SRC)
+    audio.loop = true
+    audio.addEventListener('play', () => { isPlaying.value = true })
+    audio.addEventListener('pause', () => { isPlaying.value = false })
+    audio.addEventListener('ended', () => { isPlaying.value = false })
+  }
+
+  if (audio.paused) {
+    audio.play().catch(() => {})
+  } else {
+    audio.pause()
+  }
+}
 </script>
 
 <style scoped>
@@ -57,12 +61,12 @@ const showPlayer = ref(false)
   border-color: var(--sakura-pink);
   box-shadow: 0 4px 16px rgba(232, 138, 154, 0.25);
 }
-.music-toggle.active {
+.music-toggle.playing {
   border-color: var(--sakura-pink);
   color: var(--sakura-deep);
   box-shadow: 0 0 16px rgba(255, 183, 197, 0.4);
 }
-.music-toggle.active .music-icon {
+.music-toggle.playing .music-icon {
   animation: music-spin 3s linear infinite;
 }
 
@@ -71,27 +75,7 @@ const showPlayer = ref(false)
   to   { transform: rotate(360deg); }
 }
 
-/* 播放条 */
-.music-bar {
-  position: fixed;
-  bottom: 32px;
-  right: 140px;
-  z-index: 102;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  padding: 4px 0 0 0;
-  overflow: hidden;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(8px);
-  line-height: 1;
-}
-.music-bar iframe {
-  display: block;
-}
-
 @media (max-width: 640px) {
   .music-toggle { bottom: 24px; right: 76px; width: 40px; height: 40px; font-size: 18px; }
-  .music-bar { right: 16px; bottom: 80px; }
 }
 </style>
