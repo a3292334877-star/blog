@@ -7,12 +7,13 @@
   >
     <span class="music-icon">♪</span>
   </button>
-  <audio ref="audioEl" loop @play="playing = true" @pause="playing = false" @ended="playing = false" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" />
+  <audio ref="audioEl" :src="src" loop @play="playing = true" @pause="playing = false" @ended="playing = false" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const src = '/blog/music.mp3'
 const audioEl = ref<HTMLAudioElement | null>(null)
 const playing = ref(false)
 
@@ -20,11 +21,7 @@ function toggle() {
   const a = audioEl.value
   if (!a) return
 
-  // 首次点击才设 src，避免页面加载时预下载 4.3MB mp3
-  if (!a.src) {
-    a.src = '/blog/music.mp3'
-    a.load()
-  }
+  if (a.readyState === 0) a.load()
 
   if (a.paused) {
     a.play().catch(() => { playing.value = false })
