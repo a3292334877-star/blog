@@ -7,7 +7,7 @@ comments: false
 
 ## Sakiko
 
-- 🎂 2007.03.08，重庆出生，广东长大
+- 计算机小白，梦想是全球旅游，最后定居日本，想去美国欧洲
 - 🎯 目标：升学 + 留学日本（读修士）+ 永居日本
 
 ## 技能
@@ -15,7 +15,7 @@ comments: false
 | 类别 | 详情 |
 |------|------|
 | 语言 | 日语N1 / 英语备考四级 |
-| 编程 | C语言 / Java / C++ |
+| 编程 | C语言 / Java / C++ / Python|
 | 竞赛 | 蓝桥杯省三 (2026) |
 
 ## 爱好
@@ -23,6 +23,8 @@ comments: false
 - 📺 **ACGN文化爱好者**
 - 🍡 忠实京蜜（京都动画）
 - 🎬 推荐：凉宫春日的忧郁、幸运星、轻音少女、紫罗兰永恒花园
+- 乐队迷：喜欢各种乐队，类似于草东没有派对，Ave Mujica，Mygo等等
+- 音乐：术曲，动漫曲，Punk，纯音乐等等
 
 ## 联系
 
@@ -30,4 +32,4 @@ comments: false
 
 ---
 
-> 至死不渝地追逐清华梦 🩷
+> If you're rejected, accept it. If you're unloved, let go. If they choose someone or something over you, move on. 🩷
