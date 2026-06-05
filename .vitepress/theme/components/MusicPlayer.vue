@@ -1,31 +1,49 @@
 <template>
   <button
     class="music-toggle"
-    :class="{ playing: playing }"
-    :title="playing ? '暂停' : '♪ 播放'"
+    :class="{ playing: playing, buffering: buffering }"
+    :title="buffering ? '加载中...' : (playing ? '暂停' : '♪ 播放')"
     @click.stop="toggle"
   >
-    <span class="music-icon">♪</span>
+    <span class="music-icon">{{ buffering ? '⟳' : '♪' }}</span>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const playing = ref(false)
+const buffering = ref(false)
 let audio: HTMLAudioElement | null = null
 
-function toggle() {
-  if (!audio) {
-    audio = new Audio('/blog/music.mp3')
-    audio.loop = true
-    audio.addEventListener('play', () => { playing.value = true })
-    audio.addEventListener('pause', () => { playing.value = false })
-    audio.addEventListener('ended', () => { playing.value = false })
-  }
+onMounted(() => {
+  // 页面加载就创建 audio 并预加载，等点击时已经缓冲好了
+  audio = new Audio('/blog/music.mp3')
+  audio.loop = true
+  audio.preload = 'auto'
+  audio.addEventListener('play', () => { playing.value = true; buffering.value = false })
+  audio.addEventListener('pause', () => { playing.value = false })
+  audio.addEventListener('ended', () => { playing.value = false })
+  audio.addEventListener('waiting', () => { buffering.value = true })
+  audio.addEventListener('canplay', () => { buffering.value = false })
+  audio.addEventListener('error', (e) => {
+    console.error('音乐加载失败:', audio?.error?.message || e)
+    playing.value = false
+    buffering.value = false
+  })
+})
 
+function toggle() {
+  if (!audio) return
   if (audio.paused) {
-    audio.play().catch(() => { playing.value = false })
+    buffering.value = true
+    audio.play().then(() => {
+      buffering.value = false
+    }).catch((e) => {
+      console.error('音乐播放失败:', e)
+      playing.value = false
+      buffering.value = false
+    })
   } else {
     audio.pause()
   }
@@ -67,6 +85,10 @@ function toggle() {
 }
 .music-toggle.playing .music-icon {
   animation: music-spin 3s linear infinite;
+}
+.music-toggle.buffering .music-icon {
+  animation: music-spin 0.8s linear infinite;
+  opacity: 0.7;
 }
 
 @keyframes music-spin {
