@@ -60,6 +60,7 @@ export default defineConfig({
             { text: 'C++ 高精度算法详解与竞赛模板', link: '/posts/bigint-in-cpp' },
             { text: '数据结构基础：从数组到并查集', link: '/posts/data-structure-basics' },
             { text: '矩阵入门：从高斯消元到特征值', link: '/posts/matrix-basics' },
+            { text: '2024年广东专插本《计算机基础与程序设计》真题回忆版+详解', link: '/posts/2024-zhuanchaben-c-programming' },
           ],
         },
       ],
