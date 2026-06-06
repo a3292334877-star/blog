@@ -61,6 +61,7 @@ export default defineConfig({
             { text: '数据结构基础：从数组到并查集', link: '/posts/data-structure-basics' },
             { text: '矩阵入门：从高斯消元到特征值', link: '/posts/matrix-basics' },
             { text: '2024年广东专插本《计算机基础与程序设计》真题回忆版+详解', link: '/posts/2024-zhuanchaben-c-programming' },
+            { text: '2024年广东专插本《高等数学》真题回忆版+详解', link: '/posts/2024-zhuanchaben-math' },
           ],
         },
       ],
