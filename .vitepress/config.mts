@@ -62,6 +62,7 @@ export default defineConfig({
             { text: '矩阵入门：从高斯消元到特征值', link: '/posts/matrix-basics' },
             { text: '2024年广东专插本《计算机基础与程序设计》真题回忆版+详解', link: '/posts/2024-zhuanchaben-c-programming' },
             { text: '2024年广东专插本《高等数学》真题回忆版+详解', link: '/posts/2024-zhuanchaben-math' },
+            { text: 'Java 零基础入门教程：从 Hello World 到面向对象', link: '/posts/java-tutorial' },
           ],
         },
       ],
