@@ -15,20 +15,24 @@
 import { ref, onMounted } from 'vue'
 
 const petals = ref<Array<{ i: number; style: Record<string, string> }>>([])
-
 onMounted(() => {
-  petals.value = Array.from({ length: 16 }, (_, i) => ({
-    i,
-    style: {
-      left: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 15}s`,
-      animationDuration: `${10 + Math.random() * 15}s`,
-      width: `${10 + Math.random() * 14}px`,
-      height: `${10 + Math.random() * 14}px`,
-      opacity: String(0.12 + Math.random() * 0.25),
-      color: `hsl(${340 + Math.random() * 20}, 70%, 70%)`,
-    },
-  }))
+  petals.value = Array.from({ length: 16 }, (_, i) => {
+    // 每片花瓣独立的横向漂移终点，避免 16 片同步移动
+    const drift = Math.round(-60 + Math.random() * 160)
+    return {
+      i,
+      style: {
+        left: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 15}s`,
+        animationDuration: `${10 + Math.random() * 15}s`,
+        width: `${10 + Math.random() * 14}px`,
+        height: `${10 + Math.random() * 14}px`,
+        opacity: String(0.12 + Math.random() * 0.25),
+        color: `hsl(${340 + Math.random() * 20}, 70%, 70%)`,
+        '--drift': `${drift}px`,
+      } as Record<string, string>,
+    }
+  })
 })
 </script>
 
@@ -45,6 +49,6 @@ onMounted(() => {
   0%   { transform: translateY(-30px) rotate(0deg) translateX(0); opacity: 0; }
   10%  { opacity: 1; }
   90%  { opacity: 0.5; }
-  100% { transform: translateY(105vh) rotate(540deg) translateX(80px); opacity: 0; }
+  100% { transform: translateY(105vh) rotate(540deg) translateX(var(--drift, 80px)); opacity: 0; }
 }
 </style>

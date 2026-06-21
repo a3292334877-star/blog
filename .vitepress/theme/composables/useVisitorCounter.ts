@@ -37,10 +37,20 @@
  */
 
 // ============================================================
-// TODO: 替换为你的 Supabase 项目信息
+// 从环境变量读取 Supabase 配置
+// 在项目根目录创建 .env 文件（已在 .gitignore 中忽略）：
+//   VITE_SUPABASE_URL=https://xxx.supabase.co
+//   VITE_SUPABASE_ANON_KEY=eyJ...
 // ============================================================
-const SUPABASE_URL = 'https://izzxptzeblxecmwfbyzd.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enhwdHplYmx4ZWNtd2ZieXpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzODM5MjUsImV4cCI6MjA5NTk1OTkyNX0.LlMOGUnicnxmCWG40QNvHDzCAar3Mmdfv-EsCXspTRU'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? ''
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? ''
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.warn(
+    '[useVisitorCounter] 缺少 VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY 环境变量，访客计数功能将不可用。' +
+    ' 请复制 .env.example 为 .env 并填入 Supabase 凭据。',
+  )
+}
 
 // 防抖间隔（毫秒）：同一浏览器在此时间内不会重复发送 POST
 const DEBOUNCE_MS = 5000
@@ -154,6 +164,9 @@ export function useVisitorCounter(): { uv: Ref<number | null>; pv: Ref<number | 
   const pv = ref<number | null>(null)
 
   onMounted(async () => {
+    // 缺少凭据时直接跳过，不发无效请求
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return
+
     const storage = getStorage()
     const fp = generateFingerprint()
 

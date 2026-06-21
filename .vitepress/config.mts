@@ -1,4 +1,37 @@
 import { defineConfig } from 'vitepress'
+import fs from 'node:fs'
+import path from 'node:path'
+import matter from 'gray-matter'
+
+interface PostMeta {
+  title: string
+  date: number
+  slug: string
+}
+
+function loadPosts(): PostMeta[] {
+  const cwd = process.cwd()
+  const postDir = path.join(cwd, 'posts')
+  if (!fs.existsSync(postDir)) return []
+
+  return fs
+    .readdirSync(postDir)
+    .filter((f) => f.endsWith('.md') && f !== 'index.md')
+    .map((f) => {
+      const raw = fs.readFileSync(path.join(postDir, f), 'utf-8')
+      const { data } = matter(raw)
+      if (!data.title) return null
+      return {
+        title: data.title as string,
+        date: +new Date(data.date) || fs.statSync(path.join(postDir, f)).mtimeMs,
+        slug: f.replace(/\.md$/, ''),
+      }
+    })
+    .filter((p): p is PostMeta => p !== null)
+    .sort((a, b) => b.date - a.date)
+}
+
+const posts = loadPosts()
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -17,9 +50,9 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Sakikoの博客' }],
     ['meta', { property: 'og:description', content: '一个热爱ACGN的程序员小窝' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@400;600&display=swap' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.cn' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.cn', crossorigin: '' }],
+    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@400;600&display=swap' }],
 
   ],
 
@@ -51,19 +84,10 @@ export default defineConfig({
       '/posts/': [
         {
           text: '文章列表',
-          items: [
-            { text: '你好，世界', link: '/posts/hello-world' },
-            { text: 'Markdown 写作指南', link: '/posts/markdown-guide' },
-            { text: 'Linux Tips 常用命令', link: '/posts/linux-tips' },
-            { text: 'Git Tips 常用操作', link: '/posts/git-tips' },
-            { text: 'C++ 哈希 Map 应用与竞赛技巧', link: '/posts/hashmap-in-cpp' },
-            { text: 'C++ 高精度算法详解与竞赛模板', link: '/posts/bigint-in-cpp' },
-            { text: '数据结构基础：从数组到并查集', link: '/posts/data-structure-basics' },
-            { text: '矩阵入门：从高斯消元到特征值', link: '/posts/matrix-basics' },
-            { text: '2024年广东专插本《计算机基础与程序设计》真题回忆版+详解', link: '/posts/2024-zhuanchaben-c-programming' },
-            { text: '2024年广东专插本《高等数学》真题回忆版+详解', link: '/posts/2024-zhuanchaben-math' },
-            { text: 'Java 零基础入门教程：从 Hello World 到面向对象', link: '/posts/java-tutorial' },
-          ],
+          items: posts.map((p) => ({
+            text: p.title,
+            link: `/posts/${p.slug}`,
+          })),
         },
       ],
     },

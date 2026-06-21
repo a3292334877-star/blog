@@ -9,18 +9,21 @@ import { ref, onMounted, watch, nextTick } from 'vue'
 import { useData, useRoute } from 'vitepress'
 
 // ============================================================
-// Giscus 配置 — 用你自己的 GitHub 仓库信息替换
+// Giscus 配置
 // ============================================================
 // 设置步骤：
 // 1. 在 https://github.com/a3292334877-star/blog/settings 开启 Discussions
 // 2. 安装 Giscus App: https://github.com/apps/giscus
 // 3. 访问 https://giscus.app/zh-CN 获取 repo-id, category-id
+// 4. 在项目根目录 .env 文件中填入：
+//    VITE_GISCUS_REPO_ID=R_kgDO...
+//    VITE_GISCUS_CATEGORY_ID=DIC_kwDO...
 // ============================================================
 
 const REPO = 'a3292334877-star/blog'
-const REPO_ID = 'R_kgDOStv0cA'
+const REPO_ID = import.meta.env.VITE_GISCUS_REPO_ID ?? ''
 const CATEGORY = 'General'
-const CATEGORY_ID = 'DIC_kwDOStv0cM4C-XEc'
+const CATEGORY_ID = import.meta.env.VITE_GISCUS_CATEGORY_ID ?? ''
 
 const giscusContainer = ref<HTMLElement>()
 const { isDark, frontmatter } = useData()
@@ -32,6 +35,15 @@ function loadGiscus() {
   giscusContainer.value.innerHTML = ''
 
   if (frontmatter.value.comments === false) return
+
+  // 缺少 IDs 时不挂载 Giscus，避免加载失败
+  if (!REPO_ID || !CATEGORY_ID) {
+    console.warn(
+      '[GiscusComment] 缺少 VITE_GISCUS_REPO_ID / VITE_GISCUS_CATEGORY_ID 环境变量，评论功能未启用。' +
+      ' 请复制 .env.example 为 .env 并填入 Giscus IDs。',
+    )
+    return
+  }
 
   const script = document.createElement('script')
   script.src = 'https://giscus.app/client.js'

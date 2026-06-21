@@ -14,9 +14,19 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const show = ref(false)
+let ticking = false
+
+function update() {
+  show.value = window.scrollY > 300
+}
 
 function onScroll() {
-  show.value = window.scrollY > 300
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    update()
+    ticking = false
+  })
 }
 
 function scrollToTop() {
@@ -28,7 +38,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll, { passive: true } as EventListenerOptions)
+  window.removeEventListener('scroll', onScroll)
 })
 </script>
 

@@ -69,13 +69,22 @@ onMounted(() => {
 })
 
 // 文章页顶部横幅样式
-const docBannerStyle = computed(() => {
-  if (!frontmatter.value.title) return ''
+// 使用对象绑定而非字符串拼接，避免 cover 字段含 ; / ) 破坏样式或注入新属性
+const docBannerStyle = computed<Record<string, string> | null>(() => {
+  if (!frontmatter.value.title) return null
   const cover = frontmatter.value.cover
   if (cover) {
-    return `background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url(${cover}); background-size: cover; background-position: center;`
+    // 对 cover 中的反斜杠和双引号转义，防止 url("...") 闭合注入
+    const safe = String(cover).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+    return {
+      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url("${safe}")`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }
   }
-  return 'background: linear-gradient(135deg, var(--sakura-pink), var(--sakura-warm));'
+  return {
+    background: 'linear-gradient(135deg, var(--sakura-pink), var(--sakura-warm))',
+  }
 })
 
 function formatDate(d: string | Date): string {

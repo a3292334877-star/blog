@@ -10,27 +10,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const playing = ref(false)
 const buffering = ref(false)
 let audio: HTMLAudioElement | null = null
+
+const onPlay = () => { playing.value = true; buffering.value = false }
+const onPause = () => { playing.value = false }
+const onEnded = () => { playing.value = false }
+const onWaiting = () => { buffering.value = true }
+const onCanPlay = () => { buffering.value = false }
+const onError = (e: Event) => {
+  console.error('音乐加载失败:', audio?.error?.message || e)
+  playing.value = false
+  buffering.value = false
+}
 
 onMounted(() => {
   // 页面加载就创建 audio 并预加载，等点击时已经缓冲好了
   audio = new Audio('/blog/music.mp3')
   audio.loop = true
   audio.preload = 'auto'
-  audio.addEventListener('play', () => { playing.value = true; buffering.value = false })
-  audio.addEventListener('pause', () => { playing.value = false })
-  audio.addEventListener('ended', () => { playing.value = false })
-  audio.addEventListener('waiting', () => { buffering.value = true })
-  audio.addEventListener('canplay', () => { buffering.value = false })
-  audio.addEventListener('error', (e) => {
-    console.error('音乐加载失败:', audio?.error?.message || e)
-    playing.value = false
-    buffering.value = false
-  })
+  audio.addEventListener('play', onPlay)
+  audio.addEventListener('pause', onPause)
+  audio.addEventListener('ended', onEnded)
+  audio.addEventListener('waiting', onWaiting)
+  audio.addEventListener('canplay', onCanPlay)
+  audio.addEventListener('error', onError)
+})
+
+onUnmounted(() => {
+  if (!audio) return
+  audio.pause()
+  audio.removeEventListener('play', onPlay)
+  audio.removeEventListener('pause', onPause)
+  audio.removeEventListener('ended', onEnded)
+  audio.removeEventListener('waiting', onWaiting)
+  audio.removeEventListener('canplay', onCanPlay)
+  audio.removeEventListener('error', onError)
+  audio.src = ''
+  audio = null
 })
 
 function toggle() {

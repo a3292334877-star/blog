@@ -6,11 +6,21 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const progress = ref(0)
+let ticking = false
 
-function onScroll() {
+function update() {
   const scrollTop = window.scrollY
   const docHeight = document.documentElement.scrollHeight - window.innerHeight
   progress.value = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0
+}
+
+function onScroll() {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    update()
+    ticking = false
+  })
 }
 
 onMounted(() => {
@@ -18,7 +28,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll, { passive: true } as EventListenerOptions)
+  window.removeEventListener('scroll', onScroll)
 })
 </script>
 
