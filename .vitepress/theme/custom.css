@@ -15,6 +15,7 @@
   --vp-c-brand-soft: rgba(228, 89, 111, 0.14);
 
   --vp-font-family-base: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --vp-font-family-title: "Noto Serif SC", "Source Han Serif SC", "Microsoft YaHei", serif;
   --vp-font-family-mono: "Fira Code", "Cascadia Code", monospace;
 }
 
@@ -181,4 +182,35 @@ body {
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+/* ========== 字体场景化：标题用衬线，正文用无衬线 ========== */
+/* 文章正文标题 */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+  font-family: var(--vp-font-family-title);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* 文章页横幅标题 */
+.doc-banner .doc-title {
+  font-family: var(--vp-font-family-title);
+}
+
+/* 首页各 section heading */
+.section-heading,
+.blog-list-section h2,
+.timeline-section h2,
+.site-stats h2,
+.tag-page h1 {
+  font-family: var(--vp-font-family-title);
+}
+
+/* 导航栏站点标题 */
+.VPNavBarTitle .title {
+  font-family: var(--vp-font-family-title);
+  font-weight: 700;
 }

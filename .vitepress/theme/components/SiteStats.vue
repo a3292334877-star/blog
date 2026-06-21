@@ -9,7 +9,7 @@
       <div class="stat-card" :style="{ animationDelay: '0ms' }">
         <div class="stat-label">👥 来访人数</div>
         <div class="stat-value">
-          <template v-if="uv !== null">{{ fmtNum(uv) }}</template>
+          <template v-if="uv !== null">{{ fmtNum(uvDisplay) }}</template>
           <template v-else>-</template>
           <span class="stat-unit">人次</span>
         </div>
@@ -17,7 +17,7 @@
       <div class="stat-card" :style="{ animationDelay: '80ms' }">
         <div class="stat-label">👁️ 访问次数</div>
         <div class="stat-value">
-          <template v-if="pv !== null">{{ fmtNum(pv) }}</template>
+          <template v-if="pv !== null">{{ fmtNum(pvDisplay) }}</template>
           <template v-else>-</template>
           <span class="stat-unit">次</span>
         </div>
@@ -27,7 +27,7 @@
       <div class="stat-card" :style="{ animationDelay: '160ms' }">
         <div class="stat-label">📝 本站总字数</div>
         <div class="stat-value">
-          {{ fmtNum(stats.totalWords) }}
+          {{ fmtNum(wordsDisplay) }}
           <span class="stat-unit">字</span>
         </div>
       </div>
@@ -36,7 +36,7 @@
       <div class="stat-card" :style="{ animationDelay: '240ms' }">
         <div class="stat-label">⏳ 已运行时间</div>
         <div class="stat-value">
-          {{ stats.runDays }}
+          {{ runDaysDisplay }}
           <span class="stat-unit">天</span>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <div class="stat-card" :style="{ animationDelay: '400ms' }">
         <div class="stat-label">📅 近一月新增</div>
         <div class="stat-value">
-          {{ stats.monthNew }}
+          {{ monthNewDisplay }}
           <span class="stat-unit">篇</span>
         </div>
       </div>
@@ -62,7 +62,7 @@
       <div class="stat-card" :style="{ animationDelay: '480ms' }">
         <div class="stat-label">📆 近一周新增</div>
         <div class="stat-value">
-          {{ stats.weekNew }}
+          {{ weekNewDisplay }}
           <span class="stat-unit">篇</span>
         </div>
       </div>
@@ -71,7 +71,7 @@
       <div class="stat-card" :style="{ animationDelay: '560ms' }">
         <div class="stat-label">🚀 项目数量</div>
         <div class="stat-value">
-          {{ stats.projectCount }}
+          {{ projectCountDisplay }}
           <span class="stat-unit">个</span>
         </div>
       </div>
@@ -80,10 +80,29 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { data as stats } from '../../site.data.mjs'
 import { useVisitorCounter } from '../composables/useVisitorCounter'
+import { useCountUp } from '../composables/useCountUp'
 
 const { uv, pv } = useVisitorCounter()
+
+// 异步数字（来自 Supabase，可能为 null）：在 uv/pv 到达后触发 count-up
+const uvDisplay = useCountUp(uv, 1500)
+const pvDisplay = useCountUp(pv, 1500)
+
+// 静态数字（构建时已确定），用 ref 包一下喂给 useCountUp
+const wordsRef = ref(stats.totalWords)
+const runDaysRef = ref(stats.runDays)
+const monthNewRef = ref(stats.monthNew)
+const weekNewRef = ref(stats.weekNew)
+const projectCountRef = ref(stats.projectCount)
+
+const wordsDisplay = useCountUp(wordsRef, 1200)
+const runDaysDisplay = useCountUp(runDaysRef, 1000)
+const monthNewDisplay = useCountUp(monthNewRef, 800)
+const weekNewDisplay = useCountUp(weekNewRef, 800)
+const projectCountDisplay = useCountUp(projectCountRef, 800)
 
 function fmtNum(n: number) {
   return n.toLocaleString('zh-CN')
