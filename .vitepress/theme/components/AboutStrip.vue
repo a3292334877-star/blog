@@ -1,7 +1,7 @@
 <template>
   <section class="about-strip">
     <div class="strip-inner">
-      <span class="strip-item"><span class="emoji">🎓</span> 深职院 · 人工智能</span>
+      <span class="strip-item"><span class="emoji">🎓</span> 深大 · 人工智能</span>
       <span class="divider"></span>
       <span class="strip-item"><span class="emoji">☕</span> Java / C++ / Flutter</span>
       <span class="divider"></span>
