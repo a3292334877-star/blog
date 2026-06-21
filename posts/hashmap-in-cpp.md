@@ -2,7 +2,7 @@
 title: C++ 中哈希 Map 的应用与竞赛技巧
 date: 2026-06-02
 tags: [教程, C++, 算法]
-cover: https://images.unsplash.com/photo-1515879218367-8466d910auj7?w=800
+cover: https://images.unsplash.com/photo-1515879218367-8466d9101a7b?w=800
 ---
 
 # C++ 中哈希 Map 的应用与竞赛技巧 🗺️

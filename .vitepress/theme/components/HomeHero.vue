@@ -3,6 +3,15 @@
     <!-- 渐变背景 -->
     <div class="hero-bg"></div>
 
+    <!-- 装饰 blob -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- 头像 -->
+    <div class="avatar">
+      <img :src="avatarSrc" alt="Sakiko">
+    </div>
+
     <!-- Glitch 标题 -->
     <div class="glitch" :data-text="greeting">{{ greeting }}</div>
 
@@ -38,7 +47,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useData } from 'vitepress'
+
+const { site } = useData()
+const base = site.value.base
+// public 目录下资源，用 base 前缀
+const avatarSrc = computed(() => base + 'avatar.svg'.replace(/^\//, ''))
 
 const greeting = 'Hello, Sakiko 🌸'
 
@@ -83,6 +98,13 @@ onMounted(() => {
     }
   }
   tick()
+
+  // 入场自动播一次 glitch（给 hero 加 .glitch-intro 类）
+  const hero = document.querySelector('.home-hero .glitch')
+  if (hero) {
+    hero.classList.add('glitch-intro')
+    setTimeout(() => hero.classList.remove('glitch-intro'), 1600)
+  }
 })
 
 onUnmounted(() => { if (timer) clearTimeout(timer) })
@@ -103,27 +125,81 @@ function scrollDown() {
   overflow: hidden;
 }
 
+/* 收敛为 3 段渐变 + 双色旋转光斑，去掉杂色 */
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #ffb7c5, #ffd1dc 25%, #fff0f3 50%, #ffe4b5 75%, #ffb7c5);
-  background-size: 400% 400%;
-  animation: bg-shift 15s ease infinite;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,183,197,0.6), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255,228,181,0.55), transparent 50%),
+    linear-gradient(135deg, #fff5f7 0%, #ffeede 50%, #fff0f3 100%);
+  background-size: 160% 160%;
+  animation: bg-shift 18s ease infinite;
 }
 
 @keyframes bg-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%, 100% { background-position: 0% 50%, 100% 50%, 0% 50%; }
+  50% { background-position: 100% 50%, 0% 50%, 100% 50%; }
+}
+
+/* 装饰 blob：浮动光斑增加层次 */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+  animation: blob-float 14s ease-in-out infinite;
+}
+.blob-1 {
+  width: 320px; height: 320px;
+  background: var(--sakura-pink);
+  top: 10%; left: -80px;
+}
+.blob-2 {
+  width: 260px; height: 260px;
+  background: var(--sakura-warm);
+  bottom: 15%; right: -60px;
+  animation-delay: -7s;
+}
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(1.1); }
+}
+
+/* 头像 */
+.avatar {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 3px solid rgba(255,255,255,0.7);
+  box-shadow: 0 8px 30px rgba(232,138,154,0.25);
+  animation: avatar-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@keyframes avatar-in {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
 /* Glitch */
 .glitch {
   position: relative;
   font-weight: bold;
-  font-size: 72px;
+  font-size: 64px;
   color: #fff;
-  text-shadow: rgba(0,0,0,0.2) 4px 4px 8px;
+  text-shadow: rgba(0,0,0,0.25) 4px 4px 12px;
   z-index: 1;
+  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+}
+@keyframes title-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 .glitch::before, .glitch::after {
   content: attr(data-text);
@@ -133,11 +209,13 @@ function scrollDown() {
 }
 .glitch::before { left: -1px; text-shadow: 1px 0 #ff3f1a; }
 .glitch::after  { left: 1px;  text-shadow: -1px 0 #00a7e0; }
-.glitch:hover::before {
+.glitch:hover::before,
+.glitch.glitch-intro::before {
   text-shadow: 4px 0 #ff3f1a;
   animation: glitch-1 0.8s infinite ease-in-out alternate-reverse;
 }
-.glitch:hover::after {
+.glitch:hover::after,
+.glitch.glitch-intro::after {
   text-shadow: -4px 0 #00a7e0;
   animation: glitch-2 0.8s infinite ease-in-out alternate-reverse;
 }
@@ -166,6 +244,7 @@ function scrollDown() {
   text-align: center;
   margin: 24px 0 0;
   min-height: 28px;
+  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
 }
 .quote { color: var(--sakura-deep); margin: 0 6px; font-size: 18px; }
 .typing-cursor { color: var(--sakura-deep); animation: blink 1s step-end infinite; }
@@ -180,6 +259,7 @@ function scrollDown() {
   justify-content: center;
   gap: 10px;
   margin-top: 24px;
+  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
 }
 .badge {
   padding: 6px 16px;
@@ -210,6 +290,7 @@ function scrollDown() {
   border-radius: 12px;
   font-size: 16px;
   transition: all 0.3s;
+  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s both;
 }
 .gh-btn:hover {
   background: var(--accent-color);
@@ -243,7 +324,10 @@ function scrollDown() {
 }
 
 @media (max-width: 720px) {
-  .glitch { font-size: 42px; }
+  .glitch { font-size: 36px; }
   .typewriter-line { font-size: 14px; }
+  .avatar { width: 96px; height: 96px; }
+  .blob-1 { width: 220px; height: 220px; }
+  .blob-2 { width: 180px; height: 180px; }
 }
 </style>

@@ -11,7 +11,8 @@
           <span class="text">{{ year }}</span>
         </div>
 
-        <div v-for="p in group" :key="p.href" class="item">
+        <div v-for="(p, i) in group" :key="p.href" class="item"
+          :style="{ animationDelay: i * 50 + 'ms' }">
           <div class="marker">
             <span class="mdot"></span>
             <span class="mline"></span>
@@ -84,7 +85,15 @@ function fmtShort(ts: number) {
 }
 .text { font-size: 20px; font-weight: 700; color: var(--accent-color); }
 
-.item { display: flex; position: relative; margin-bottom: 18px; }
+.item {
+  display: flex; position: relative; margin-bottom: 18px;
+  opacity: 0;
+  transform: translateX(-12px);
+  animation: item-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes item-in {
+  to { opacity: 1; transform: translateX(0); }
+}
 
 .marker {
   position: absolute; left: -22px; top: 0; bottom: -18px;

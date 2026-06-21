@@ -1,28 +1,31 @@
 /* ========== 樱花 Sakura 风格变量 ========== */
 :root {
-  --sakura-pink: #ffb7c5;
-  --sakura-deep: #e88a9a;
-  --sakura-light: #fff0f3;
-  --sakura-warm: #ffe4b5;
-  --accent-color: #fe9600;
+  /* 粉色降饱和，避免与橙色 accent 叠加过腻 */
+  --sakura-pink: #f5b8c4;
+  --sakura-deep: #d97a8c;
+  --sakura-light: #fff4f6;
+  --sakura-warm: #ffe9c9;
+  /* accent 改用更深的玫红，与粉色层级更清晰 */
+  --accent-color: #e4596f;
 
   /* VitePress 默认变量覆盖 */
-  --vp-c-brand-1: #fe9600;
-  --vp-c-brand-2: #e58700;
-  --vp-c-brand-3: #cc7700;
-  --vp-c-brand-soft: rgba(254, 150, 0, 0.14);
+  --vp-c-brand-1: #e4596f;
+  --vp-c-brand-2: #c8455e;
+  --vp-c-brand-3: #a8384f;
+  --vp-c-brand-soft: rgba(228, 89, 111, 0.14);
 
-  --vp-font-family-base: "Noto Serif SC", "Microsoft YaHei", "PingFang SC", serif;
+  --vp-font-family-base: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
   --vp-font-family-mono: "Fira Code", "Cascadia Code", monospace;
 }
 
-/* 暗黑模式 */
+/* 暗黑模式：加一点夜樱蓝紫调，避免纯灰冷漠 */
 .dark {
-  --vp-c-bg: #1a1a1a;
-  --vp-c-bg-alt: #222;
-  --vp-c-bg-elv: #252525;
-  --vp-c-bg-soft: #2a2a2a;
-  --sakura-light: rgba(255, 183, 197, 0.08);
+  --vp-c-bg: #1a1620;
+  --vp-c-bg-alt: #221d2a;
+  --vp-c-bg-elv: #272130;
+  --vp-c-bg-soft: #2c2536;
+  --sakura-light: rgba(245, 184, 196, 0.08);
+  --sakura-pink: #c98a98;
 }
 
 /* ========== 全局 ========== */
@@ -98,6 +101,11 @@ body {
   margin: -24px -24px 32px;
   color: #fff;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  animation: banner-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes banner-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .doc-banner .doc-title {

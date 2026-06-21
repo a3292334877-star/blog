@@ -6,7 +6,7 @@
 
     <div class="stats-grid">
       <!-- 来访人数 / 访问次数 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '0ms' }">
         <div class="stat-label">👥 来访人数</div>
         <div class="stat-value">
           <template v-if="uv !== null">{{ fmtNum(uv) }}</template>
@@ -14,7 +14,7 @@
           <span class="stat-unit">人次</span>
         </div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '80ms' }">
         <div class="stat-label">👁️ 访问次数</div>
         <div class="stat-value">
           <template v-if="pv !== null">{{ fmtNum(pv) }}</template>
@@ -24,7 +24,7 @@
       </div>
 
       <!-- 总字数 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '160ms' }">
         <div class="stat-label">📝 本站总字数</div>
         <div class="stat-value">
           {{ fmtNum(stats.totalWords) }}
@@ -33,7 +33,7 @@
       </div>
 
       <!-- 已运行时间 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '240ms' }">
         <div class="stat-label">⏳ 已运行时间</div>
         <div class="stat-value">
           {{ stats.runDays }}
@@ -42,7 +42,7 @@
       </div>
 
       <!-- 活跃时间 (最近更新) -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '320ms' }">
         <div class="stat-label">🕐 最近更新</div>
         <div class="stat-value small">
           {{ fmtDate(stats.lastUpdate) }}
@@ -50,7 +50,7 @@
       </div>
 
       <!-- 近一月新增 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '400ms' }">
         <div class="stat-label">📅 近一月新增</div>
         <div class="stat-value">
           {{ stats.monthNew }}
@@ -59,7 +59,7 @@
       </div>
 
       <!-- 近一周新增 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '480ms' }">
         <div class="stat-label">📆 近一周新增</div>
         <div class="stat-value">
           {{ stats.weekNew }}
@@ -68,7 +68,7 @@
       </div>
 
       <!-- 项目数量 -->
-      <div class="stat-card">
+      <div class="stat-card" :style="{ animationDelay: '560ms' }">
         <div class="stat-label">🚀 项目数量</div>
         <div class="stat-value">
           {{ stats.projectCount }}
@@ -120,12 +120,19 @@ function fmtDate(ts: number) {
   border-radius: 12px;
   padding: 22px 18px;
   text-align: center;
-  transition: all 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  /* 入场 stagger */
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  animation: stat-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes stat-in {
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(254,150,0,0.1);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(228,89,111,0.15);
   border-color: var(--accent-color);
 }
 

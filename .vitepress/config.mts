@@ -46,7 +46,7 @@ export default defineConfig({
       `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
 
     ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#fe9600' }],
+    ['meta', { name: 'theme-color', content: '#e4596f' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Sakikoの博客' }],
     ['meta', { property: 'og:description', content: '一个热爱ACGN的程序员小窝' }],
