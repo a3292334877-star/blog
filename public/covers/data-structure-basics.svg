@@ -3,45 +3,77 @@
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#00b894"/>
-      <stop offset="1" stop-color="#55efc4"/>
+      <stop offset="1" stop-color="#00cec9"/>
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
-      <stop offset="0" stop-color="rgba(255,255,255,0.25)"/>
+    <radialGradient id="glow" cx="70%" cy="30%" r="70%">
+      <stop offset="0" stop-color="rgba(255,255,255,0.22)"/>
       <stop offset="1" stop-color="rgba(255,255,255,0)"/>
     </radialGradient>
+    <!-- 噪点纹理 -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0"/>
+    </filter>
   </defs>
 
-  <!-- 背景 -->
+  <!-- 背景层 -->
   <rect width="1200" height="675" fill="url(#bg)"/>
   <rect width="1200" height="675" fill="url(#glow)"/>
+  <rect width="1200" height="675" filter="url(#noise)" opacity="0.5"/>
 
   <!-- 装饰圆斑 -->
-  <circle cx="980" cy="120" r="220" fill="rgba(255,255,255,0.08)"/>
-  <circle cx="180" cy="560" r="160" fill="rgba(255,255,255,0.06)"/>
-  <circle cx="1080" cy="540" r="90" fill="rgba(255,255,255,0.10)"/>
+  <circle cx="1080" cy="80" r="180" fill="rgba(255,255,255,0.07)"/>
+  <circle cx="120" cy="600" r="140" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="60" cy="120" r="60" fill="rgba(255,255,255,0.08)"/>
 
-  <!-- 装饰线条（点阵） -->
-  <g fill="rgba(255,255,255,0.12)">
-    <circle cx="80" cy="100" r="3"/>
-    <circle cx="110" cy="100" r="3"/>
-    <circle cx="140" cy="100" r="3"/>
-    <circle cx="80" cy="130" r="3"/>
-    <circle cx="110" cy="130" r="3"/>
-    <circle cx="140" cy="130" r="3"/>
+  <!-- 左上点阵装饰 -->
+  <g fill="rgba(255,255,255,0.14)">
+    <circle cx="50" cy="80" r="3"/><circle cx="78" cy="80" r="3"/><circle cx="106" cy="80" r="3"/>
+    <circle cx="50" cy="108" r="3"/><circle cx="78" cy="108" r="3"/>
+    <circle cx="50" cy="136" r="3"/>
   </g>
 
-  <!-- 中央大 emoji 图标 -->
-  <text x="600" y="320" font-size="200" text-anchor="middle" dominant-baseline="central" opacity="0.92">🌳</text>
+  <!-- 右上主题装饰图形 -->
+  
+  <g stroke="rgba(255,255,255,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <!-- 树枝 -->
+    <line x1="940" y1="150" x2="870" y2="220"/>
+    <line x1="940" y1="150" x2="1010" y2="220"/>
+    <line x1="870" y1="220" x2="830" y2="290"/>
+    <line x1="870" y1="220" x2="910" y2="290"/>
+    <line x1="1010" y1="220" x2="980" y2="290"/>
+    <line x1="1010" y1="220" x2="1050" y2="290"/>
+  </g>
+  <!-- 节点 -->
+  <g>
+    <circle cx="940" cy="150" r="18" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="870" cy="220" r="16" fill="rgba(255,255,255,0.75)"/>
+    <circle cx="1010" cy="220" r="16" fill="rgba(255,255,255,0.75)"/>
+    <circle cx="830" cy="290" r="14" fill="rgba(255,255,255,0.6)"/>
+    <circle cx="910" cy="290" r="14" fill="rgba(255,255,255,0.6)"/>
+    <circle cx="980" cy="290" r="14" fill="rgba(255,255,255,0.6)"/>
+    <circle cx="1050" cy="290" r="14" fill="rgba(255,255,255,0.6)"/>
+  </g>
+  <!-- 节点数值 -->
+  <g font-family="'Fira Code',monospace" font-size="14" fill="#2d3436" text-anchor="middle" font-weight="700">
+    <text x="940" y="155">1</text>
+    <text x="870" y="225">2</text>
+    <text x="1010" y="225">3</text>
+    <text x="830" y="295">4</text>
+    <text x="910" y="295">5</text>
+    <text x="980" y="295">6</text>
+    <text x="1050" y="295">7</text>
+  </g>
+  
 
-  <!-- 标题 -->
-  <text x="600" y="470" font-size="52" font-weight="700" text-anchor="middle" fill="#ffffff" style="text-shadow: 0 2px 12px rgba(0,0,0,0.25);">数据结构基础：从数组到并查集</text>
+  <!-- 底部品牌区 -->
+  <text x="80" y="610" font-size="22" fill="rgba(255,255,255,0.75)" font-family="'Noto Serif SC',serif">🌸 Sakiko の博客</text>
 
-  <!-- 副标题 -->
-  <text x="600" y="525" font-size="22" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="'Noto Serif SC',serif">教程 · C++ · 数据结构</text>
-
-  <!-- 底部分隔线 -->
-  <line x1="540" y1="565" x2="660" y2="565" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
-
-  <!-- 右下角小樱花 logo -->
-  <text x="1140" y="640" font-size="28" text-anchor="end" opacity="0.7">🌸 Sakiko</text>
+  <!-- 标题区（左下） -->
+  <g transform="translate(80 460)">
+    <!-- 标题前竖线装饰 -->
+    <rect x="0" y="-30" width="5" height="110" rx="2" fill="rgba(255,255,255,0.85)"/>
+    <text x="22" y="10" font-size="46" font-weight="700" fill="#ffffff" style="text-shadow: 0 2px 12px rgba(0,0,0,0.3);">数据结构基础：从数组到并查集</text>
+    <text x="22" y="55" font-size="22" fill="rgba(255,255,255,0.88)" font-family="'Noto Serif SC',serif">教程 · C++ · 数据结构</text>
+  </g>
 </svg>
