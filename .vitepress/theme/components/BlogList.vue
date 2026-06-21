@@ -57,9 +57,9 @@ function fmtDate(ts: number) {
 
 <style scoped>
 .blog-list-section {
-  max-width: 1080px;
+  width: 100%;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 32px 0;
 }
 
 .section-heading {

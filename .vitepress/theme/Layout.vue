@@ -1,6 +1,7 @@
 <template>
   <DefaultTheme.Layout>
     <template #layout-top>
+      <CursorGlow />
       <ReadingProgress />
       <SakuraPetals />
       <MusicPlayer />
@@ -11,8 +12,11 @@
     </template>
 
     <template #home-hero-after>
-      <BlogList />
-      <BlogTimeline />
+      <AboutStrip />
+      <HomeColumns />
+      <AnimePreview />
+      <ProjectsPreview />
+      <ShuoshuoPreview />
       <SiteStats />
     </template>
 
@@ -44,14 +48,18 @@ import { useData, useRoute } from 'vitepress'
 import { computed, watch, nextTick, onMounted } from 'vue'
 import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
-import BlogList from './components/BlogList.vue'
-import BlogTimeline from './components/BlogTimeline.vue'
+import AboutStrip from './components/AboutStrip.vue'
+import HomeColumns from './components/HomeColumns.vue'
+import AnimePreview from './components/AnimePreview.vue'
+import ProjectsPreview from './components/ProjectsPreview.vue'
+import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
 import SakuraPetals from './components/SakuraPetals.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
 import GiscusComment from './components/GiscusComment.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import Live2DWidget from './components/Live2DWidget.vue'
+import CursorGlow from './components/CursorGlow.vue'
 
 const { frontmatter } = useData()
 const route = useRoute()

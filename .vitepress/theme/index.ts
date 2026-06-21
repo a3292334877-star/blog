@@ -5,6 +5,9 @@ import BlogList from './components/BlogList.vue'
 import BlogTimeline from './components/BlogTimeline.vue'
 import TagCloud from './components/TagCloud.vue'
 import SiteStats from './components/SiteStats.vue'
+import AnimePreview from './components/AnimePreview.vue'
+import ProjectsPreview from './components/ProjectsPreview.vue'
+import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
 import './custom.css'
 
 export default {
@@ -16,5 +19,8 @@ export default {
     app.component('BlogTimeline', BlogTimeline)
     app.component('TagCloud', TagCloud)
     app.component('SiteStats', SiteStats)
+    app.component('AnimePreview', AnimePreview)
+    app.component('ProjectsPreview', ProjectsPreview)
+    app.component('ShuoshuoPreview', ShuoshuoPreview)
   },
 }

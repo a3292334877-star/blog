@@ -57,9 +57,9 @@ function fmtShort(ts: number) {
 
 <style scoped>
 .timeline-section {
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: 24px 0 48px;
 }
 .section-heading {
   font-size: 22px;
