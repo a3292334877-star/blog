@@ -2,7 +2,7 @@
 title: 矩阵入门：从高斯消元到特征值
 date: 2026-06-03
 tags: [教程, 线性代数, 高等数学]
-cover: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800
+cover: /blog/covers/matrix-basics.svg
 ---
 
 # 矩阵入门：从高斯消元到特征值

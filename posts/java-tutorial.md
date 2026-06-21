@@ -2,7 +2,7 @@
 title: Java 零基础入门教程：从 Hello World 到面向对象
 date: 2026-06-06
 tags: [教程, Java, 面向对象, 入门]
-cover: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800
+cover: /blog/covers/java-tutorial.svg
 ---
 
 # Java 零基础入门教程：从 Hello World 到面向对象 ☕

@@ -2,7 +2,7 @@
 title: C++ 高精度算法详解与竞赛模板
 date: 2026-06-02
 tags: [教程, C++, 算法]
-cover: https://images.unsplash.com/photo-1509228468518-180b3b6f51ac?w=800
+cover: /blog/covers/bigint-in-cpp.svg
 ---
 
 # C++ 高精度算法详解与竞赛模板 🔢

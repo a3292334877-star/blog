@@ -2,7 +2,7 @@
 title: Markdown 写作指南
 date: 2026-06-01
 tags: [教程, Markdown]
-cover: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800
+cover: /blog/covers/markdown-guide.svg
 ---
 
 # Markdown 写作指南 📝
@@ -140,7 +140,7 @@ $$
 title: 文章标题
 date: 2026-06-01
 tags: [教程, Markdown]
-cover: https://example.com/cover.jpg
+cover: /blog/covers/your-post-slug.svg
 ---
 ```
 

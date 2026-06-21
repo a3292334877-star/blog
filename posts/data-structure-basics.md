@@ -2,7 +2,7 @@
 title: 数据结构基础：从数组到并查集
 date: 2026-06-02
 tags: [教程, C++, 数据结构]
-cover: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800
+cover: /blog/covers/data-structure-basics.svg
 ---
 
 # 数据结构基础：从数组到并查集 📚

@@ -2,7 +2,7 @@
 title: Git 入门与实用技巧
 date: 2026-06-02
 tags: [教程, Git]
-cover: https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=800
+cover: /blog/covers/git-tips.svg
 ---
 
 # Git 入门与实用技巧 🛠️

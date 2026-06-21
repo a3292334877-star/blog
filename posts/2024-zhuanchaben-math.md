@@ -2,7 +2,7 @@
 title: 2024年广东专插本《高等数学》真题回忆版+详解
 date: 2026-06-06
 tags: [专插本, 高等数学, 微积分, 真题, 教程]
-cover: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800
+cover: /blog/covers/2024-zhuanchaben-math.svg
 ---
 
 # 2024年广东专插本《高等数学》真题回忆版+详解 📐

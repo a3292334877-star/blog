@@ -2,7 +2,7 @@
 title: 2024年广东专插本《计算机基础与程序设计》真题回忆版+详解
 date: 2026-06-04
 tags: [专插本, C语言, 数据结构, 真题, 教程]
-cover: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800
+cover: /blog/covers/2024-zhuanchaben-c-programming.svg
 ---
 
 # 2024年广东专插本《计算机基础与程序设计》真题回忆版+详解 🖥️

@@ -2,7 +2,7 @@
 title: Linux 常用操作技巧
 date: 2026-06-02
 tags: [教程, Linux]
-cover: https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800
+cover: /blog/covers/linux-tips.svg
 ---
 
 # Linux 常用操作技巧 🐧
