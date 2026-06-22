@@ -441,16 +441,23 @@ function makeSvg({ title, subtitle, gradient, decor }) {
 function main() {
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
 
+  // 以脚本文件 mtime 作为配置版本基准：脚本改动才会触发重生成
+  const scriptMtime = statSync(new URL(import.meta.url)).mtimeMs
+
   let generated = 0
   let skipped = 0
   for (const cfg of COVERS) {
     const file = path.join(OUT_DIR, `${cfg.slug}.svg`)
-    // 始终重新生成（v2 升级，覆盖旧的简陋版本）
+    // 增量生成：输出存在且比脚本新则跳过
+    if (existsSync(file) && statSync(file).mtimeMs >= scriptMtime) {
+      skipped++
+      continue
+    }
     const svg = makeSvg(cfg)
     writeFileSync(file, svg, 'utf-8')
     generated++
   }
-  console.log(`  ✓ 封面生成完成 v2: ${generated} 张已更新 (共 ${COVERS.length} 张)`)
+  console.log(`  ✓ 封面生成完成 v2: ${generated} 张更新, ${skipped} 张跳过 (共 ${COVERS.length} 张)`)
 }
 
 main()

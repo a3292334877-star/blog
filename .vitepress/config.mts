@@ -154,4 +154,36 @@ export default defineConfig({
 
   // Vite 配置
   vite: {},
+
+  // SEO meta：文章页注入 og:* / twitter:* （build 时静态注入到 frontmatter.head）
+  transformPageData(pageData: any) {
+    const fm = pageData.frontmatter || {}
+    if (!fm.title) return
+    const title = fm.title
+    const desc = fm.description || SITE_DESC
+    const cover = fm.cover
+      ? (String(fm.cover).startsWith('http')
+          ? String(fm.cover)
+          : `${SITE_URL}${fm.cover}`)
+      : null
+    const url = `${SITE_URL}/blog/${pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')}`
+
+    const head: any[] = [
+      ['meta', { property: 'og:type', content: 'article' }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: desc }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { name: 'twitter:card', content: cover ? 'summary_large_image' : 'summary' }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: desc }],
+    ]
+    if (cover) {
+      head.push(['meta', { property: 'og:image', content: cover }])
+      head.push(['meta', { name: 'twitter:image', content: cover }])
+    }
+    pageData.frontmatter = { ...fm, head }
+  },
 })
+
+const SITE_URL = 'https://a3292334877-star.github.io'
+const SITE_DESC = '一个热爱ACGN的程序员小窝'

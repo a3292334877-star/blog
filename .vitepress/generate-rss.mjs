@@ -15,6 +15,7 @@ const SITE = {
 
 const DIST = path.join(process.cwd(), '.vitepress/dist')
 const POST_DIR = path.join(process.cwd(), 'posts')
+const ABS_BASE = 'https://a3292334877-star.github.io'
 
 function escapeXml(s) {
   return s
@@ -39,23 +40,32 @@ function main() {
       if (!data.title) return null
       const slug = f.replace(/\.md$/, '')
       const date = +new Date(data.date) || fs.statSync(path.join(POST_DIR, f)).mtimeMs
-      return { title: data.title, date, slug, excerpt: (excerpt || '').trim() }
+      const cover = data.cover
+        ? (String(data.cover).startsWith('http') ? String(data.cover) : `${ABS_BASE}${data.cover}`)
+        : null
+      const desc = data.description || (excerpt || '').trim() || SITE.desc
+      return { title: data.title, date, slug, excerpt: desc, cover }
     })
     .filter(Boolean)
     .sort((a, b) => b.date - a.date)
 
   const updated = posts.length > 0 ? rfc3339(posts[0].date) : rfc3339(Date.now())
 
-  const items = posts.map(p => `
+  const items = posts.map(p => {
+    const media = p.cover
+      ? `\n      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="${escapeXml(p.cover)}" medium="image"/>`
+      : ''
+    return `
     <entry>
       <title>${escapeXml(p.title)}</title>
       <link href="${SITE.url}/posts/${p.slug}"/>
       <id>${SITE.url}/posts/${p.slug}</id>
       <published>${rfc3339(p.date)}</published>
       <updated>${rfc3339(p.date)}</updated>
-      <summary type="html">${escapeXml(p.excerpt)}</summary>
+      <summary type="html">${escapeXml(p.excerpt)}</summary>${media}
       <author><name>${SITE.author}</name></author>
-    </entry>`).join('')
+    </entry>`
+  }).join('')
 
   const feed = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">

@@ -13,12 +13,12 @@
   "license": "MIT",
   "dependencies": {
     "gray-matter": "^4.0.3",
+    "live2d-widget": "^3.0.4",
     "markdown-it-mathjax3": "^4.3.2",
     "medium-zoom": "^1.1.0",
     "vitepress": "^1.6.4"
   },
   "devDependencies": {
-    "live2d-widget": "^3.0.4",
     "sass-embedded": "^1.100.0"
   }
 }

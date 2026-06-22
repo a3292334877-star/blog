@@ -100,11 +100,14 @@ function parseProjects(cwd) {
       return {
         title: (data.title || f.replace(/\.md$/, '')).replace(/\s*[-–—].*$/, ''), // 去掉副标题
         slug: f.replace(/\.md$/, ''),
+        date: +new Date(data.date) || 0,
         cover: data.cover || '',
         desc,
         tags: data.tags || [],
       }
     })
+    .filter((p) => p.date > 0)
+    .sort((a, b) => b.date - a.date)
     .slice(0, 3)
 }
 
