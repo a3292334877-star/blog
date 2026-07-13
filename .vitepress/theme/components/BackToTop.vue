@@ -34,6 +34,7 @@ function scrollToTop() {
 }
 
 onMounted(() => {
+  update()
   window.addEventListener('scroll', onScroll, { passive: true })
 })
 

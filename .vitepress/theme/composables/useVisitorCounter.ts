@@ -4,36 +4,7 @@
  * 使用 Supabase 作为后端存储 UV/PV 数据。
  * 用户需要先创建 Supabase 项目，然后替换下方的 SUPABASE_URL 和 SUPABASE_ANON_KEY。
  *
- * 设置步骤：
- * 1. 注册 https://supabase.com（可用 GitHub 登录）
- * 2. 创建新项目，选择 ap-southeast-1（新加坡）区域
- * 3. 在 SQL Editor 中运行：
- *
- *    CREATE TABLE visits (
- *      id BIGSERIAL PRIMARY KEY,
- *      fingerprint TEXT NOT NULL,
- *      page_path TEXT NOT NULL DEFAULT '/',
- *      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
- *    );
- *    CREATE INDEX idx_visits_fingerprint ON visits (fingerprint);
- *    ALTER TABLE visits ENABLE ROW LEVEL SECURITY;
- *    CREATE POLICY "allow_public_insert" ON visits FOR INSERT TO anon WITH CHECK (true);
- *    CREATE POLICY "allow_public_select" ON visits FOR SELECT TO anon USING (true);
- *
- *    CREATE OR REPLACE FUNCTION get_site_stats()
- *    RETURNS TABLE (uv BIGINT, pv BIGINT)
- *    LANGUAGE plpgsql AS $$
- *    BEGIN
- *      RETURN QUERY
- *      SELECT
- *        COUNT(DISTINCT fingerprint) AS uv,
- *        COUNT(*) AS pv
- *      FROM visits;
- *    END;
- *    $$;
- *
- * 4. 从 Settings > API 复制 Project URL 和 anon public key
- * 5. 替换下方占位符
+ * 后端初始化脚本见 supabase/visitor-counter.sql。
  */
 
 // ============================================================
@@ -129,7 +100,7 @@ async function postVisit(fingerprint: string): Promise<void> {
     Prefer: 'return=minimal',
   }
 
-  await fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -137,6 +108,7 @@ async function postVisit(fingerprint: string): Promise<void> {
       page_path: location.pathname,
     }),
   })
+  if (!res.ok) throw new Error(`Visitor API returned ${res.status}`)
 }
 
 async function fetchStats(): Promise<{ uv: number; pv: number } | null> {
@@ -166,15 +138,16 @@ export function useVisitorCounter(): { uv: Ref<number | null>; pv: Ref<number | 
   onMounted(async () => {
     // 缺少凭据时直接跳过，不发无效请求
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return
+    if (navigator.doNotTrack === '1') return
 
     const storage = getStorage()
     const fp = generateFingerprint()
 
     // 记录访问（带防抖）
     if (!isDebounced(storage)) {
-      markPosted(storage)
       try {
         await postVisit(fp)
+        markPosted(storage)
       } catch {
         // 计数失败不影响页面正常浏览
       }

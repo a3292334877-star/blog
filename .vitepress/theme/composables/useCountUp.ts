@@ -1,4 +1,4 @@
-import { ref, watch, onMounted, onUnmounted, type Ref } from 'vue'
+import { ref, watch, onUnmounted, type Ref } from 'vue'
 
 /**
  * 数字 count-up 动画
@@ -34,8 +34,12 @@ export function useCountUp(
   }
 
   function start(to: number) {
-    // SSR 环境无 requestAnimationFrame，直接设到目标值
-    if (typeof window === 'undefined' || typeof requestAnimationFrame === 'undefined') {
+    // SSR 环境无 requestAnimationFrame，或用户要求减少动画时，直接设为目标值
+    if (
+      typeof window === 'undefined'
+      || typeof requestAnimationFrame === 'undefined'
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
       display.value = to
       return
     }

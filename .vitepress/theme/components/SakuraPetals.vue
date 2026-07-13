@@ -16,6 +16,8 @@ import { ref, onMounted } from 'vue'
 
 const petals = ref<Array<{ i: number; style: Record<string, string> }>>([])
 onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
   petals.value = Array.from({ length: 16 }, (_, i) => {
     // 每片花瓣独立的横向漂移终点，避免 16 片同步移动
     const drift = Math.round(-60 + Math.random() * 160)

@@ -226,3 +226,27 @@ body {
   font-family: var(--vp-font-family-title);
   font-weight: 700;
 }
+
+/* 键盘用户保留清晰焦点，鼠标点击不额外显示 */
+:focus-visible {
+  outline: 3px solid var(--vp-c-brand-1);
+  outline-offset: 3px;
+}
+
+/* 尊重系统的减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .petals,
+  .cursor-glow,
+  #live2d-widget {
+    display: none !important;
+  }
+}

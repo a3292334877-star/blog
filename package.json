@@ -4,13 +4,17 @@
   "type": "module",
   "description": "Sakikoの博客 - VitePress",
   "scripts": {
-    "dev": "node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress dev",
-    "build": "node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs",
+    "check": "node scripts/check-project.mjs",
+    "dev": "npm run check && node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress dev",
+    "build": "npm run check && node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],
   "author": "Sakiko",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "gray-matter": "^4.0.3",
     "live2d-widget": "^3.0.4",

@@ -34,7 +34,7 @@ function loop() {
 
 onMounted(() => {
   // 仅桌面端启用（触屏无意义且会增加负担）
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  if (window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
     window.addEventListener('mousemove', onMove, { passive: true })
   }
 })

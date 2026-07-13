@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { SITE, absoluteAsset, absoluteUrl } from './site.constants.mjs'
 
 interface PostMeta {
   title: string
@@ -35,21 +36,23 @@ const posts = loadPosts()
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/blog/',
+  base: SITE.base,
   lang: 'zh-CN',
-  title: 'Sakikoの博客',
-  description: '一个热爱ACGN的程序员小窝',
+  title: SITE.title,
+  description: SITE.description,
 
   head: [
     // PWA 已关闭，此脚本清除旧 Service Worker
     ['script', {},
       `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
 
-    ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
+    ['link', { rel: 'icon', href: `${SITE.base}favicon.ico` }],
+    ['link', { rel: 'alternate', type: 'application/atom+xml', title: `${SITE.title} RSS`, href: `${SITE.base}feed.xml` }],
     ['meta', { name: 'theme-color', content: '#e4596f' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Sakikoの博客' }],
-    ['meta', { property: 'og:description', content: '一个热爱ACGN的程序员小窝' }],
+    ['meta', { property: 'og:title', content: SITE.title }],
+    ['meta', { property: 'og:description', content: SITE.description }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.cn' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.cn', crossorigin: '' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@400;600&display=swap' }],
@@ -61,7 +64,7 @@ export default defineConfig({
 
   // Sitemap
   sitemap: {
-    hostname: 'https://a3292334877-star.github.io',
+    hostname: SITE.origin,
   },
 
   themeConfig: {
@@ -145,7 +148,10 @@ export default defineConfig({
     image: { lazyLoading: true },
     config: async (md) => {
       const mathjax3 = (await import('markdown-it-mathjax3')).default
-      md.use(mathjax3)
+      md.use(mathjax3, {
+        // 共享字形定义，避免公式较多时重复嵌入大量 SVG path
+        svg: { fontCache: 'global' },
+      })
     },
   },
 
@@ -159,17 +165,23 @@ export default defineConfig({
   transformPageData(pageData: any) {
     const fm = pageData.frontmatter || {}
     if (!fm.title) return
+
     const title = fm.title
-    const desc = fm.description || SITE_DESC
+    const desc = fm.description || SITE.description
     const cover = fm.cover
       ? (String(fm.cover).startsWith('http')
           ? String(fm.cover)
-          : `${SITE_URL}${fm.cover}`)
+          : absoluteAsset(fm.cover))
       : null
-    const url = `${SITE_URL}/blog/${pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')}`
+    const pagePath = pageData.relativePath
+      .replace(/\.md$/, '')
+      .replace(/(^|\/)index$/, '$1')
+    const url = absoluteUrl(pagePath)
+    const isPost = pageData.relativePath.startsWith('posts/') && pageData.relativePath !== 'posts/index.md'
 
     const head: any[] = [
-      ['meta', { property: 'og:type', content: 'article' }],
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:type', content: isPost ? 'article' : 'website' }],
       ['meta', { property: 'og:title', content: title }],
       ['meta', { property: 'og:description', content: desc }],
       ['meta', { property: 'og:url', content: url }],
@@ -181,9 +193,7 @@ export default defineConfig({
       head.push(['meta', { property: 'og:image', content: cover }])
       head.push(['meta', { name: 'twitter:image', content: cover }])
     }
-    pageData.frontmatter = { ...fm, head }
+    const existingHead = Array.isArray(fm.head) ? fm.head : []
+    pageData.frontmatter = { ...fm, head: [...existingHead, ...head] }
   },
 })
-
-const SITE_URL = 'https://a3292334877-star.github.io'
-const SITE_DESC = '一个热爱ACGN的程序员小窝'

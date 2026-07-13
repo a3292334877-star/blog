@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import { useData, useRoute, withBase } from 'vitepress'
-import { computed, watch, nextTick, onMounted } from 'vue'
+import { computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
 import AboutStrip from './components/AboutStrip.vue'
@@ -65,16 +65,25 @@ const { frontmatter } = useData()
 const route = useRoute()
 
 // Image lightbox — re-attach on route change
+let zoom: ReturnType<typeof mediumZoom> | null = null
+
+function attachZoom() {
+  zoom?.detach()
+  zoom = mediumZoom('.main img:not([data-no-zoom])', {
+    background: 'var(--vp-c-bg)',
+    margin: 24,
+  })
+}
+
 onMounted(() => {
   watch(
     () => route.path,
-    () => nextTick(() => mediumZoom('.main img', {
-      background: 'var(--vp-c-bg)',
-      margin: 24,
-    })),
+    () => nextTick(attachZoom),
     { immediate: true },
   )
 })
+
+onUnmounted(() => zoom?.detach())
 
 // 文章页顶部横幅样式
 // 使用对象绑定而非字符串拼接，避免 cover 字段含 ; / ) 破坏样式或注入新属性

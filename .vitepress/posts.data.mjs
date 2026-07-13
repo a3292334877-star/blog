@@ -31,8 +31,9 @@ export default {
 function getPost(md, file, postDir, asFeed = false) {
   const fullPath = path.join(postDir, file)
   const timestamp = Math.floor(fs.statSync(fullPath).mtimeMs)
+  const cacheKey = `${fullPath}:${asFeed ? 'feed' : 'page'}`
 
-  const cached = cache.get(fullPath)
+  const cached = cache.get(cacheKey)
   if (cached && timestamp === cached.timestamp) {
     return cached.post
   }
@@ -56,6 +57,6 @@ function getPost(md, file, postDir, asFeed = false) {
     post.data = data
   }
 
-  cache.set(fullPath, { timestamp, post })
+  cache.set(cacheKey, { timestamp, post })
   return post
 }

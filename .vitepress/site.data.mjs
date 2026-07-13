@@ -35,7 +35,7 @@ export default {
     }
 
     // 运行天数（最早文章至今）
-    const firstDate = posts.reduce((min, p) => Math.min(min, p.date), now)
+    const firstDate = posts.length ? Math.min(...posts.map((p) => p.date)) : now
     const runDays = Math.max(1, Math.floor((now - firstDate) / DAY))
 
     // 近一周 / 近一月新增
@@ -59,7 +59,7 @@ export default {
       postCount: posts.length,
       weekNew,
       monthNew,
-      lastUpdate: Math.max(...posts.map((p) => p.date)),
+      lastUpdate: posts.length ? Math.max(...posts.map((p) => p.date)) : now,
       projectCount,
     }
   },

@@ -3,9 +3,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
+import { withBase } from 'vitepress'
 
-const MODEL_PATH = '/blog/live2d/model-static.json'
+const MODEL_PATH = withBase('/live2d/model.json')
+let loadTimer: ReturnType<typeof setTimeout> | null = null
 
 declare global {
   interface Window {
@@ -18,7 +20,7 @@ async function loadResources(): Promise<void> {
   if (!document.querySelector('link[data-live2d="fa"]')) {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = '/blog/live2d/font-awesome.min.css'
+    link.href = withBase('/live2d/font-awesome.min.css')
     link.setAttribute('data-live2d', 'fa')
     document.head.appendChild(link)
   }
@@ -27,7 +29,7 @@ async function loadResources(): Promise<void> {
   if (!window.L2Dwidget) {
     await new Promise<void>((resolve, reject) => {
       const script = document.createElement('script')
-      script.src = '/blog/live2d/L2Dwidget.min.js'
+      script.src = withBase('/live2d/L2Dwidget.min.js')
       script.onload = () => resolve()
       script.onerror = () => reject(new Error('Live2D load failed'))
       document.head.appendChild(script)
@@ -37,8 +39,7 @@ async function loadResources(): Promise<void> {
 
 function initWidget(): void {
   // L2Dwidget 的 webpack public path 已硬编码为 /blog/live2d/，
-  // 会自动从本地加载 chunk (L2Dwidget.0.min.js) 与模型资源，
-  // pluginRootPath / pluginJsPath / pluginModelPath 在 bundle 中未被引用，无需设置。
+  // 会自动从本地加载 chunk (L2Dwidget.0.min.js) 与模型资源。
   window.L2Dwidget.init({
     tagMode: false,
     debug: false,
@@ -55,9 +56,9 @@ function initWidget(): void {
       vOffset: -20,
     },
     mobile: {
-      show: true,
+      show: false,
       scale: 0.5,
-      motion: true,
+      motion: false,
     },
     react: {
       opacityDefault: 0.8,
@@ -76,12 +77,27 @@ function initWidget(): void {
   })
 }
 
-onMounted(async () => {
-  try {
-    await loadResources()
-    initWidget()
-  } catch (e) {
-    console.error('Live2D load failed:', e)
-  }
+function shouldLoad(): boolean {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+  return window.matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)').matches
+    && !connection?.saveData
+}
+
+onMounted(() => {
+  if (!shouldLoad()) return
+
+  // 让出首屏主线程与网络，再加载 1MB+ 的模型
+  loadTimer = setTimeout(async () => {
+    try {
+      await loadResources()
+      initWidget()
+    } catch (e) {
+      console.error('Live2D load failed:', e)
+    }
+  }, 1200)
+})
+
+onUnmounted(() => {
+  if (loadTimer) clearTimeout(loadTimer)
 })
 </script>

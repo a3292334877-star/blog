@@ -37,12 +37,12 @@
     </a>
 
     <!-- 向下 -->
-    <div class="scroll-hint" @click="scrollDown">
+    <button type="button" class="scroll-hint" aria-label="继续浏览" @click="scrollDown">
       <span>往下看</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="bounce-arrow">
         <polyline points="6 9 12 15 18 9"/>
       </svg>
-    </div>
+    </button>
   </section>
 </template>
 
@@ -71,6 +71,12 @@ const displayedText = ref('')
 let timer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduceMotion) {
+    displayedText.value = mottos[0]
+    return
+  }
+
   let charIdx = 0
   let textIdx = 0
   let deleting = false
@@ -310,6 +316,10 @@ function scrollDown() {
   color: rgba(0,0,0,0.35);
   font-size: 13px;
   cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
 }
 .scroll-hint:hover { color: rgba(0,0,0,0.55); }
 .bounce-arrow {

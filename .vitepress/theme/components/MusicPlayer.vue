@@ -3,6 +3,9 @@
     class="music-toggle"
     :class="{ playing: playing, buffering: buffering }"
     :title="buffering ? '加载中...' : (playing ? '暂停' : '♪ 播放')"
+    :aria-label="buffering ? '音乐加载中' : (playing ? '暂停背景音乐' : '播放背景音乐')"
+    :aria-pressed="playing"
+    type="button"
     @click.stop="toggle"
   >
     <span class="music-icon">{{ buffering ? '⟳' : '♪' }}</span>
@@ -11,6 +14,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { withBase } from 'vitepress'
 
 const playing = ref(false)
 const buffering = ref(false)
@@ -28,10 +32,10 @@ const onError = (e: Event) => {
 }
 
 onMounted(() => {
-  // 页面加载就创建 audio 并预加载，等点击时已经缓冲好了
-  audio = new Audio('/blog/music.mp3')
+  // 只读取媒体元数据，避免首屏下载整首 4MB+ 音频
+  audio = new Audio(withBase('/music.mp3'))
   audio.loop = true
-  audio.preload = 'auto'
+  audio.preload = 'metadata'
   audio.addEventListener('play', onPlay)
   audio.addEventListener('pause', onPause)
   audio.addEventListener('ended', onEnded)

@@ -32,7 +32,7 @@ function loadGiscus() {
   if (!giscusContainer.value) return
 
   // 始终清空容器（SPA 导航从有评论页切到无评论页时需清除残留）
-  giscusContainer.value.innerHTML = ''
+  giscusContainer.value.replaceChildren()
 
   if (frontmatter.value.comments === false) return
 
@@ -69,10 +69,18 @@ const route = useRoute()
 
 onMounted(loadGiscus)
 
-// 主题切换时重新加载 Giscus
+function updateTheme() {
+  const iframe = giscusContainer.value?.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+  iframe?.contentWindow?.postMessage(
+    { giscus: { setConfig: { theme: isDark.value ? 'dark' : 'light' } } },
+    'https://giscus.app',
+  )
+}
+
+// 主题切换只更新现有 iframe，避免重复请求和评论区闪烁
 watch(isDark, () => {
   if (typeof window === 'undefined') return
-  loadGiscus()
+  updateTheme()
 })
 
 // SPA 路由切换时重新加载 Giscus（根据 pathname 映射到对应 Discussion）

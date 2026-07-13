@@ -6,8 +6,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 
-const DAY = 24 * 60 * 60 * 1000
-
 /**
  * 从 anime/index.md 提取最近番剧
  * 解析表格行 | 番名 | 年份 | 简评 |
