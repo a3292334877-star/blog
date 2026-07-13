@@ -24,6 +24,14 @@ npm run build
 
 复制 `.env.example` 为 `.env`，按需配置 Giscus 和 Supabase。访客统计的安全初始化 SQL 位于 `supabase/visitor-counter.sql`：公开客户端只能写入访问记录和调用聚合统计函数，不能读取原始指纹或访问路径。
 
+## 模拟卷生成工具
+
+可选脚本 `scripts/make_exam.py` 用于生成专插本计算机基础模拟卷：
+
+```bash
+python3 -m pip install -r scripts/requirements-exam.txt
+python3 scripts/make_exam.py --output ~/Desktop/exam.docx
+```
 ## 部署
 
 推送到 `main` 或 `master` 后，GitHub Actions 会构建并部署到 GitHub Pages。部署所需的环境变量请配置为仓库 Actions secrets。
