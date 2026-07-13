@@ -5,8 +5,6 @@ tags: [生活, 博客]
 cover: /blog/covers/hello-world.svg
 ---
 
-# 你好，世界 🌸
-
 这是我的第一篇博客文章！请多多指教！未来我还会写更多文章
 
 <!-- more -->

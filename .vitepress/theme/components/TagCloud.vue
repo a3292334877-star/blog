@@ -38,23 +38,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
 const { site } = useData()
-const route = useRoute()
 const base = site.value.base
 function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const active = ref<string | null>(null)
-
-// 从 URL 参数读取预选标签
-onMounted(() => {
-  const q = route.query?.q
-  if (q && typeof q === 'string') {
-    active.value = q
-  }
-})
 
 const tagMap = computed(() => {
   const m: Record<string, typeof posts> = {}
@@ -67,10 +58,27 @@ const tagMap = computed(() => {
   return m
 })
 
+function syncFromUrl() {
+  const q = new URLSearchParams(window.location.search).get('q')
+  active.value = q && tagMap.value[q] ? q : null
+}
+
+// 从 URL 参数读取预选标签
+onMounted(syncFromUrl)
+
 const maxCount = computed(() => Math.max(...Object.values(tagMap.value).map(a => a.length), 1))
 
 function select(tag: string) {
   active.value = active.value === tag ? null : tag
+
+  // 同步地址栏，让当前筛选结果可以刷新和分享
+  const url = new URL(window.location.href)
+  if (active.value) {
+    url.searchParams.set('q', active.value)
+  } else {
+    url.searchParams.delete('q')
+  }
+  window.history.replaceState(window.history.state, '', url)
 }
 
 function fmt(ts: number) {

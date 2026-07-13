@@ -5,8 +5,6 @@ tags: [教程, Linux]
 cover: /blog/covers/linux-tips.svg
 ---
 
-# Linux 常用操作技巧 🐧
-
 Linux 是程序员绕不开的操作系统。日常开发中积累了一些实用技巧，整理分享。
 
 <!-- more -->

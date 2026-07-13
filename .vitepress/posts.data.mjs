@@ -21,7 +21,7 @@ export default {
 
     return fs
       .readdirSync(postDir)
-      .filter((file) => file.endsWith('.md'))
+      .filter((file) => file.endsWith('.md') && file !== 'index.md')
       .map((file) => getPost(md, file, postDir, asFeed))
       .filter(Boolean)
       .sort((a, b) => b.create - a.create)

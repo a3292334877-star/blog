@@ -25,7 +25,7 @@
             <a
               v-for="t in p.tags"
               :key="t"
-              :href="withBase(`tags/?q=${t}`)"
+              :href="tagHref(t)"
               class="card-tag"
             >🏷️ {{ t }}</a>
           </div>
@@ -46,6 +46,10 @@ const base = site.value.base
 
 function withBase(p: string) {
   return base + p.replace(/^\//, '')
+}
+
+function tagHref(tag: string) {
+  return withBase(`tags/?q=${encodeURIComponent(tag)}`)
 }
 
 function fmtDate(ts: number) {

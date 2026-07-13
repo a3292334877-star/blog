@@ -5,8 +5,6 @@ tags: [教程, Markdown]
 cover: /blog/covers/markdown-guide.svg
 ---
 
-# Markdown 写作指南 📝
-
 Markdown 是一种轻量级标记语言，用纯文本格式就能写出结构清晰的文档。这篇笔记整理了常用语法和写作技巧。
 
 <!-- more -->

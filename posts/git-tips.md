@@ -5,8 +5,6 @@ tags: [教程, Git]
 cover: /blog/covers/git-tips.svg
 ---
 
-# Git 入门与实用技巧 🛠️
-
 Git 是程序员最常用的版本控制工具。这篇笔记整理了日常高频命令和一些实用技巧。
 
 <!-- more -->

@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-const MODEL_PATH = '/blog/live2d/model.json'
+const MODEL_PATH = '/blog/live2d/model-static.json'
 
 declare global {
   interface Window {

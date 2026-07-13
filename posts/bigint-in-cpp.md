@@ -5,8 +5,6 @@ tags: [教程, C++, 算法]
 cover: /blog/covers/bigint-in-cpp.svg
 ---
 
-# C++ 高精度算法详解与竞赛模板 🔢
-
 C++ 原生整数最大只能到 `unsigned long long`（约 1.8 × 10¹⁹），但竞赛中经常需要处理几百位甚至几千位的大数。本文将系统讲解高精度算法的实现与优化。
 
 <!-- more -->

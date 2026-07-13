@@ -26,7 +26,7 @@
         <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
           <span v-if="frontmatter.date" class="doc-date">{{ formatDate(frontmatter.date) }}</span>
           <span v-if="frontmatter.tags" class="doc-tags">
-            <a v-for="t in frontmatter.tags" :key="t" :href="`/blog/tags/?q=${t}`">{{ t }}</a>
+            <a v-for="t in frontmatter.tags" :key="t" :href="tagHref(t)">{{ t }}</a>
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
-import { useData, useRoute } from 'vitepress'
+import { useData, useRoute, withBase } from 'vitepress'
 import { computed, watch, nextTick, onMounted } from 'vue'
 import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
@@ -94,6 +94,10 @@ const docBannerStyle = computed<Record<string, string> | null>(() => {
     background: 'linear-gradient(135deg, var(--sakura-pink), var(--sakura-warm))',
   }
 })
+
+function tagHref(tag: string): string {
+  return withBase(`/tags/?q=${encodeURIComponent(tag)}`)
+}
 
 function formatDate(d: string | Date): string {
   if (!d) return ''

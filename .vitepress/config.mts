@@ -66,7 +66,7 @@ export default defineConfig({
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: '/blog/favicon.ico',
+    logo: '/favicon.ico',
     siteTitle: '🌸 Sakiko',
 
     nav: [
