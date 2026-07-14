@@ -1,5 +1,5 @@
 /**
- * 主题化 SVG 封面生成器 v2
+ * 主题化 SVG 封面生成器 v3
  * 为每篇文章生成独一无二、信息丰富的 SVG 封面
  *
  * 设计语言：
@@ -10,7 +10,8 @@
  * 用法：node scripts/generate-covers.mjs
  * 已接入 package.json 的 dev / build 钩子
  */
-import { mkdirSync, existsSync, writeFileSync, statSync } from 'node:fs'
+import { mkdirSync, existsSync, readFileSync, readdirSync, writeFileSync, statSync } from 'node:fs'
+import matter from 'gray-matter'
 import path from 'node:path'
 
 const OUT_DIR = path.join(process.cwd(), 'public/covers')
@@ -99,6 +100,80 @@ const COVERS = [
     decor: decorCoffee,
   },
 ]
+
+const AUTO_PALETTES = [
+  ['#e85d75', '#713b77'],
+  ['#2563eb', '#312e81'],
+  ['#0891b2', '#164e63'],
+  ['#059669', '#14532d'],
+  ['#d97706', '#7c2d12'],
+  ['#7c3aed', '#3b0764'],
+  ['#db2777', '#831843'],
+  ['#475569', '#0f172a'],
+]
+
+function stableIndex(value, length) {
+  let hash = 2166136261
+  for (const char of value) {
+    hash ^= char.codePointAt(0)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0) % length
+}
+
+function inferDecor(title, tags) {
+  const key = `${title} ${tags.join(' ')}`.toLowerCase()
+  const rules = [
+    [/markdown|写作/, decorMarkdown],
+    [/linux|终端|shell/, decorTerminal],
+    [/git|版本控制/, decorGit],
+    [/hash|map|哈希/, decorHashmap],
+    [/高精度|bigint/, decorBigint],
+    [/数据结构|并查集|树/, decorTree],
+    [/矩阵|线性代数/, decorMatrix],
+    [/高数|数学|微积分/, decorIntegral],
+    [/java/, decorCoffee],
+    [/c\+\+|c语言|编程|代码|算法/, decorCodeWindow],
+  ]
+  return rules.find(([pattern]) => pattern.test(key))?.[1] ?? decorSakuraEarth
+}
+
+function loadCoverConfigs() {
+  const postDir = path.join(process.cwd(), 'posts')
+  const overrides = new Map(COVERS.map((cover) => [cover.slug, cover]))
+  const posts = readdirSync(postDir)
+    .filter((file) => file.endsWith('.md') && file !== 'index.md')
+    .map((file) => {
+      const fullPath = path.join(postDir, file)
+      const { data } = matter(readFileSync(fullPath, 'utf8'))
+      if (!data.title) return null
+      if (data.cover === false) return null
+
+      const slug = file.replace(/\.md$/, '')
+      const generatedCover = `/covers/${slug}.svg`
+      const customCover = data.cover ? String(data.cover) : ''
+      if (customCover && customCover !== generatedCover) return null
+
+      const override = overrides.get(slug)
+      const tags = Array.isArray(data.tags) ? data.tags.map(String) : []
+      return {
+        slug,
+        title: String(data.title),
+        subtitle: tags.slice(0, 3).join(' · ') || override?.subtitle || '学习笔记',
+        gradient: override?.gradient ?? AUTO_PALETTES[stableIndex(slug, AUTO_PALETTES.length)],
+        decor: override?.decor ?? inferDecor(String(data.title), tags),
+        date: Number(new Date(data.date)) || statSync(fullPath).mtimeMs,
+        sourceMtime: statSync(fullPath).mtimeMs,
+      }
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.date - b.date)
+
+  return posts.map((post, index) => ({
+    ...post,
+    issue: String(index + 1).padStart(2, '0'),
+  }))
+}
 
 // ============================================================
 // 装饰图形：每个函数返回 SVG 内容字符串，画在右上角 ~440x300 区域
@@ -380,11 +455,52 @@ function esc(s) {
     .replace(/"/g, '&quot;')
 }
 
-function makeSvg({ title, subtitle, gradient, decor }) {
+function visualWidth(text) {
+  return [...text].reduce((sum, char) => sum + (/^[\x00-\xff]$/.test(char) ? 0.55 : 1), 0)
+}
+
+function wrapTitle(title, maxWidth = 18) {
+  const tokens = String(title).match(/[A-Za-z0-9+#.]+(?:['’_-][A-Za-z0-9+#.]+)*|\s+|./gu) ?? []
+  const lines = [[]]
+  let truncated = false
+
+  for (const rawToken of tokens) {
+    const token = /^\s+$/u.test(rawToken) ? ' ' : rawToken
+    const line = lines.at(-1)
+    const candidate = `${line.join('')}${line.length ? token : token.trimStart()}`
+
+    if (visualWidth(candidate) <= maxWidth) {
+      line.push(line.length ? token : token.trimStart())
+      continue
+    }
+
+    if (lines.length === 1) {
+      const nextToken = token.trimStart()
+      lines.push(nextToken ? [nextToken] : [])
+      continue
+    }
+
+    truncated = true
+    break
+  }
+
+  if (truncated) {
+    const lastLine = lines.at(-1)
+    while (lastLine.length && visualWidth(`${lastLine.join('').trimEnd()}…`) > maxWidth) lastLine.pop()
+    lastLine.push('…')
+  }
+
+  return lines.map((line) => line.join('').trim())
+}
+
+function makeSvg({ title, subtitle, gradient, decor, date, issue }) {
   const [c1, c2] = gradient
-  const titleEsc = esc(title)
-  const subtitleEsc = esc(subtitle)
-  const decorSvg = decor()
+  const titleLines = wrapTitle(title)
+  const titleSize = titleLines.length > 1 || visualWidth(title) > 15 ? 43 : 50
+  const titleSvg = titleLines
+    .map((line, index) => `<tspan x="80" y="${270 + index * 62}">${esc(line)}</tspan>`)
+    .join('')
+  const dateText = new Date(date).toISOString().slice(0, 10).replaceAll('-', ' / ')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif">
@@ -393,47 +509,45 @@ function makeSvg({ title, subtitle, gradient, decor }) {
       <stop offset="0" stop-color="${c1}"/>
       <stop offset="1" stop-color="${c2}"/>
     </linearGradient>
-    <radialGradient id="glow" cx="70%" cy="30%" r="70%">
-      <stop offset="0" stop-color="rgba(255,255,255,0.22)"/>
-      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
-    </radialGradient>
-    <!-- 噪点纹理 -->
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
-      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0"/>
-    </filter>
+    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#050816" stop-opacity="0.34"/>
+      <stop offset="0.62" stop-color="#050816" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#050816" stop-opacity="0.24"/>
+    </linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M 42 0 L 0 0 0 42" fill="none" stroke="#fff" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <clipPath id="art-clip"><rect x="760" y="76" width="368" height="440" rx="32"/></clipPath>
   </defs>
 
-  <!-- 背景层 -->
   <rect width="1200" height="675" fill="url(#bg)"/>
-  <rect width="1200" height="675" fill="url(#glow)"/>
-  <rect width="1200" height="675" filter="url(#noise)" opacity="0.5"/>
+  <rect width="1200" height="675" fill="url(#shade)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <path d="M -80 610 L 760 -80 L 910 -80 L 70 690 Z" fill="#fff" opacity="0.045"/>
+  <circle cx="1160" cy="-20" r="260" fill="#fff" opacity="0.06"/>
 
-  <!-- 装饰圆斑 -->
-  <circle cx="1080" cy="80" r="180" fill="rgba(255,255,255,0.07)"/>
-  <circle cx="120" cy="600" r="140" fill="rgba(255,255,255,0.05)"/>
-  <circle cx="60" cy="120" r="60" fill="rgba(255,255,255,0.08)"/>
+  <text x="80" y="78" font-size="18" font-weight="700" letter-spacing="4" fill="#fff" opacity="0.82">SAKIKO / FIELD NOTES</text>
+  <text x="1120" y="78" font-size="18" font-weight="700" letter-spacing="2" text-anchor="end" fill="#fff" opacity="0.82">NO. ${issue}</text>
+  <line x1="80" y1="104" x2="1120" y2="104" stroke="#fff" stroke-opacity="0.28"/>
 
-  <!-- 左上点阵装饰 -->
-  <g fill="rgba(255,255,255,0.14)">
-    <circle cx="50" cy="80" r="3"/><circle cx="78" cy="80" r="3"/><circle cx="106" cy="80" r="3"/>
-    <circle cx="50" cy="108" r="3"/><circle cx="78" cy="108" r="3"/>
-    <circle cx="50" cy="136" r="3"/>
+  <g>
+    <rect x="80" y="154" width="128" height="38" rx="19" fill="#fff" opacity="0.16"/>
+    <text x="144" y="179" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="2" fill="#fff">ARTICLE</text>
   </g>
 
-  <!-- 右上主题装饰图形 -->
-  ${decorSvg}
+  <text font-size="${titleSize}" font-weight="750" fill="#fff" letter-spacing="-1">${titleSvg}</text>
+  <line x1="80" y1="${titleLines.length > 1 ? 376 : 322}" x2="650" y2="${titleLines.length > 1 ? 376 : 322}" stroke="#fff" stroke-opacity="0.5"/>
+  <text x="80" y="${titleLines.length > 1 ? 420 : 366}" font-size="21" fill="#fff" opacity="0.84">${esc(subtitle)}</text>
 
-  <!-- 底部品牌区 -->
-  <text x="80" y="610" font-size="22" fill="rgba(255,255,255,0.75)" font-family="'Noto Serif SC',serif">🌸 Sakiko の博客</text>
+  <rect x="760" y="76" width="368" height="440" rx="32" fill="#fff" opacity="0.09" stroke="#fff" stroke-opacity="0.28"/>
+  <g clip-path="url(#art-clip)" transform="translate(-10 28) scale(0.96)">${decor()}</g>
+  <text x="1102" y="492" text-anchor="end" font-size="13" letter-spacing="2" fill="#fff" opacity="0.58">VISUAL INDEX / ${issue}</text>
 
-  <!-- 标题区（左下） -->
-  <g transform="translate(80 460)">
-    <!-- 标题前竖线装饰 -->
-    <rect x="0" y="-30" width="5" height="110" rx="2" fill="rgba(255,255,255,0.85)"/>
-    <text x="22" y="10" font-size="46" font-weight="700" fill="#ffffff" style="text-shadow: 0 2px 12px rgba(0,0,0,0.3);">${titleEsc}</text>
-    <text x="22" y="55" font-size="22" fill="rgba(255,255,255,0.88)" font-family="'Noto Serif SC',serif">${subtitleEsc}</text>
-  </g>
+  <line x1="80" y1="560" x2="1120" y2="560" stroke="#fff" stroke-opacity="0.28"/>
+  <text x="80" y="608" font-size="17" letter-spacing="2" fill="#fff" opacity="0.72">${dateText}</text>
+  <text x="1120" y="608" text-anchor="end" font-size="17" letter-spacing="2" fill="#fff" opacity="0.72">SAKIKOBLOG.INFO</text>
+  <circle cx="80" cy="636" r="4" fill="#fff" opacity="0.75"/>
+  <line x1="96" y1="636" x2="270" y2="636" stroke="#fff" stroke-opacity="0.3"/>
 </svg>
 `
 }
@@ -441,23 +555,22 @@ function makeSvg({ title, subtitle, gradient, decor }) {
 function main() {
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
 
-  // 以脚本文件 mtime 作为配置版本基准：脚本改动才会触发重生成
   const scriptMtime = statSync(new URL(import.meta.url)).mtimeMs
-
+  const configs = loadCoverConfigs()
   let generated = 0
   let skipped = 0
-  for (const cfg of COVERS) {
+
+  for (const cfg of configs) {
     const file = path.join(OUT_DIR, `${cfg.slug}.svg`)
-    // 增量生成：输出存在且比脚本新则跳过
-    if (existsSync(file) && statSync(file).mtimeMs >= scriptMtime) {
+    const newestInput = Math.max(scriptMtime, cfg.sourceMtime)
+    if (existsSync(file) && statSync(file).mtimeMs >= newestInput) {
       skipped++
       continue
     }
-    const svg = makeSvg(cfg)
-    writeFileSync(file, svg, 'utf-8')
+    writeFileSync(file, makeSvg(cfg), 'utf8')
     generated++
   }
-  console.log(`  ✓ 封面生成完成 v2: ${generated} 张更新, ${skipped} 张跳过 (共 ${COVERS.length} 张)`)
+  console.log(`  ✓ 封面生成完成 v3: ${generated} 张更新, ${skipped} 张跳过 (共 ${configs.length} 张)`)
 }
 
 main()

@@ -180,16 +180,19 @@ export default defineConfig({
 
     const title = fm.title || SITE.title
     const desc = fm.description || SITE.description
-    const cover = fm.cover
-      ? (String(fm.cover).startsWith('http')
-          ? String(fm.cover)
-          : absoluteAsset(fm.cover))
+    const isPost = pageData.relativePath.startsWith('posts/') && pageData.relativePath !== 'posts/index.md'
+    const slug = pageData.relativePath.replace(/^posts\//, '').replace(/\.md$/, '')
+    const defaultCover = isPost ? `/covers/${slug}.svg` : null
+    const coverSource = fm.cover === false ? null : (fm.cover || defaultCover)
+    const cover = coverSource
+      ? (String(coverSource).startsWith('http')
+          ? String(coverSource)
+          : absoluteAsset(coverSource))
       : (isHome ? absoluteAsset('/avatar.jpg') : null)
     const pagePath = pageData.relativePath
       .replace(/\.md$/, '')
       .replace(/(^|\/)index$/, '$1')
     const url = absoluteUrl(pagePath)
-    const isPost = pageData.relativePath.startsWith('posts/') && pageData.relativePath !== 'posts/index.md'
 
     const head: any[] = [
       ['link', { rel: 'canonical', href: url }],
@@ -206,6 +209,10 @@ export default defineConfig({
       head.push(['meta', { name: 'twitter:image', content: cover }])
     }
     const existingHead = Array.isArray(fm.head) ? fm.head : []
-    pageData.frontmatter = { ...fm, head: [...existingHead, ...head] }
+    pageData.frontmatter = {
+      ...fm,
+      ...(isPost && fm.cover == null ? { cover: defaultCover } : {}),
+      head: [...existingHead, ...head],
+    }
   },
 })

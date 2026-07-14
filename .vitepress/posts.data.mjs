@@ -44,13 +44,14 @@ function getPost(md, file, postDir, asFeed = false) {
   // 跳过分页索引文件
   if (!data.title) return null
 
+  const slug = file.replace(/\.md$/, '')
   const post = {
     title: data.title,
-    href: `posts/${file.replace(/\.md$/, '')}`,
+    href: `posts/${slug}`,
     create: +new Date(data.date) || timestamp,
     update: timestamp,
     tags: data.tags || [],
-    cover: data.cover || '',
+    cover: data.cover === false ? '' : (data.cover || `/covers/${slug}.svg`),
     excerpt: md.render(excerpt || ''),
   }
   if (asFeed) {

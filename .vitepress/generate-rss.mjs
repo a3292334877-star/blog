@@ -40,8 +40,9 @@ function main() {
       if (!data.title) return null
       const slug = f.replace(/\.md$/, '')
       const date = +new Date(data.date) || fs.statSync(path.join(POST_DIR, f)).mtimeMs
-      const cover = data.cover
-        ? (String(data.cover).startsWith('http') ? String(data.cover) : absoluteAsset(data.cover))
+      const coverSource = data.cover === false ? null : (data.cover || `/covers/${slug}.svg`)
+      const cover = coverSource
+        ? (String(coverSource).startsWith('http') ? String(coverSource) : absoluteAsset(coverSource))
         : null
       const desc = data.description || (excerpt || '').trim() || SITE.desc
       return { title: data.title, date, slug, excerpt: desc, cover }

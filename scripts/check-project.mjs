@@ -40,7 +40,9 @@ for (const file of filesUnder(postsDir).filter((path) => extname(path) === '.md'
   }
   if (typeof data.title !== 'string' || !data.title.trim()) fail(`${name}: missing title`)
   if (!data.date || Number.isNaN(new Date(data.date).valueOf())) fail(`${name}: invalid date`)
-  if (data.cover) checkLocalAsset(String(data.cover), `${name} cover`)
+  const slug = file.slice(file.lastIndexOf('/') + 1).replace(/\.md$/, '')
+  const cover = data.cover === false ? null : (data.cover || `/covers/${slug}.svg`)
+  if (cover) checkLocalAsset(String(cover), `${name} cover`)
 }
 
 const modelPath = join(root, 'public', 'live2d', 'model.json')
