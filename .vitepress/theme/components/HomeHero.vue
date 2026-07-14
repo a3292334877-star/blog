@@ -46,7 +46,7 @@
         <div class="visual-ring visual-ring--outer"></div>
         <div class="visual-ring visual-ring--inner"></div>
         <div class="avatar-frame">
-          <img :src="withBase('/avatar.svg')" alt="" width="320" height="320">
+          <img :src="withBase('/avatar.jpg')" alt="" width="320" height="320">
         </div>
         <span class="floating-note floating-note--code">&lt;/&gt; Code</span>
         <span class="floating-note floating-note--jp">日本語 N1</span>
