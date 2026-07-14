@@ -20,15 +20,15 @@ import BlogTimeline from './BlogTimeline.vue'
   margin: 0 auto;
   padding: 16px 24px 32px;
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
-  gap: 40px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(380px, 1fr);
+  gap: 32px;
   align-items: start;
 }
 
 .col { min-width: 0; }
 
 /* 窄屏回退单列 */
-@media (max-width: 960px) {
+@media (max-width: 1040px) {
   .home-columns {
     grid-template-columns: 1fr;
     gap: 0;

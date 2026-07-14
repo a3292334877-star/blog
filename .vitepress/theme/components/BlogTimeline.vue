@@ -21,7 +21,8 @@
             <time class="date">{{ fmtShort(p.create) }}</time>
             <span class="title">{{ p.title }}</span>
             <span class="tags" v-if="p.tags?.length">
-              <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+              <span v-for="t in p.tags.slice(0, 3)" :key="t" class="tag">{{ t }}</span>
+              <span v-if="p.tags.length > 3" class="tag tag--more">+{{ p.tags.length - 3 }}</span>
             </span>
           </a>
         </div>
@@ -115,26 +116,59 @@ function fmtShort(ts: number) {
 }
 
 .card {
-  display: flex; align-items: center; gap: 14px; padding: 14px 20px;
-  background: var(--vp-c-bg); border: 1px solid var(--vp-c-divider);
-  border-radius: 14px; transition: all 0.3s; color: var(--vp-c-text-1);
   width: 100%;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: start;
+  gap: 7px 12px;
+  padding: 15px 18px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  color: var(--vp-c-text-1);
   box-shadow: var(--site-shadow-sm);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  overflow: hidden;
 }
 .card:hover {
   transform: translateX(6px);
   border-color: var(--sakura-pink);
 }
-.date { font-size: 13px; color: var(--vp-c-text-3); min-width: 60px; white-space: nowrap; }
-.title { font-size: 15px; font-weight: 500; flex: 1; }
-.tags { display: flex; gap: 6px; }
+.date {
+  grid-row: 1 / span 2;
+  padding-top: 1px;
+  color: var(--vp-c-text-3);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.title {
+  min-width: 0;
+  color: var(--vp-c-text-1);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tags {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  overflow: hidden;
+}
 .tag {
   font-size: 11px; padding: 2px 8px;
   background: var(--sakura-light); border-radius: 10px;
   color: var(--vp-c-text-2); white-space: nowrap;
 }
+.tag--more { color: var(--accent-color); }
 
 @media (max-width: 600px) {
-  .card { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .card { grid-template-columns: 1fr; }
+  .date, .title, .tags { grid-column: 1; }
+  .date { grid-row: auto; }
 }
 </style>
