@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { katex } from '@mdit/plugin-katex'
 import { SITE, absoluteAsset, absoluteUrl } from './site.constants.mjs'
 
 interface PostMeta {
@@ -147,11 +148,12 @@ export default defineConfig({
 
   markdown: {
     image: { lazyLoading: true },
-    config: async (md) => {
-      const mathjax3 = (await import('markdown-it-mathjax3')).default
-      md.use(mathjax3, {
-        // 共享字形定义，避免公式较多时重复嵌入大量 SVG path
-        svg: { fontCache: 'global' },
+    config: (md) => {
+      md.use(katex, {
+        delimiters: 'dollars',
+        throwOnError: false,
+        strict: 'warn',
+        output: 'mathml',
       })
     },
   },
@@ -160,20 +162,29 @@ export default defineConfig({
   outDir: '.vitepress/dist',
 
   // Vite 配置
-  vite: {},
+  vite: {
+    server: {
+      host: '127.0.0.1',
+      strictPort: true,
+      cors: {
+        origin: /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/,
+      },
+    },
+  },
 
   // SEO meta：文章页注入 og:* / twitter:* （build 时静态注入到 frontmatter.head）
   transformPageData(pageData: any) {
     const fm = pageData.frontmatter || {}
-    if (!fm.title) return
+    const isHome = pageData.relativePath === 'index.md'
+    if (!fm.title && !isHome) return
 
-    const title = fm.title
+    const title = fm.title || SITE.title
     const desc = fm.description || SITE.description
     const cover = fm.cover
       ? (String(fm.cover).startsWith('http')
           ? String(fm.cover)
           : absoluteAsset(fm.cover))
-      : null
+      : (isHome ? absoluteAsset('/avatar.jpg') : null)
     const pagePath = pageData.relativePath
       .replace(/\.md$/, '')
       .replace(/(^|\/)index$/, '$1')

@@ -30,6 +30,11 @@ comments: false
 
 - GitHub: [Sakiko](https://github.com/a3292334877-star)
 
+## 隐私说明
+
+本站仅使用随机会话 ID 统计匿名访问次数，不读取浏览器指纹，也不会跨会话识别访客。
+启用“请勿跟踪（Do Not Track）”后不会发送统计请求。评论功能由 Giscus 提供，只有在你主动打开评论区时才会加载。
+
 ---
 
 > If you're rejected, accept it. If you're unloved, let go. If they choose someone or something over you, move on. 🩷

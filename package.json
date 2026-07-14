@@ -6,7 +6,7 @@
   "scripts": {
     "check": "node scripts/check-project.mjs",
     "dev": "npm run check && node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress dev",
-    "build": "npm run check && node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs",
+    "build": "npm run check && node scripts/generate-covers.mjs && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node scripts/check-build.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],
@@ -16,9 +16,8 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@mdit/plugin-katex": "^1.0.1",
     "gray-matter": "^4.0.3",
-    "live2d-widget": "^3.0.4",
-    "markdown-it-mathjax3": "^4.3.2",
     "medium-zoom": "^1.1.0",
     "vitepress": "^1.6.4"
   },

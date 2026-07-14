@@ -44,7 +44,7 @@ const friends = [
     name: 'Future 的酒馆',
     url: 'https://kkbk.info/',
     description: '足够先进的创意，都与魔法无异。',
-    avatar: '/friends/kkbk.png',
+    avatar: '/friends/kkbk.webp',
   },
 ]
 

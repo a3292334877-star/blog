@@ -8,6 +8,12 @@ import { withBase } from 'vitepress'
 
 const MODEL_PATH = withBase('/live2d/model.json')
 let loadTimer: ReturnType<typeof setTimeout> | null = null
+let idleHandle: number | null = null
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+  cancelIdleCallback?: (handle: number) => void
+}
 
 declare global {
   interface Window {
@@ -83,21 +89,36 @@ function shouldLoad(): boolean {
     && !connection?.saveData
 }
 
+async function loadWidget(): Promise<void> {
+  try {
+    await loadResources()
+    initWidget()
+  } catch (e) {
+    console.error('Live2D load failed:', e)
+  }
+}
+
 onMounted(() => {
   if (!shouldLoad()) return
 
-  // 让出首屏主线程与网络，再加载 1MB+ 的模型
-  loadTimer = setTimeout(async () => {
-    try {
-      await loadResources()
-      initWidget()
-    } catch (e) {
-      console.error('Live2D load failed:', e)
-    }
-  }, 1200)
+  // 浏览器空闲时再加载 1MB+ 的模型；不支持 idle callback 时延迟加载。
+  const idleWindow = window as IdleWindow
+  if (idleWindow.requestIdleCallback) {
+    idleHandle = idleWindow.requestIdleCallback(() => {
+      void loadWidget()
+    }, { timeout: 5000 })
+  } else {
+    loadTimer = setTimeout(() => {
+      void loadWidget()
+    }, 3000)
+  }
 })
 
 onUnmounted(() => {
   if (loadTimer) clearTimeout(loadTimer)
+  if (idleHandle !== null) {
+    const idleWindow = window as IdleWindow
+    idleWindow.cancelIdleCallback?.(idleHandle)
+  }
 })
 </script>

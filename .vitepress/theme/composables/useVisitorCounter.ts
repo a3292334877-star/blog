@@ -31,33 +31,31 @@ const DEBOUNCE_MS = 5000
 // ============================================================
 
 /**
- * 生成浏览器指纹（不含日期，同一浏览器始终产生相同指纹）
- * 用于 Supabase 中的 COUNT(DISTINCT fingerprint) 计算 UV
+ * 生成随机会话 ID。它只保存在当前标签页的 sessionStorage 中，
+ * 不读取浏览器、屏幕、语言或时区，不用于跨会话识别访客。
  */
-function generateFingerprint(): string {
-  const components = [
-    navigator.userAgent || '',
-    screen.width || 0,
-    screen.height || 0,
-    screen.colorDepth || 0,
-    navigator.language || '',
-    Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-  ].join('|')
+function getSessionId(storage: Storage | null): string {
+  const key = 'visitor_session_id'
+  const existing = storage?.getItem(key)
+  if (existing) return existing
 
-  // djb2 hash — 简单高效的非加密哈希
-  let hash = 5381
-  for (let i = 0; i < components.length; i++) {
-    hash = ((hash << 5) + hash + components.charCodeAt(i)) | 0
+  const sessionId = typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  try {
+    storage?.setItem(key, sessionId)
+  } catch {
+    // 存储不可用时仍使用当前页面内的随机 ID
   }
-  return (hash >>> 0).toString(36)
+  return sessionId
 }
 
 function getStorage(): Storage | null {
   try {
     const key = '__visitor_test__'
-    localStorage.setItem(key, '1')
-    localStorage.removeItem(key)
-    return localStorage
+    sessionStorage.setItem(key, '1')
+    sessionStorage.removeItem(key)
+    return sessionStorage
   } catch {
     return null
   }
@@ -91,7 +89,7 @@ function markPosted(storage: Storage | null): void {
 // API 调用
 // ============================================================
 
-async function postVisit(fingerprint: string): Promise<void> {
+async function postVisit(sessionId: string): Promise<void> {
   const url = `${SUPABASE_URL}/rest/v1/visits`
   const headers: Record<string, string> = {
     apikey: SUPABASE_ANON_KEY,
@@ -104,7 +102,7 @@ async function postVisit(fingerprint: string): Promise<void> {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      fingerprint,
+      fingerprint: sessionId,
       page_path: location.pathname,
     }),
   })
@@ -141,12 +139,12 @@ export function useVisitorCounter(): { uv: Ref<number | null>; pv: Ref<number | 
     if (navigator.doNotTrack === '1') return
 
     const storage = getStorage()
-    const fp = generateFingerprint()
+    const sessionId = getSessionId(storage)
 
     // 记录访问（带防抖）
     if (!isDebounced(storage)) {
       try {
-        await postVisit(fp)
+        await postVisit(sessionId)
         markPosted(storage)
       } catch {
         // 计数失败不影响页面正常浏览

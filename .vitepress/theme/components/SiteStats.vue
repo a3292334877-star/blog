@@ -7,11 +7,11 @@
     <div class="stats-grid">
       <!-- 来访人数 / 访问次数 -->
       <div class="stat-card" :style="{ animationDelay: '0ms' }">
-        <div class="stat-label">👥 来访人数</div>
+        <div class="stat-label">👥 访问会话</div>
         <div class="stat-value">
           <template v-if="uv !== null">{{ fmtNum(uvDisplay) }}</template>
           <template v-else>-</template>
-          <span class="stat-unit">人次</span>
+          <span class="stat-unit">次</span>
         </div>
       </div>
       <div class="stat-card" :style="{ animationDelay: '80ms' }">
