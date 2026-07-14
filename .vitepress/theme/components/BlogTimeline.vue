@@ -117,8 +117,9 @@ function fmtShort(ts: number) {
 .card {
   display: flex; align-items: center; gap: 14px; padding: 14px 20px;
   background: var(--vp-c-bg); border: 1px solid var(--vp-c-divider);
-  border-radius: 12px; transition: all 0.3s; color: var(--vp-c-text-1);
+  border-radius: 14px; transition: all 0.3s; color: var(--vp-c-text-1);
   width: 100%;
+  box-shadow: var(--site-shadow-sm);
 }
 .card:hover {
   transform: translateX(6px);

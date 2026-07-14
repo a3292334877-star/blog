@@ -44,9 +44,9 @@ const projects = data.projects
 
 <style scoped>
 .home-preview {
-  max-width: 1080px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: clamp(44px, 6vw, 76px) 24px;
 }
 
 .section-heading {

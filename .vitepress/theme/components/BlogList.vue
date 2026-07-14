@@ -67,8 +67,9 @@ function fmtDate(ts: number) {
 }
 
 .section-heading {
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 28px;
+  letter-spacing: -0.02em;
 }
 
 /* 2 列卡片网格，窄屏自动单列 */
@@ -84,8 +85,9 @@ function fmtDate(ts: number) {
 .post-card {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: var(--site-shadow-sm);
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   /* 入场 stagger 动画 */
   opacity: 0;
@@ -98,7 +100,7 @@ function fmtDate(ts: number) {
 
 .post-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(254,150,0,0.18);
+  box-shadow: var(--site-shadow-lg);
   border-color: var(--sakura-pink);
 }
 
@@ -106,7 +108,7 @@ function fmtDate(ts: number) {
 .card-cover {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: var(--sakura-light);
 }
@@ -135,7 +137,7 @@ function fmtDate(ts: number) {
 }
 
 .card-body {
-  padding: 20px 22px 22px;
+  padding: 22px 24px 24px;
 }
 
 .card-date {

@@ -1,64 +1,60 @@
 <template>
-  <section class="about-strip">
-    <div class="strip-inner">
-      <span class="strip-item"><span class="emoji">🎓</span> 深大 · 计算机科学与技术</span>
-      <span class="divider"></span>
-      <span class="strip-item"><span class="emoji">☕</span> Java / C++ / Flutter</span>
-      <span class="divider"></span>
-      <span class="strip-item"><span class="emoji">🗾</span> 日语 N1</span>
-      <span class="divider"></span>
-      <span class="strip-item"><span class="emoji">🍡</span> 京阿尼忠实蜜</span>
-      <span class="divider"></span>
-      <span class="strip-item"><span class="emoji">🏆</span> 蓝桥杯省三</span>
-    </div>
+  <section class="about-strip" aria-label="个人简介">
+    <ul class="strip-inner">
+      <li v-for="item in items" :key="item.text">
+        <span class="emoji" aria-hidden="true">{{ item.icon }}</span>
+        <span>{{ item.text }}</span>
+      </li>
+    </ul>
   </section>
 </template>
 
+<script setup lang="ts">
+const items = [
+  { icon: '🎓', text: '深大 · 计算机科学与技术' },
+  { icon: '☕', text: 'Java / C++ / Flutter' },
+  { icon: '🗾', text: '日语 N1' },
+  { icon: '🍡', text: '京阿尼忠实蜜' },
+  { icon: '🏆', text: '蓝桥杯省三' },
+]
+</script>
+
 <style scoped>
 .about-strip {
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(245,184,196,0.12),
-    rgba(255,233,201,0.12),
-    transparent);
-  border-top: 1px solid var(--vp-c-divider);
-  border-bottom: 1px solid var(--vp-c-divider);
-  overflow: hidden;
-  padding: 14px 0;
+  border-block: 1px solid var(--vp-c-divider);
+  background: color-mix(in srgb, var(--sakura-light) 52%, var(--vp-c-bg));
 }
-
 .strip-inner {
-  max-width: 1080px;
+  width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  list-style: none;
+}
+li {
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
   justify-content: center;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.strip-item {
-  font-size: 14px;
+  gap: 8px;
+  padding: 4px 14px;
   color: var(--vp-c-text-2);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--vp-font-family-title);
+  font-size: 13px;
+  text-align: center;
 }
-.strip-item .emoji { font-size: 16px; }
+li + li { border-left: 1px solid var(--vp-c-divider); }
+.emoji { flex: 0 0 auto; font-size: 16px; }
 
-.divider {
-  width: 1px;
-  height: 14px;
-  background: var(--vp-c-divider);
+@media (max-width: 900px) {
+  .strip-inner { grid-template-columns: repeat(2, 1fr); gap: 10px; padding-block: 16px; }
+  li { justify-content: flex-start; border: 0 !important; padding: 8px 12px; }
+  li:last-child { grid-column: 1 / -1; justify-content: center; }
 }
 
-@media (max-width: 720px) {
-  .strip-inner { gap: 12px; }
-  .divider { display: none; }
-  .strip-item { font-size: 13px; }
+@media (max-width: 520px) {
+  .strip-inner { width: min(100% - 24px, 420px); }
+  li { font-size: 12px; padding-inline: 4px; }
 }
 </style>

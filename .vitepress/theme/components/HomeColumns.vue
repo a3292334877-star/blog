@@ -16,12 +16,12 @@ import BlogTimeline from './BlogTimeline.vue'
 
 <style scoped>
 .home-columns {
-  max-width: 1280px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 16px 24px 32px;
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 32px;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
+  gap: 40px;
   align-items: start;
 }
 

@@ -1,343 +1,362 @@
 <template>
-  <section class="home-hero">
-    <!-- 渐变背景 -->
-    <div class="hero-bg"></div>
+  <section class="home-hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--one" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--two" aria-hidden="true"></div>
 
-    <!-- 装饰 blob -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+    <div class="hero-shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> PROGRAMMER · ACGN ENTHUSIAST</p>
+        <h1 id="hero-title">你好，我是 <strong>Sakiko</strong></h1>
+        <p class="hero-lead">
+          在代码、动画与日语之间持续探索。这里记录我的学习笔记、项目实践，以及那些值得反复回味的作品。
+        </p>
 
-    <!-- 头像 -->
-    <div class="avatar">
-      <img :src="avatarSrc" alt="Sakiko">
+        <p class="typewriter-line">
+          <span class="sr-only">{{ mottos[0] }}</span>
+          <span aria-hidden="true">{{ displayedText }}<span class="typing-cursor">_</span></span>
+        </p>
+
+        <div class="hero-actions">
+          <a :href="withBase('/posts/')" class="hero-action hero-action--primary">
+            开始阅读
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            class="hero-action hero-action--secondary"
+            href="https://github.com/a3292334877-star"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <ul class="hero-badges" aria-label="个人标签">
+          <li v-for="badge in badges" :key="badge.label">
+            <span aria-hidden="true">{{ badge.icon }}</span>{{ badge.label }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="visual-ring visual-ring--outer"></div>
+        <div class="visual-ring visual-ring--inner"></div>
+        <div class="avatar-frame">
+          <img :src="withBase('/avatar.svg')" alt="" width="320" height="320">
+        </div>
+        <span class="floating-note floating-note--code">&lt;/&gt; Code</span>
+        <span class="floating-note floating-note--jp">日本語 N1</span>
+        <span class="floating-note floating-note--anime">Animation ✦</span>
+      </div>
     </div>
 
-    <!-- Glitch 标题 -->
-    <div class="glitch" :data-text="greeting">{{ greeting }}</div>
-
-    <!-- 打字机 -->
-    <p class="typewriter-line">
-      <span class="quote">"</span>
-      <span class="typed">{{ displayedText }}</span>
-      <span class="typing-cursor">|</span>
-      <span class="quote">"</span>
-    </p>
-
-    <!-- 标签 -->
-    <div class="hero-badges">
-      <span v-for="t in badges" :key="t" class="badge">{{ t }}</span>
-    </div>
-
-    <!-- GitHub -->
-    <a class="gh-btn" href="https://github.com/a3292334877-star" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-      </svg>
-      GitHub
-    </a>
-
-    <!-- 向下 -->
     <button type="button" class="scroll-hint" aria-label="继续浏览" @click="scrollDown">
-      <span>往下看</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="bounce-arrow">
-        <polyline points="6 9 12 15 18 9"/>
+      <span>SCROLL</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m7 10 5 5 5-5" />
       </svg>
     </button>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useData } from 'vitepress'
-
-const { site } = useData()
-const base = site.value.base
-// public 目录下资源，用 base 前缀
-const avatarSrc = computed(() => base + 'avatar.svg'.replace(/^\//, ''))
-
-const greeting = 'Hello, Sakiko 🌸'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { withBase } from 'vitepress'
 
 const mottos = [
   '至死不渝地追逐清华梦 🩷',
-  '一个热爱ACGN的程序员小窝',
-  '每天更爱Sakiko一点',
+  '一个热爱 ACGN 的程序员小窝',
+  '每天更爱 Sakiko 一点',
   'コードを書くのが好きです',
 ]
 
-const badges = ['☕ Java Learner', '🗾 日语N1', '🍡 忠实京蜜', '🌸 ACGN']
+const badges = [
+  { icon: '☕', label: 'Java Learner' },
+  { icon: '🗾', label: '日语 N1' },
+  { icon: '🌸', label: 'ACGN' },
+]
 
-// Typewriter
 const displayedText = ref('')
-let timer: ReturnType<typeof setTimeout> | null = null
+let timer: ReturnType<typeof setTimeout> | undefined
 
 onMounted(() => {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduceMotion) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     displayedText.value = mottos[0]
     return
   }
 
-  let charIdx = 0
-  let textIdx = 0
+  let charIndex = 0
+  let textIndex = 0
   let deleting = false
 
-  function tick() {
-    const current = mottos[textIdx]
-    if (!deleting) {
-      displayedText.value = current.substring(0, charIdx + 1)
-      charIdx++
-      if (charIdx === current.length) {
-        timer = setTimeout(() => { deleting = true; tick() }, 2000)
-        return
-      }
-      timer = setTimeout(tick, 100)
-    } else {
-      displayedText.value = current.substring(0, charIdx - 1)
-      charIdx--
-      if (charIdx === 0) {
-        deleting = false
-        textIdx = (textIdx + 1) % mottos.length
-        timer = setTimeout(tick, 500)
-        return
-      }
-      timer = setTimeout(tick, 50)
-    }
-  }
-  tick()
+  const tick = () => {
+    const current = mottos[textIndex]
+    displayedText.value = current.slice(0, deleting ? charIndex - 1 : charIndex + 1)
+    charIndex += deleting ? -1 : 1
 
-  // 入场自动播一次 glitch（给 hero 加 .glitch-intro 类）
-  const hero = document.querySelector('.home-hero .glitch')
-  if (hero) {
-    hero.classList.add('glitch-intro')
-    setTimeout(() => hero.classList.remove('glitch-intro'), 1600)
+    if (!deleting && charIndex === current.length) {
+      deleting = true
+      timer = setTimeout(tick, 2200)
+      return
+    }
+    if (deleting && charIndex === 0) {
+      deleting = false
+      textIndex = (textIndex + 1) % mottos.length
+      timer = setTimeout(tick, 450)
+      return
+    }
+    timer = setTimeout(tick, deleting ? 42 : 82)
   }
+
+  tick()
 })
 
-onUnmounted(() => { if (timer) clearTimeout(timer) })
+onUnmounted(() => clearTimeout(timer))
 
 function scrollDown() {
-  window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+  document.querySelector('.about-strip')?.scrollIntoView({
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+  })
 }
 </script>
 
 <style scoped>
 .home-hero {
   position: relative;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-height: 100svh;
   overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 112px 24px 88px;
+  isolation: isolate;
 }
 
-/* 收敛为 3 段渐变 + 双色旋转光斑，去掉杂色 */
 .hero-bg {
   position: absolute;
   inset: 0;
+  z-index: -3;
   background:
-    radial-gradient(circle at 20% 30%, rgba(255,183,197,0.6), transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255,228,181,0.55), transparent 50%),
-    linear-gradient(135deg, #fff5f7 0%, #ffeede 50%, #fff0f3 100%);
-  background-size: 160% 160%;
-  animation: bg-shift 18s ease infinite;
+    linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)),
+    linear-gradient(90deg, rgba(228,89,111,.055) 1px, transparent 1px),
+    linear-gradient(rgba(228,89,111,.055) 1px, transparent 1px),
+    radial-gradient(circle at 18% 20%, #ffe2e8 0, transparent 38%),
+    radial-gradient(circle at 82% 72%, #ffedd2 0, transparent 36%),
+    #fffafa;
+  background-size: auto, 48px 48px, 48px 48px, auto, auto, auto;
 }
 
-@keyframes bg-shift {
-  0%, 100% { background-position: 0% 50%, 100% 50%, 0% 50%; }
-  50% { background-position: 100% 50%, 0% 50%, 100% 50%; }
-}
-
-/* 装饰 blob：浮动光斑增加层次 */
-.blob {
+.hero-orb {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.45;
-  pointer-events: none;
-  z-index: 0;
-  animation: blob-float 14s ease-in-out infinite;
+  z-index: -2;
+  border-radius: 999px;
+  filter: blur(4px);
+  opacity: .65;
 }
-.blob-1 {
-  width: 320px; height: 320px;
-  background: var(--sakura-pink);
-  top: 10%; left: -80px;
+.hero-orb--one { width: 240px; height: 240px; left: -100px; top: 18%; background: #ffd7df; }
+.hero-orb--two { width: 320px; height: 320px; right: -170px; bottom: 6%; background: #ffe9c9; }
+
+.hero-shell {
+  width: min(1180px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  align-items: center;
+  gap: clamp(48px, 8vw, 112px);
 }
-.blob-2 {
-  width: 260px; height: 260px;
+
+.hero-copy { position: relative; z-index: 1; }
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  color: var(--vp-c-text-2);
+  font: 700 12px/1.4 var(--vp-font-family-mono);
+  letter-spacing: .13em;
+}
+.eyebrow span { width: 30px; height: 2px; background: var(--accent-color); }
+
+h1 {
+  margin: 0;
+  max-width: 720px;
+  color: var(--vp-c-text-1);
+  font: 700 clamp(48px, 7vw, 82px)/1.08 var(--vp-font-family-title);
+  letter-spacing: -.045em;
+}
+h1 strong {
+  color: var(--accent-color);
+  font-weight: inherit;
+  position: relative;
+  white-space: nowrap;
+}
+h1 strong::after {
+  content: '';
+  position: absolute;
+  left: 2%; right: 0; bottom: .02em;
+  height: .12em;
+  border-radius: 999px;
   background: var(--sakura-warm);
-  bottom: 15%; right: -60px;
-  animation-delay: -7s;
-}
-@keyframes blob-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, -30px) scale(1.1); }
+  z-index: -1;
+  transform: rotate(-2deg);
 }
 
-/* 头像 */
-.avatar {
-  position: relative;
-  z-index: 1;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 24px;
-  border: 3px solid rgba(255,255,255,0.7);
-  box-shadow: 0 8px 30px rgba(232,138,154,0.25);
-  animation: avatar-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-@keyframes avatar-in {
-  from { transform: scale(0.6); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+.hero-lead {
+  max-width: 650px;
+  margin: 28px 0 0;
+  color: var(--vp-c-text-2);
+  font-size: clamp(16px, 1.7vw, 19px);
+  line-height: 1.9;
 }
 
-/* Glitch */
-.glitch {
-  position: relative;
-  font-weight: bold;
-  font-size: 64px;
-  color: #fff;
-  text-shadow: rgba(0,0,0,0.25) 4px 4px 12px;
-  z-index: 1;
-  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
-}
-@keyframes title-in {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-.glitch::before, .glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0; left: 0; width: 100%;
-  clip: rect(0,0,0,0);
-}
-.glitch::before { left: -1px; text-shadow: 1px 0 #ff3f1a; }
-.glitch::after  { left: 1px;  text-shadow: -1px 0 #00a7e0; }
-.glitch:hover::before,
-.glitch.glitch-intro::before {
-  text-shadow: 4px 0 #ff3f1a;
-  animation: glitch-1 0.8s infinite ease-in-out alternate-reverse;
-}
-.glitch:hover::after,
-.glitch.glitch-intro::after {
-  text-shadow: -4px 0 #00a7e0;
-  animation: glitch-2 0.8s infinite ease-in-out alternate-reverse;
-}
-
-@keyframes glitch-1 {
-  0% { clip: rect(36px,9999px,9px,0); }
-  25% { clip: rect(25px,9999px,99px,0); }
-  50% { clip: rect(50px,9999px,102px,0); }
-  75% { clip: rect(30px,9999px,92px,0); }
-  100% { clip: rect(91px,9999px,98px,0); }
-}
-@keyframes glitch-2 {
-  0% { top:-1px; left:1px; clip: rect(65px,9999px,119px,0); }
-  25% { top:-6px; left:4px; clip: rect(79px,9999px,19px,0); }
-  50% { top:-3px; left:2px; clip: rect(68px,9999px,11px,0); }
-  75% { top:0; left:-4px; clip: rect(95px,9999px,53px,0); }
-  100% { top:-1px; left:-1px; clip: rect(31px,9999px,149px,0); }
-}
-
-/* Typewriter */
 .typewriter-line {
-  position: relative;
-  z-index: 1;
-  font-size: 16px;
-  color: #555;
-  text-align: center;
-  margin: 24px 0 0;
   min-height: 28px;
-  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
+  margin: 18px 0 0;
+  color: var(--accent-color);
+  font: 500 14px/1.8 var(--vp-font-family-mono);
 }
-.quote { color: var(--sakura-deep); margin: 0 6px; font-size: 18px; }
-.typing-cursor { color: var(--sakura-deep); animation: blink 1s step-end infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.typing-cursor { animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
 
-/* Badges */
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero-action {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-weight: 700;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.hero-action:hover { transform: translateY(-2px); }
+.hero-action--primary {
+  color: #fff;
+  background: var(--accent-color);
+  box-shadow: 0 12px 28px rgba(228,89,111,.24);
+}
+.hero-action--primary:hover { color: #fff; background: var(--vp-c-brand-2); }
+.hero-action--secondary {
+  color: var(--vp-c-text-1);
+  background: rgba(255,255,255,.72);
+  border-color: rgba(228,89,111,.18);
+  backdrop-filter: blur(12px);
+}
+.hero-action--secondary:hover { color: var(--accent-color); border-color: var(--sakura-pink); }
+.hero-action svg { width: 18px; height: 18px; }
+
 .hero-badges {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 10px;
-  margin-top: 24px;
-  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
+  padding: 0;
+  margin: 26px 0 0;
+  list-style: none;
 }
-.badge {
-  padding: 6px 16px;
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  font-size: 13px;
-  color: #777;
-  transition: all 0.2s;
-}
-.badge:hover {
-  background: var(--sakura-pink);
-  color: #fff;
-  transform: translateY(-1px);
-}
-
-/* GitHub btn */
-.gh-btn {
-  position: relative;
-  z-index: 1;
-  display: flex;
+.hero-badges li {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 24px;
-  padding: 12px 28px;
-  background: #333;
-  color: #fff;
-  border-radius: 12px;
-  font-size: 16px;
-  transition: all 0.3s;
-  animation: title-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s both;
-}
-.gh-btn:hover {
-  background: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(254,150,0,0.3);
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid rgba(228,89,111,.14);
+  border-radius: 999px;
+  background: rgba(255,255,255,.58);
+  color: var(--vp-c-text-2);
+  font-size: 12px;
 }
 
-/* Scroll hint */
+.hero-visual {
+  position: relative;
+  width: min(410px, 36vw);
+  aspect-ratio: 1;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+}
+.avatar-frame {
+  width: 68%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 10px solid rgba(255,255,255,.78);
+  border-radius: 42% 58% 56% 44% / 45% 44% 56% 55%;
+  background: linear-gradient(145deg, #fff, #ffe8ed);
+  box-shadow: 0 30px 70px rgba(155,68,88,.2);
+  animation: avatar-float 6s ease-in-out infinite;
+}
+.avatar-frame img { width: 100%; height: 100%; display: block; object-fit: cover; }
+@keyframes avatar-float { 50% { transform: translateY(-10px) rotate(1deg); } }
+
+.visual-ring { position: absolute; inset: 7%; border: 1px dashed rgba(228,89,111,.32); border-radius: 50%; }
+.visual-ring--inner { inset: 18%; border-style: solid; border-color: rgba(228,89,111,.12); }
+.floating-note {
+  position: absolute;
+  padding: 9px 13px;
+  border: 1px solid rgba(228,89,111,.15);
+  border-radius: 12px;
+  background: rgba(255,255,255,.78);
+  box-shadow: 0 10px 30px rgba(94,52,62,.1);
+  backdrop-filter: blur(12px);
+  color: var(--vp-c-text-2);
+  font: 600 12px/1 var(--vp-font-family-mono);
+}
+.floating-note--code { top: 11%; left: 0; transform: rotate(-5deg); }
+.floating-note--jp { top: 28%; right: -4%; transform: rotate(4deg); }
+.floating-note--anime { left: 4%; bottom: 13%; transform: rotate(3deg); }
+
 .scroll-hint {
   position: absolute;
-  bottom: 40px;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: rgba(0,0,0,0.35);
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0;
+  left: 50%; bottom: 24px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px;
   border: 0;
   background: transparent;
-  font: inherit;
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  font: 600 9px/1 var(--vp-font-family-mono);
+  letter-spacing: .18em;
 }
-.scroll-hint:hover { color: rgba(0,0,0,0.55); }
-.bounce-arrow {
-  width: 24px;
-  height: 24px;
-  animation: bounce 2s infinite;
+.scroll-hint svg { width: 20px; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 50% { transform: translateY(5px); } }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+:global(.dark) .hero-bg {
+  background:
+    linear-gradient(rgba(26,22,32,.82), rgba(26,22,32,.82)),
+    linear-gradient(90deg, rgba(228,89,111,.08) 1px, transparent 1px),
+    linear-gradient(rgba(228,89,111,.08) 1px, transparent 1px),
+    radial-gradient(circle at 18% 20%, #4b2835 0, transparent 38%),
+    radial-gradient(circle at 82% 72%, #4b3824 0, transparent 36%),
+    var(--vp-c-bg);
+  background-size: auto, 48px 48px, 48px 48px, auto, auto, auto;
 }
-@keyframes bounce {
-  0%,20%,50%,80%,100% { transform: translateY(0); }
-  40% { transform: translateY(6px); }
-  60% { transform: translateY(3px); }
+:global(.dark) .hero-action--secondary,
+:global(.dark) .hero-badges li,
+:global(.dark) .floating-note { background: rgba(39,33,48,.72); }
+
+@media (max-width: 820px) {
+  .home-hero { min-height: auto; padding: 120px 24px 88px; }
+  .hero-shell { grid-template-columns: 1fr; gap: 54px; text-align: center; }
+  .eyebrow, .hero-actions, .hero-badges { justify-content: center; }
+  .hero-lead { margin-inline: auto; }
+  .hero-visual { width: min(360px, 80vw); grid-row: 1; }
+  .hero-copy { grid-row: 2; }
+  .floating-note { font-size: 10px; }
 }
 
-@media (max-width: 720px) {
-  .glitch { font-size: 36px; }
-  .typewriter-line { font-size: 14px; }
-  .avatar { width: 96px; height: 96px; }
-  .blob-1 { width: 220px; height: 220px; }
-  .blob-2 { width: 180px; height: 180px; }
+@media (max-width: 520px) {
+  .home-hero { padding-inline: 18px; }
+  h1 { font-size: clamp(42px, 14vw, 58px); }
+  .hero-lead { font-size: 15px; line-height: 1.8; }
+  .hero-visual { width: min(300px, 82vw); }
+  .hero-action { flex: 1 1 140px; }
+  .floating-note--jp { right: 0; }
 }
 </style>
