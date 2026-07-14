@@ -5,17 +5,17 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { SITE as SITE_CONFIG, SITE_URL, absoluteAsset } from './site.constants.mjs'
 
 const SITE = {
-  title: "Sakikoの博客",
-  desc: "一个热爱ACGN的程序员小窝",
-  url: "https://a3292334877-star.github.io/blog",
-  author: "Sakiko",
+  title: SITE_CONFIG.title,
+  desc: SITE_CONFIG.description,
+  url: SITE_URL,
+  author: SITE_CONFIG.author,
 }
 
 const DIST = path.join(process.cwd(), '.vitepress/dist')
 const POST_DIR = path.join(process.cwd(), 'posts')
-const ABS_BASE = 'https://a3292334877-star.github.io'
 
 function escapeXml(s) {
   return s
@@ -41,7 +41,7 @@ function main() {
       const slug = f.replace(/\.md$/, '')
       const date = +new Date(data.date) || fs.statSync(path.join(POST_DIR, f)).mtimeMs
       const cover = data.cover
-        ? (String(data.cover).startsWith('http') ? String(data.cover) : `${ABS_BASE}${data.cover}`)
+        ? (String(data.cover).startsWith('http') ? String(data.cover) : absoluteAsset(data.cover))
         : null
       const desc = data.description || (excerpt || '').trim() || SITE.desc
       return { title: data.title, date, slug, excerpt: desc, cover }

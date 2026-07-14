@@ -38,7 +38,7 @@ async function loadResources(): Promise<void> {
 }
 
 function initWidget(): void {
-  // L2Dwidget 的 webpack public path 已硬编码为 /blog/live2d/，
+  // L2Dwidget 的 webpack public path 已调整为根域名下的 /live2d/，
   // 会自动从本地加载 chunk (L2Dwidget.0.min.js) 与模型资源。
   window.L2Dwidget.init({
     tagMode: false,

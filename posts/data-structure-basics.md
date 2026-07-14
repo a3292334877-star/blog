@@ -2,7 +2,7 @@
 title: 数据结构基础：从数组到并查集
 date: 2026-06-02
 tags: [教程, C++, 数据结构]
-cover: /blog/covers/data-structure-basics.svg
+cover: /covers/data-structure-basics.svg
 ---
 
 数据结构是程序的骨架。选对数据结构，问题就解决了八成。本文串讲 C++ 竞赛中最核心的基础数据结构及其应用场景。

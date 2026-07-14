@@ -2,8 +2,8 @@ export const SITE = Object.freeze({
   title: 'Sakikoの博客',
   description: '一个热爱ACGN的程序员小窝',
   author: 'Sakiko',
-  origin: 'https://a3292334877-star.github.io',
-  base: '/blog/',
+  origin: 'https://sakikoblog.info',
+  base: '/',
   repository: 'a3292334877-star/blog',
 })
 

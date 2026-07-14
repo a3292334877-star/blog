@@ -2,7 +2,7 @@
 title: 矩阵入门：从高斯消元到特征值
 date: 2026-06-03
 tags: [教程, 线性代数, 高等数学]
-cover: /blog/covers/matrix-basics.svg
+cover: /covers/matrix-basics.svg
 ---
 
 **矩阵**是线性代数最核心的工具。它不仅仅是数字的排列，更是**线性变换**的数学表示。本文从零开始，梳理矩阵的基本概念与运算。

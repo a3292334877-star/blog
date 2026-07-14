@@ -2,7 +2,7 @@
 title: Linux 常用操作技巧
 date: 2026-06-02
 tags: [教程, Linux]
-cover: /blog/covers/linux-tips.svg
+cover: /covers/linux-tips.svg
 ---
 
 Linux 是程序员绕不开的操作系统。日常开发中积累了一些实用技巧，整理分享。

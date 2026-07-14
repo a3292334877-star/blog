@@ -2,7 +2,7 @@
 title: C++ 中哈希 Map 的应用与竞赛技巧
 date: 2026-06-02
 tags: [教程, C++, 算法]
-cover: /blog/covers/hashmap-in-cpp.svg
+cover: /covers/hashmap-in-cpp.svg
 ---
 
 哈希表是竞赛中最常用的数据结构之一。本文梳理 C++ 中 `unordered_map` / `map` 的用法、原理和竞赛实战技巧。
