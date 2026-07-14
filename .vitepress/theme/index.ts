@@ -8,6 +8,7 @@ import SiteStats from './components/SiteStats.vue'
 import AnimePreview from './components/AnimePreview.vue'
 import ProjectsPreview from './components/ProjectsPreview.vue'
 import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
+import FriendLinks from './components/FriendLinks.vue'
 import './custom.css'
 
 export default {
@@ -22,5 +23,6 @@ export default {
     app.component('AnimePreview', AnimePreview)
     app.component('ProjectsPreview', ProjectsPreview)
     app.component('ShuoshuoPreview', ShuoshuoPreview)
+    app.component('FriendLinks', FriendLinks)
   },
 }
