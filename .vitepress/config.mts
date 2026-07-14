@@ -46,7 +46,7 @@ export default defineConfig({
     ['script', {},
       `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
 
-    ['link', { rel: 'icon', href: `${SITE.base}favicon.ico` }],
+    ['link', { rel: 'icon', type: 'image/jpeg', href: `${SITE.base}avatar.jpg` }],
     ['link', { rel: 'alternate', type: 'application/atom+xml', title: `${SITE.title} RSS`, href: `${SITE.base}feed.xml` }],
     ['meta', { name: 'theme-color', content: '#e4596f' }],
     ['meta', { name: 'robots', content: 'index, follow' }],
@@ -69,7 +69,7 @@ export default defineConfig({
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: '/favicon.ico',
+    logo: '/avatar.jpg',
     siteTitle: '🌸 Sakiko',
 
     nav: [
