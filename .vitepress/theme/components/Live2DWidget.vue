@@ -95,7 +95,8 @@ function initWidget(): void {
       hitokoto: false,
     },
     name: {
-      div: 'live2d-tooltip',
+      canvas: 'live2dcanvas',
+      div: 'live2d-widget',
     },
     dev: {
       border: false,
@@ -121,7 +122,10 @@ async function loadWidget(): Promise<void> {
 }
 
 function setWidgetVisible(visible: boolean): boolean {
+  // 兼容修复前错误使用的 live2d-tooltip 容器 ID。
   const widget = document.getElementById('live2d-widget')
+    || document.getElementById('live2d-tooltip')
+    || document.getElementById('live2dcanvas')?.parentElement
   if (!widget) return false
   widget.style.display = visible ? '' : 'none'
   return true
