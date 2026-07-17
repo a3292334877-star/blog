@@ -21,7 +21,7 @@
         <div class="card-body">
           <div class="card-meta">
             <time class="card-date">{{ fmtDate(p.create) }}</time>
-            <span class="reading-time">阅读 {{ readingTime(p) }} 分钟</span>
+            <span class="reading-time">阅读 {{ p.readingTime }} 分钟</span>
           </div>
           <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
           <div class="card-excerpt" v-html="p.excerpt"></div>
@@ -62,10 +62,6 @@ function fmtDate(ts: number) {
   })
 }
 
-function readingTime(p: any) {
-  const words = String(p.excerpt || '').replace(/<[^>]+>/g, '').length
-  return Math.max(3, Math.ceil(words / 180))
-}
 </script>
 
 <style scoped>

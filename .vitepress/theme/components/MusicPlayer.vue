@@ -19,6 +19,7 @@ import { withBase } from 'vitepress'
 const playing = ref(false)
 const buffering = ref(false)
 let audio: HTMLAudioElement | null = null
+let sourceAttached = false
 
 const onPlay = () => { playing.value = true; buffering.value = false }
 const onPause = () => { playing.value = false }
@@ -32,10 +33,10 @@ const onError = (e: Event) => {
 }
 
 onMounted(() => {
-  // 只读取媒体元数据，避免首屏下载整首 4MB+ 音频
-  audio = new Audio(withBase('/music.mp3'))
+  // 不在首屏设置 src；只有用户主动播放时才开始请求 4MB+ 音频。
+  audio = new Audio()
   audio.loop = true
-  audio.preload = 'metadata'
+  audio.preload = 'none'
   audio.addEventListener('play', onPlay)
   audio.addEventListener('pause', onPause)
   audio.addEventListener('ended', onEnded)
@@ -60,6 +61,10 @@ onUnmounted(() => {
 function toggle() {
   if (!audio) return
   if (audio.paused) {
+    if (!sourceAttached) {
+      audio.src = withBase('/music.mp3')
+      sourceAttached = true
+    }
     buffering.value = true
     audio.play().then(() => {
       buffering.value = false

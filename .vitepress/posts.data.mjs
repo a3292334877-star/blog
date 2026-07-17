@@ -39,7 +39,7 @@ function getPost(md, file, postDir, asFeed = false) {
   }
 
   const src = fs.readFileSync(fullPath, 'utf-8')
-  const { data, excerpt } = matter(src, { excerpt: true, excerpt_separator: '<!-- more -->' })
+  const { data, content, excerpt } = matter(src, { excerpt: true, excerpt_separator: '<!-- more -->' })
 
   // 跳过分页索引文件
   if (!data.title) return null
@@ -53,6 +53,7 @@ function getPost(md, file, postDir, asFeed = false) {
     tags: data.tags || [],
     cover: data.cover === false ? '' : (data.cover || `/covers/${slug}.svg`),
     excerpt: md.render(excerpt || ''),
+    readingTime: estimateReadingTime(content),
   }
   if (asFeed) {
     post.data = data
@@ -60,4 +61,17 @@ function getPost(md, file, postDir, asFeed = false) {
 
   cache.set(cacheKey, { timestamp, post })
   return post
+}
+
+function estimateReadingTime(markdown) {
+  const plain = markdown
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[#>*_|~-]/g, ' ')
+  const cjkCount = (plain.match(/[\u3400-\u9fff\uf900-\ufaff]/g) || []).length
+  const wordCount = (plain.replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ').match(/[A-Za-z0-9]+/g) || []).length
+  return Math.max(1, Math.ceil(cjkCount / 300 + wordCount / 200))
 }

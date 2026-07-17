@@ -1,12 +1,32 @@
 <template>
-  <div style="display: none" />
+  <div class="live2d-controls">
+    <button
+      v-if="loaded && !disabled"
+      class="live2d-close"
+      type="button"
+      aria-label="关闭看板娘"
+      title="关闭看板娘"
+      @click="disableWidget"
+    >×</button>
+    <button
+      v-else-if="disabled && desktopEligible"
+      class="live2d-restore"
+      type="button"
+      title="显示看板娘"
+      @click="restoreWidget"
+    >🌸 看板娘</button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { withBase } from 'vitepress'
 
 const MODEL_PATH = withBase('/live2d/model.json')
+const STORAGE_KEY = 'sakiko-live2d-disabled'
+const loaded = ref(false)
+const disabled = ref(false)
+const desktopEligible = ref(false)
 let loadTimer: ReturnType<typeof setTimeout> | null = null
 let idleHandle: number | null = null
 
@@ -81,6 +101,7 @@ function initWidget(): void {
       border: false,
     },
   })
+  loaded.value = true
 }
 
 function shouldLoad(): boolean {
@@ -90,6 +111,7 @@ function shouldLoad(): boolean {
 }
 
 async function loadWidget(): Promise<void> {
+  if (disabled.value || loaded.value) return
   try {
     await loadResources()
     initWidget()
@@ -98,8 +120,27 @@ async function loadWidget(): Promise<void> {
   }
 }
 
+function removeWidget(): void {
+  document.getElementById('live2d-widget')?.remove()
+  loaded.value = false
+}
+
+function disableWidget(): void {
+  disabled.value = true
+  localStorage.setItem(STORAGE_KEY, '1')
+  removeWidget()
+}
+
+function restoreWidget(): void {
+  disabled.value = false
+  localStorage.removeItem(STORAGE_KEY)
+  void loadWidget()
+}
+
 onMounted(() => {
-  if (!shouldLoad()) return
+  desktopEligible.value = shouldLoad()
+  disabled.value = localStorage.getItem(STORAGE_KEY) === '1'
+  if (!desktopEligible.value || disabled.value) return
 
   // 浏览器空闲时再加载 1MB+ 的模型；不支持 idle callback 时延迟加载。
   const idleWindow = window as IdleWindow
@@ -122,3 +163,35 @@ onUnmounted(() => {
   }
 })
 </script>
+
+<style scoped>
+.live2d-close,
+.live2d-restore {
+  position: fixed;
+  left: 16px;
+  z-index: 102;
+  border: 1px solid var(--vp-c-divider);
+  background: color-mix(in srgb, var(--vp-c-bg) 88%, transparent);
+  color: var(--vp-c-text-2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.live2d-close {
+  bottom: 286px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+}
+.live2d-restore {
+  bottom: 18px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.live2d-close:hover,
+.live2d-restore:hover { color: var(--accent-color); border-color: var(--sakura-pink); }
+@media (max-width: 899px) { .live2d-controls { display: none; } }
+</style>
