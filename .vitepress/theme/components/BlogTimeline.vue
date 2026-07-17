@@ -2,6 +2,7 @@
   <section class="timeline-section">
     <h2 class="section-heading">
       <span class="icon">📅</span> 文章时间线
+      <a class="section-more" :href="withBase('/posts/')">全部文章 →</a>
     </h2>
 
     <div class="timeline">
@@ -43,7 +44,7 @@ function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const grouped = computed(() => {
   const m: Record<string, typeof posts> = {}
-  for (const p of posts) {
+  for (const p of posts.slice(0, 6)) {
     const y = new Date(p.create).getFullYear().toString()
     if (!m[y]) m[y] = []
     m[y].push(p)
@@ -63,9 +64,11 @@ function fmtShort(ts: number) {
   padding: 24px 0 48px;
 }
 .section-heading {
+  display: flex; align-items: center; gap: 8px;
   font-size: 22px;
   margin-bottom: 36px;
 }
+.section-more { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--accent-color); }
 
 .timeline { padding-left: 28px; position: relative; }
 

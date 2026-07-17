@@ -167,7 +167,15 @@ function scrollDown() {
   gap: clamp(48px, 8vw, 112px);
 }
 
-.hero-copy { position: relative; z-index: 1; }
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .58);
+  box-shadow: 0 18px 48px rgba(93, 47, 59, .06);
+  backdrop-filter: blur(5px);
+}
 .eyebrow {
   display: flex;
   align-items: center;
@@ -340,6 +348,7 @@ h1 strong::after {
 :global(.dark) .hero-action--secondary,
 :global(.dark) .hero-badges li,
 :global(.dark) .floating-note { background: rgba(39,33,48,.72); }
+:global(.dark) .hero-copy { background: rgba(39,33,48,.58); }
 
 @media (max-width: 820px) {
   .home-hero { min-height: auto; padding: 120px 24px 88px; }
@@ -356,6 +365,7 @@ h1 strong::after {
   h1 { font-size: clamp(42px, 14vw, 58px); }
   .hero-lead { font-size: 15px; line-height: 1.8; }
   .hero-visual { width: min(300px, 82vw); }
+  .hero-copy { padding: 22px 18px; }
   .hero-action { flex: 1 1 140px; }
   .floating-note--jp { right: 0; }
 }

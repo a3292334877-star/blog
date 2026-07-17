@@ -78,11 +78,16 @@ export default defineConfig({
       { text: '文章', link: '/posts/' },
       { text: '标签', link: '/tags/' },
       { text: '项目', link: '/projects/' },
-      { text: '追番', link: '/anime/' },
-      { text: '说说', link: '/shuoshuo/' },
-      { text: '学习', link: '/learn/' },
-      { text: '友链', link: '/friends/' },
-      { text: '关于', link: '/about/' },
+      {
+        text: '更多',
+        items: [
+          { text: '追番', link: '/anime/' },
+          { text: '说说', link: '/shuoshuo/' },
+          { text: '学习', link: '/learn/' },
+          { text: '友链', link: '/friends/' },
+          { text: '关于', link: '/about/' },
+        ],
+      },
     ],
 
     sidebar: {

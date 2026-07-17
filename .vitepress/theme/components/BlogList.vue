@@ -1,12 +1,13 @@
 <template>
   <section class="blog-list-section">
     <h2 class="section-heading">
-      <span class="icon">📖</span> 文章列表
+      <span class="icon">📖</span> 最新文章
+      <a class="section-more" :href="withBase('/posts/')">查看全部 →</a>
     </h2>
 
     <div class="post-grid">
       <article
-        v-for="(p, i) in posts"
+        v-for="(p, i) in posts.slice(0, 6)"
         :key="p.href"
         class="post-card"
         :style="{ animationDelay: i * 80 + 'ms' }"
@@ -18,7 +19,10 @@
           <span class="placeholder-icon">🌸</span>
         </a>
         <div class="card-body">
-          <time class="card-date">{{ fmtDate(p.create) }}</time>
+          <div class="card-meta">
+            <time class="card-date">{{ fmtDate(p.create) }}</time>
+            <span class="reading-time">阅读 {{ readingTime(p) }} 分钟</span>
+          </div>
           <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
           <div class="card-excerpt" v-html="p.excerpt"></div>
           <div class="card-tags" v-if="p.tags?.length">
@@ -57,6 +61,11 @@ function fmtDate(ts: number) {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 }
+
+function readingTime(p: any) {
+  const words = String(p.excerpt || '').replace(/<[^>]+>/g, '').length
+  return Math.max(3, Math.ceil(words / 180))
+}
 </script>
 
 <style scoped>
@@ -67,10 +76,16 @@ function fmtDate(ts: number) {
 }
 
 .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 24px;
   margin-bottom: 28px;
   letter-spacing: -0.02em;
 }
+.section-more { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--accent-color); }
+.card-meta { display: flex; align-items: center; gap: 10px; }
+.reading-time { font-size: 12px; color: var(--vp-c-text-3); }
 
 /* 2 列卡片网格，窄屏自动单列 */
 .post-grid {

@@ -10,16 +10,16 @@
         <div class="stat-label">👥 访问会话</div>
         <div class="stat-value">
           <template v-if="uv !== null">{{ fmtNum(uvDisplay) }}</template>
-          <template v-else>-</template>
-          <span class="stat-unit">次</span>
+          <template v-if="uv !== null"><span class="stat-unit">次</span></template>
+          <template v-else><span class="stat-unavailable">暂不可用</span></template>
         </div>
       </div>
       <div class="stat-card" :style="{ animationDelay: '80ms' }">
         <div class="stat-label">👁️ 访问次数</div>
         <div class="stat-value">
           <template v-if="pv !== null">{{ fmtNum(pvDisplay) }}</template>
-          <template v-else>-</template>
-          <span class="stat-unit">次</span>
+          <template v-if="pv !== null"><span class="stat-unit">次</span></template>
+          <template v-else><span class="stat-unavailable">暂不可用</span></template>
         </div>
       </div>
 
@@ -177,4 +177,5 @@ function fmtDate(ts: number) {
   color: var(--vp-c-text-3);
   margin-left: 4px;
 }
+.stat-unavailable { font-size: 14px; font-weight: 500; color: var(--vp-c-text-3); }
 </style>
