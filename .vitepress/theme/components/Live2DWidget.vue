@@ -120,20 +120,28 @@ async function loadWidget(): Promise<void> {
   }
 }
 
-function removeWidget(): void {
-  document.getElementById('live2d-widget')?.remove()
-  loaded.value = false
+function setWidgetVisible(visible: boolean): boolean {
+  const widget = document.getElementById('live2d-widget')
+  if (!widget) return false
+  widget.style.display = visible ? '' : 'none'
+  return true
 }
 
 function disableWidget(): void {
   disabled.value = true
   localStorage.setItem(STORAGE_KEY, '1')
-  removeWidget()
+  // L2Dwidget 没有可靠的销毁 API。保留已初始化实例，仅隐藏画布，
+  // 避免恢复时重复创建 WebGL 上下文导致花屏。
+  setWidgetVisible(false)
 }
 
 function restoreWidget(): void {
   disabled.value = false
   localStorage.removeItem(STORAGE_KEY)
+  if (setWidgetVisible(true)) {
+    loaded.value = true
+    return
+  }
   void loadWidget()
 }
 
