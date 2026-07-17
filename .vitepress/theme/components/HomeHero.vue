@@ -46,7 +46,7 @@
         <div class="visual-ring visual-ring--outer"></div>
         <div class="visual-ring visual-ring--inner"></div>
         <div class="avatar-frame">
-          <img :src="withBase('/avatar.jpg')" alt="" width="320" height="320">
+          <img :src="withBase('/avatar.webp')" alt="" width="478" height="478">
         </div>
         <span class="floating-note floating-note--code">&lt;/&gt; Code</span>
         <span class="floating-note floating-note--jp">日本語 N1</span>
@@ -351,22 +351,28 @@ h1 strong::after {
 :global(.dark) .hero-copy { background: rgba(39,33,48,.58); }
 
 @media (max-width: 820px) {
-  .home-hero { min-height: auto; padding: 120px 24px 88px; }
-  .hero-shell { grid-template-columns: 1fr; gap: 54px; text-align: center; }
+  .home-hero { min-height: auto; padding: 96px 24px 48px; }
+  .hero-shell { grid-template-columns: 1fr; gap: 28px; text-align: center; }
   .eyebrow, .hero-actions, .hero-badges { justify-content: center; }
   .hero-lead { margin-inline: auto; }
-  .hero-visual { width: min(360px, 80vw); grid-row: 1; }
+  .hero-visual { width: min(250px, 64vw); grid-row: 1; }
   .hero-copy { grid-row: 2; }
   .floating-note { font-size: 10px; }
 }
 
 @media (max-width: 520px) {
-  .home-hero { padding-inline: 18px; }
-  h1 { font-size: clamp(42px, 14vw, 58px); }
+  .home-hero { padding: 82px 14px 34px; }
+  h1 { font-size: clamp(36px, 12vw, 48px); }
   .hero-lead { font-size: 15px; line-height: 1.8; }
-  .hero-visual { width: min(300px, 82vw); }
-  .hero-copy { padding: 22px 18px; }
+  .hero-visual { width: min(210px, 58vw); }
+  .hero-copy { padding: 20px 16px; }
+  .eyebrow { margin-bottom: 14px; font-size: 10px; }
+  .hero-lead { margin-top: 16px; }
+  .typewriter-line { margin-top: 10px; }
+  .hero-actions { margin-top: 20px; }
+  .hero-badges { margin-top: 16px; }
   .hero-action { flex: 1 1 140px; }
-  .floating-note--jp { right: 0; }
+  .floating-note { display: none; }
+  .scroll-hint { display: none; }
 }
 </style>

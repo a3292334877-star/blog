@@ -28,7 +28,8 @@ if (!existsSync(dist)) {
     const requiredFragments = [
       '<link rel="canonical" href="https://sakikoblog.info/">',
       '<meta property="og:url" content="https://sakikoblog.info/">',
-      '<meta property="og:image" content="https://sakikoblog.info/avatar.jpg">',
+      '<meta property="og:image" content="https://sakikoblog.info/avatar.webp">',
+      '<script type="application/ld+json">',
     ]
     for (const fragment of requiredFragments) {
       if (!homepage.includes(fragment)) fail(`homepage is missing ${fragment}`)

@@ -47,7 +47,7 @@ export default defineConfig({
     ['script', {},
       `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
 
-    ['link', { rel: 'icon', type: 'image/jpeg', href: `${SITE.base}avatar.jpg` }],
+    ['link', { rel: 'icon', type: 'image/webp', href: `${SITE.base}avatar.webp` }],
     ['link', { rel: 'alternate', type: 'application/atom+xml', title: `${SITE.title} RSS`, href: `${SITE.base}feed.xml` }],
     ['meta', { name: 'theme-color', content: '#e4596f' }],
     ['meta', { name: 'robots', content: 'index, follow' }],
@@ -70,7 +70,7 @@ export default defineConfig({
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: '/avatar.jpg',
+    logo: '/avatar.webp',
     siteTitle: '🌸 Sakiko',
     outline: {
       level: [2, 3],
@@ -201,7 +201,7 @@ export default defineConfig({
       ? (String(coverSource).startsWith('http')
           ? String(coverSource)
           : absoluteAsset(coverSource))
-      : (isHome ? absoluteAsset('/avatar.jpg') : null)
+      : (isHome ? absoluteAsset('/avatar.webp') : null)
     const pagePath = pageData.relativePath
       .replace(/\.md$/, '')
       .replace(/(^|\/)index$/, '$1')
@@ -221,6 +221,48 @@ export default defineConfig({
       head.push(['meta', { property: 'og:image', content: cover }])
       head.push(['meta', { name: 'twitter:image', content: cover }])
     }
+
+    const breadcrumbItems = [
+      { '@type': 'ListItem', position: 1, name: '首页', item: absoluteUrl() },
+      ...(isPost
+        ? [{ '@type': 'ListItem', position: 2, name: '文章', item: absoluteUrl('posts/') }]
+        : []),
+      ...(!isHome
+        ? [{ '@type': 'ListItem', position: isPost ? 3 : 2, name: title, item: url }]
+        : []),
+    ]
+    const structuredData: Record<string, any>[] = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbItems,
+      },
+    ]
+    if (isPost) {
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: title,
+        description: desc,
+        url,
+        mainEntityOfPage: url,
+        image: cover || undefined,
+        datePublished: fm.date ? new Date(fm.date).toISOString() : undefined,
+        dateModified: pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : undefined,
+        author: {
+          '@type': 'Person',
+          name: SITE.author,
+          url: absoluteUrl('about/'),
+          sameAs: ['https://github.com/a3292334877-star'],
+        },
+        publisher: {
+          '@type': 'Person',
+          name: SITE.author,
+          url: absoluteUrl(),
+        },
+      })
+    }
+    head.push(['script', { type: 'application/ld+json' }, JSON.stringify(structuredData).replace(/</g, '\\u003c')])
     const existingHead = Array.isArray(fm.head) ? fm.head : []
     pageData.frontmatter = {
       ...fm,

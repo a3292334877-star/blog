@@ -13,6 +13,7 @@
 
     <template #home-hero-after>
       <AboutStrip />
+      <HomeCategories />
       <HomeColumns />
       <AnimePreview />
       <ProjectsPreview />
@@ -22,6 +23,15 @@
 
     <template #doc-before>
       <div class="doc-banner" :style="docBannerStyle" v-if="docBannerStyle">
+        <nav class="doc-breadcrumb" aria-label="面包屑导航">
+          <a :href="withBase('/')">首页</a>
+          <span aria-hidden="true">/</span>
+          <template v-if="route.path.startsWith('/posts/')">
+            <a :href="withBase('/posts/')">文章</a>
+            <span aria-hidden="true">/</span>
+          </template>
+          <span aria-current="page">{{ frontmatter.title }}</span>
+        </nav>
         <h1 class="doc-title">{{ frontmatter.title }}</h1>
         <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
           <span v-if="frontmatter.date" class="doc-date">{{ formatDate(frontmatter.date) }}</span>
@@ -51,6 +61,7 @@ import { computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
 import AboutStrip from './components/AboutStrip.vue'
+import HomeCategories from './components/HomeCategories.vue'
 import HomeColumns from './components/HomeColumns.vue'
 import AnimePreview from './components/AnimePreview.vue'
 import ProjectsPreview from './components/ProjectsPreview.vue'
