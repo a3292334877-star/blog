@@ -72,6 +72,14 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: '/avatar.jpg',
     siteTitle: '🌸 Sakiko',
+    outline: {
+      level: [2, 3],
+      label: '本页目录',
+    },
+    docFooter: {
+      prev: false,
+      next: false,
+    },
 
     nav: [
       { text: '首页', link: '/' },

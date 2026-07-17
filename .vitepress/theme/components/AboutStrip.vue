@@ -15,7 +15,6 @@ const items = [
   { icon: '☕', text: 'Java / C++ / Flutter' },
   { icon: '🗾', text: '日语 N1' },
   { icon: '🍡', text: '京阿尼忠实蜜' },
-  { icon: '🏆', text: '蓝桥杯省三' },
 ]
 </script>
 
@@ -29,7 +28,7 @@ const items = [
   margin: 0 auto;
   padding: 18px 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0;
   list-style: none;
 }
@@ -50,7 +49,6 @@ li + li { border-left: 1px solid var(--vp-c-divider); }
 @media (max-width: 900px) {
   .strip-inner { grid-template-columns: repeat(2, 1fr); gap: 10px; padding-block: 16px; }
   li { justify-content: flex-start; border: 0 !important; padding: 8px 12px; }
-  li:last-child { grid-column: 1 / -1; justify-content: center; }
 }
 
 @media (max-width: 520px) {

@@ -36,6 +36,28 @@ if (!existsSync(dist)) {
   }
 
   const files = filesUnder(dist)
+
+  // 检查构建后的站内链接与资源，避免部署后出现 404。
+  const htmlFiles = files.filter((file) => extname(file) === '.html')
+  const checkedLinks = new Set()
+  for (const htmlFile of htmlFiles) {
+    const html = readFileSync(htmlFile, 'utf8')
+    for (const match of html.matchAll(/(?:href|src)="(\/[^"#?]+)(?:[?#][^"]*)?"/g)) {
+      const urlPath = decodeURIComponent(match[1])
+      if (checkedLinks.has(urlPath)) continue
+      checkedLinks.add(urlPath)
+      const cleanPath = urlPath.replace(/^\//, '')
+      const candidates = extname(cleanPath)
+        ? [join(dist, cleanPath)]
+        : [join(dist, `${cleanPath}.html`), join(dist, cleanPath, 'index.html')]
+      if (cleanPath === '') candidates.push(join(dist, 'index.html'))
+      if (!candidates.some(existsSync)) {
+        fail(`${relative(dist, htmlFile)} links to missing ${urlPath}`)
+      }
+    }
+  }
+  console.log(`  ✓ internal links: ${checkedLinks.size} unique targets checked`)
+
   const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0)
   const maxTotalBytes = 10.5 * 1024 * 1024
   if (totalBytes > maxTotalBytes) {

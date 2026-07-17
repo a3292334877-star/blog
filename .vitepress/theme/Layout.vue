@@ -32,12 +32,14 @@
       </div>
     </template>
     <template #doc-after>
+      <PostNavigation />
       <GiscusComment />
     </template>
 
     <template #layout-bottom>
       <Live2DWidget />
       <BackToTop />
+      <CopyToast />
     </template>
   </DefaultTheme.Layout>
 </template>
@@ -60,6 +62,8 @@ import GiscusComment from './components/GiscusComment.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import Live2DWidget from './components/Live2DWidget.vue'
 import CursorGlow from './components/CursorGlow.vue'
+import PostNavigation from './components/PostNavigation.vue'
+import CopyToast from './components/CopyToast.vue'
 
 const { frontmatter } = useData()
 const route = useRoute()
