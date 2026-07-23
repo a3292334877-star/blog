@@ -10,13 +10,18 @@
 // ============================================================
 // 从环境变量读取 Supabase 配置
 // 在项目根目录创建 .env 文件（已在 .gitignore 中忽略）：
+//   VITE_VISITOR_COUNTER_ENABLED=true
 //   VITE_SUPABASE_URL=https://xxx.supabase.co
 //   VITE_SUPABASE_ANON_KEY=eyJ...
 // ============================================================
+const VISITOR_COUNTER_ENABLED = import.meta.env.VITE_VISITOR_COUNTER_ENABLED === 'true'
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? ''
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? ''
+const HAS_VISITOR_CONFIG = Boolean(
+  VISITOR_COUNTER_ENABLED && SUPABASE_URL && SUPABASE_ANON_KEY,
+)
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+if (VISITOR_COUNTER_ENABLED && !HAS_VISITOR_CONFIG) {
   console.warn(
     '[useVisitorCounter] 缺少 VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY 环境变量，访客计数功能将不可用。' +
     ' 请复制 .env.example 为 .env 并填入 Supabase 凭据。',
@@ -134,8 +139,8 @@ export function useVisitorCounter(): { uv: Ref<number | null>; pv: Ref<number | 
   const pv = ref<number | null>(null)
 
   onMounted(async () => {
-    // 缺少凭据时直接跳过，不发无效请求
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return
+    // 默认关闭；只有显式启用且凭据完整时才请求，避免失效后端污染控制台。
+    if (!HAS_VISITOR_CONFIG) return
     if (navigator.doNotTrack === '1') return
 
     const storage = getStorage()

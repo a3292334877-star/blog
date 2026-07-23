@@ -9,7 +9,7 @@ import matter from 'gray-matter'
 const DAY = 24 * 60 * 60 * 1000
 
 export default {
-  watch: ['posts/*.md', 'projects/*.md'],
+  watch: ['posts/*.md', 'projects/*.md', 'shuoshuo/*.md'],
   load() {
     const cwd = process.cwd()
     const postDir = path.join(cwd, 'posts')
@@ -47,11 +47,49 @@ export default {
     // 项目数量
     const projectDir = path.join(cwd, 'projects')
     let projectCount = 0
+    let projectDates = []
     try {
-      projectCount = fs
+      const projectFiles = fs
         .readdirSync(projectDir)
-        .filter((f) => f.endsWith('.md') && f !== 'index.md').length
+        .filter((f) => f.endsWith('.md') && f !== 'index.md')
+      projectCount = projectFiles.length
+      projectDates = projectFiles
+        .map((f) => {
+          const raw = fs.readFileSync(path.join(projectDir, f), 'utf-8')
+          return +new Date(matter(raw).data.date) || 0
+        })
+        .filter((date) => date > 0)
     } catch { /* 目录不存在时忽略 */ }
+
+    // 说说使用「年份 + 月-日」标题，提取日期后一起参与“最近更新”计算。
+    const shuoshuoDates = []
+    const shuoshuoFile = path.join(cwd, 'shuoshuo', 'index.md')
+    if (fs.existsSync(shuoshuoFile)) {
+      let year = 0
+      const lines = fs.readFileSync(shuoshuoFile, 'utf-8').split(/\r?\n/)
+      for (const line of lines) {
+        const yearMatch = line.match(/^##\s+(\d{4})\s*$/)
+        if (yearMatch) {
+          year = Number(yearMatch[1])
+          continue
+        }
+        const dateMatch = line.match(/^###\s+(\d{2})-(\d{2})\s*$/)
+        if (year && dateMatch) {
+          shuoshuoDates.push(Date.UTC(
+            year,
+            Number(dateMatch[1]) - 1,
+            Number(dateMatch[2]),
+            12,
+          ))
+        }
+      }
+    }
+
+    const contentDates = [
+      ...posts.map((p) => p.date),
+      ...projectDates,
+      ...shuoshuoDates,
+    ]
 
     return {
       totalWords,
@@ -59,7 +97,7 @@ export default {
       postCount: posts.length,
       weekNew,
       monthNew,
-      lastUpdate: posts.length ? Math.max(...posts.map((p) => p.date)) : now,
+      lastUpdate: contentDates.length ? Math.max(...contentDates) : now,
       projectCount,
     }
   },

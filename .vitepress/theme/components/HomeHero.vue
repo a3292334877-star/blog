@@ -244,10 +244,10 @@ h1 strong::after {
 .hero-action:hover { transform: translateY(-2px); }
 .hero-action--primary {
   color: #fff;
-  background: var(--accent-color);
+  background: var(--accent-solid);
   box-shadow: 0 12px 28px rgba(228,89,111,.24);
 }
-.hero-action--primary:hover { color: #fff; background: var(--vp-c-brand-2); }
+.hero-action--primary:hover { color: #fff; background: var(--accent-solid-hover); }
 .hero-action--secondary {
   color: var(--vp-c-text-1);
   background: rgba(255,255,255,.72);

@@ -1,6 +1,6 @@
 <template>
-  <main class="tag-page">
-    <h1>🏷️ 标签</h1>
+  <section class="tag-page" aria-labelledby="tag-page-title">
+    <h1 id="tag-page-title">🏷️ 标签</h1>
     <p class="sub">共 {{ Object.keys(tagMap).length }} 个标签，{{ posts.length }} 篇文章</p>
 
     <!-- 标签云 -->
@@ -33,7 +33,7 @@
         </a>
       </div>
     </div>
-  </main>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -107,7 +107,7 @@ h1 { font-size: 30px; margin-bottom: 8px; }
   color: var(--accent-color); border-color: var(--accent-color);
   box-shadow: 0 4px 12px rgba(254,150,0,0.15);
 }
-.tag.active { background: var(--accent-color); color: #fff; }
+.tag.active { background: var(--accent-solid); color: #fff; }
 .n {
   font-size: 11px; background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 10px;
 }

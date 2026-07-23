@@ -83,6 +83,12 @@ export default defineConfig({
       prev: false,
       next: false,
     },
+    darkModeSwitchLabel: '外观',
+    lightModeSwitchTitle: '切换到浅色模式',
+    darkModeSwitchTitle: '切换到深色模式',
+    sidebarMenuLabel: '文章导航',
+    returnToTopLabel: '返回顶部',
+    skipToContentLabel: '跳到正文',
 
     nav: [
       { text: '首页', link: '/' },

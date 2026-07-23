@@ -1,8 +1,8 @@
 <template>
-  <main class="friends-page">
+  <section class="friends-page" aria-labelledby="friends-page-title">
     <header class="friends-header">
       <p class="eyebrow">LINKS · FRIENDS</p>
-      <h1>友情链接</h1>
+      <h1 id="friends-page-title">友情链接</h1>
       <p>在互联网的小路上，遇见一些有趣的人和他们认真经营的角落。</p>
     </header>
 
@@ -33,7 +33,7 @@
       </div>
       <a href="https://github.com/a3292334877-star" target="_blank" rel="noopener noreferrer">联系我</a>
     </section>
-  </main>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -145,12 +145,12 @@ h1 {
 .exchange-note a {
   padding: 9px 15px;
   border-radius: 11px;
-  background: var(--accent-color);
+  background: var(--accent-solid);
   color: #fff;
   font-size: 13px;
   font-weight: 700;
 }
-.exchange-note a:hover { background: var(--vp-c-brand-2); color: #fff; }
+.exchange-note a:hover { background: var(--accent-solid-hover); color: #fff; }
 
 @media (max-width: 640px) {
   .friends-page { padding: 96px 18px 56px; }

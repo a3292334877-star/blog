@@ -225,7 +225,7 @@ function fmtDate(ts: number) {
   transition: all 0.2s;
 }
 .card-tag:hover {
-  background: var(--sakura-pink);
+  background: var(--accent-solid);
   color: #fff;
 }
 .card-tag--more {
@@ -249,5 +249,16 @@ function fmtDate(ts: number) {
   .post-card { animation-duration: 0.45s; }
   .card-title { min-height: auto; }
   .card-excerpt { min-height: auto; }
+}
+
+@media (min-width: 1280px) {
+  :global(.posts-index-page) .post-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  :global(.posts-index-page) .card-body {
+    padding: 20px;
+  }
 }
 </style>

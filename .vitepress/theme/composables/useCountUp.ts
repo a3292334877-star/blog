@@ -11,7 +11,9 @@ export function useCountUp(
   target: Ref<number | null>,
   duration = 1200,
 ): Ref<number> {
-  const display = ref(0)
+  // 静态数据在 SSR 与客户端首次渲染时保持一致，避免 hydration mismatch。
+  // 异步数据（初始为 null）仍会在抵达后从 0 开始动画。
+  const display = ref(target.value ?? 0)
   let rafId: number | null = null
   let startTime = 0
   let startVal = 0
@@ -51,13 +53,12 @@ export function useCountUp(
     rafId = requestAnimationFrame(tick)
   }
 
-  // target 同步有值时立即开始；异步变化时续接动画
+  // 初始值已直接用于 SSR；这里只处理后续的异步变化。
   watch(
     target,
     (v) => {
-      if (v !== null && v !== undefined) start(v)
+      if (v !== null && v !== undefined && v !== display.value) start(v)
     },
-    { immediate: true },
   )
 
   onUnmounted(() => {

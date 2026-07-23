@@ -4,21 +4,19 @@
       <CursorGlow />
       <ReadingProgress />
       <SakuraPetals />
-      <MusicPlayer />
     </template>
 
     <template #home-hero-before>
-      <HomeHero />
-    </template>
-
-    <template #home-hero-after>
-      <AboutStrip />
-      <HomeCategories />
-      <HomeColumns />
-      <AnimePreview />
-      <ProjectsPreview />
-      <ShuoshuoPreview />
-      <SiteStats />
+      <main class="home-main">
+        <HomeHero />
+        <AboutStrip />
+        <HomeCategories />
+        <HomeColumns />
+        <AnimePreview />
+        <ProjectsPreview />
+        <ShuoshuoPreview />
+        <SiteStats />
+      </main>
     </template>
 
     <template #doc-before>
@@ -47,6 +45,7 @@
     </template>
 
     <template #layout-bottom>
+      <MusicPlayer />
       <Live2DWidget />
       <BackToTop />
       <CopyToast />

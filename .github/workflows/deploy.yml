@@ -38,6 +38,7 @@ jobs:
         env:
           # 前端可见的公开配置（anon key 有 RLS 保护，可放 secrets 也可放 variables）
           # 在仓库 Settings → Secrets and variables → Actions 添加以下 secrets：
+          VITE_VISITOR_COUNTER_ENABLED: ${{ vars.VITE_VISITOR_COUNTER_ENABLED || 'false' }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_GISCUS_REPO_ID: ${{ secrets.VITE_GISCUS_REPO_ID }}
