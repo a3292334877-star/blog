@@ -6,20 +6,18 @@
 
     <div class="stats-grid">
       <!-- 来访人数 / 访问次数 -->
-      <div class="stat-card" :style="{ animationDelay: '0ms' }">
+      <div v-if="uv !== null" class="stat-card" :style="{ animationDelay: '0ms' }">
         <div class="stat-label">👥 访问会话</div>
         <div class="stat-value">
-          <template v-if="uv !== null">{{ fmtNum(uvDisplay) }}</template>
-          <template v-if="uv !== null"><span class="stat-unit">次</span></template>
-          <template v-else><span class="stat-unavailable">暂不可用</span></template>
+          {{ fmtNum(uvDisplay) }}
+          <span class="stat-unit">次</span>
         </div>
       </div>
-      <div class="stat-card" :style="{ animationDelay: '80ms' }">
+      <div v-if="pv !== null" class="stat-card" :style="{ animationDelay: '80ms' }">
         <div class="stat-label">👁️ 访问次数</div>
         <div class="stat-value">
-          <template v-if="pv !== null">{{ fmtNum(pvDisplay) }}</template>
-          <template v-if="pv !== null"><span class="stat-unit">次</span></template>
-          <template v-else><span class="stat-unavailable">暂不可用</span></template>
+          {{ fmtNum(pvDisplay) }}
+          <span class="stat-unit">次</span>
         </div>
       </div>
 
@@ -117,28 +115,33 @@ function fmtDate(ts: number) {
 
 <style scoped>
 .site-stats {
-  max-width: 800px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
+  padding: 40px 24px 56px;
 }
 
 .section-heading {
   font-size: 22px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .stat-card {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  padding: 22px 18px;
-  text-align: center;
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-align: left;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   /* 入场 stagger */
   opacity: 0;
@@ -158,17 +161,19 @@ function fmtDate(ts: number) {
 .stat-label {
   font-size: 13px;
   color: var(--vp-c-text-2);
-  margin-bottom: 10px;
+  line-height: 1.45;
 }
 
 .stat-value {
-  font-size: 28px;
+  flex-shrink: 0;
+  font-size: 23px;
   font-weight: 700;
   color: var(--accent-color);
+  white-space: nowrap;
 }
 
 .stat-value.small {
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .stat-unit {
@@ -177,5 +182,24 @@ function fmtDate(ts: number) {
   color: var(--vp-c-text-3);
   margin-left: 4px;
 }
-.stat-unavailable { font-size: 14px; font-weight: 500; color: var(--vp-c-text-3); }
+
+@media (max-width: 860px) {
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .site-stats { padding: 32px 16px 44px; }
+  .stats-grid { gap: 10px; }
+  .stat-card {
+    min-height: 92px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 13px 14px;
+    animation-duration: 0.4s;
+  }
+  .stat-value { font-size: 21px; }
+  .stat-value.small { font-size: 14px; }
+}
 </style>

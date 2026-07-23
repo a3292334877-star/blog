@@ -1,13 +1,13 @@
 <template>
   <section class="blog-list-section">
     <h2 class="section-heading">
-      <span class="icon">📖</span> 最新文章
-      <a class="section-more" :href="withBase('/posts/')">查看全部 →</a>
+      <span class="icon">📖</span> {{ title }}
+      <a v-if="showMore" class="section-more" :href="withBase('/posts/')">查看全部 →</a>
     </h2>
 
     <div class="post-grid">
       <article
-        v-for="(p, i) in posts.slice(0, 6)"
+        v-for="(p, i) in visiblePosts"
         :key="p.href"
         class="post-card"
         :style="{ animationDelay: i * 80 + 'ms' }"
@@ -24,29 +24,47 @@
             <span class="reading-time">阅读 {{ p.readingTime }} 分钟</span>
           </div>
           <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
-          <div class="card-excerpt" v-html="p.excerpt"></div>
+          <p class="card-excerpt">{{ p.summary }}</p>
           <div class="card-tags" v-if="p.tags?.length">
             <a
-              v-for="t in p.tags"
+              v-for="t in p.tags.slice(0, 3)"
               :key="t"
               :href="tagHref(t)"
               class="card-tag"
             >🏷️ {{ t }}</a>
+            <span v-if="p.tags.length > 3" class="card-tag card-tag--more">
+              +{{ p.tags.length - 3 }}
+            </span>
           </div>
         </div>
       </article>
     </div>
 
-    <div v-if="!posts.length" class="empty">还没有文章~</div>
+    <div v-if="!visiblePosts.length" class="empty">还没有文章~</div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useData } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
+const props = withDefaults(defineProps<{
+  limit?: number
+  title?: string
+  showMore?: boolean
+}>(), {
+  limit: 0,
+  title: '最新文章',
+  showMore: true,
+})
+
 const { site } = useData()
 const base = site.value.base
+
+const visiblePosts = computed(() => (
+  props.limit > 0 ? posts.slice(0, props.limit) : posts
+))
 
 function withBase(p: string) {
   return base + p.replace(/^\//, '')
@@ -94,6 +112,9 @@ function fmtDate(ts: number) {
 }
 
 .post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: 20px;
@@ -148,6 +169,9 @@ function fmtDate(ts: number) {
 }
 
 .card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 22px 24px 24px;
 }
 
@@ -157,7 +181,6 @@ function fmtDate(ts: number) {
 }
 
 .card-title {
-  display: block;
   font-size: 19px;
   font-weight: 700;
   line-height: 1.4;
@@ -166,6 +189,7 @@ function fmtDate(ts: number) {
   transition: color 0.2s;
   /* 两行省略，保持卡片高度一致 */
   display: -webkit-box;
+  min-height: 2.8em;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -173,6 +197,8 @@ function fmtDate(ts: number) {
 .card-title:hover { color: var(--accent-color); }
 
 .card-excerpt {
+  min-height: 4.8em;
+  margin: 0;
   font-size: 14px;
   color: var(--vp-c-text-2);
   line-height: 1.6;
@@ -181,12 +207,12 @@ function fmtDate(ts: number) {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-excerpt :deep(p) { margin: 0; }
 
 .card-tags {
   display: flex;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: auto;
+  padding-top: 14px;
   flex-wrap: wrap;
 }
 
@@ -202,10 +228,26 @@ function fmtDate(ts: number) {
   background: var(--sakura-pink);
   color: #fff;
 }
+.card-tag--more {
+  cursor: default;
+  color: var(--accent-color);
+}
+.card-tag--more:hover {
+  background: var(--sakura-light);
+  color: var(--accent-color);
+}
 
 .empty {
   text-align: center;
   padding: 60px 0;
   color: var(--vp-c-text-3);
+}
+
+@media (max-width: 720px) {
+  .blog-list-section { padding: 22px 0; }
+  .section-heading { margin-bottom: 20px; }
+  .post-card { animation-duration: 0.45s; }
+  .card-title { min-height: auto; }
+  .card-excerpt { min-height: auto; }
 }
 </style>

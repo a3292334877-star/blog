@@ -1,17 +1,11 @@
 <template>
   <section class="home-columns">
-    <div class="col col-left">
-      <BlogList />
-    </div>
-    <div class="col col-right">
-      <BlogTimeline />
-    </div>
+    <BlogList :limit="4" />
   </section>
 </template>
 
 <script setup lang="ts">
 import BlogList from './BlogList.vue'
-import BlogTimeline from './BlogTimeline.vue'
 </script>
 
 <style scoped>
@@ -19,19 +13,9 @@ import BlogTimeline from './BlogTimeline.vue'
   max-width: 1180px;
   margin: 0 auto;
   padding: 16px 24px 32px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(380px, 1fr);
-  gap: 32px;
-  align-items: start;
 }
 
-.col { min-width: 0; }
-
-/* 窄屏回退单列 */
-@media (max-width: 1040px) {
-  .home-columns {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
+@media (max-width: 720px) {
+  .home-columns { padding: 8px 16px 24px; }
 }
 </style>

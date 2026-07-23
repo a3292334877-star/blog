@@ -103,13 +103,14 @@ onUnmounted(() => zoom?.detach())
 // 文章页顶部横幅样式
 // 使用对象绑定而非字符串拼接，避免 cover 字段含 ; / ) 破坏样式或注入新属性
 const docBannerStyle = computed<Record<string, string> | null>(() => {
-  if (!frontmatter.value.title) return null
+  if (!frontmatter.value.title || frontmatter.value.banner === false) return null
   const cover = frontmatter.value.cover
   if (cover) {
     // 对 cover 中的反斜杠和双引号转义，防止 url("...") 闭合注入
     const safe = String(cover).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
     return {
-      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url("${safe}")`,
+      backgroundImage: `linear-gradient(110deg, rgba(30,21,29,.88), rgba(62,37,48,.72) 56%, rgba(28,22,31,.84)), url("${safe}")`,
+      backgroundColor: '#2f252c',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }

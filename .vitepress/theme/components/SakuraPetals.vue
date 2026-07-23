@@ -18,8 +18,11 @@ const petals = ref<Array<{ i: number; style: Record<string, string> }>>([])
 onMounted(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-  petals.value = Array.from({ length: 16 }, (_, i) => {
-    // 每片花瓣独立的横向漂移终点，避免 16 片同步移动
+  const isCompact = window.matchMedia('(max-width: 720px), (pointer: coarse)').matches
+  const petalCount = isCompact ? 7 : 14
+
+  petals.value = Array.from({ length: petalCount }, (_, i) => {
+    // 每片花瓣独立漂移，移动端减少数量以降低持续动画负担
     const drift = Math.round(-60 + Math.random() * 160)
     return {
       i,

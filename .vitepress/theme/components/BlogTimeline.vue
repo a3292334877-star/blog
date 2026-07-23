@@ -1,8 +1,8 @@
 <template>
   <section class="timeline-section">
     <h2 class="section-heading">
-      <span class="icon">📅</span> 文章时间线
-      <a class="section-more" :href="withBase('/posts/')">全部文章 →</a>
+      <span class="icon">📅</span> {{ title }}
+      <a v-if="showMore" class="section-more" :href="withBase('/posts/')">全部文章 →</a>
     </h2>
 
     <div class="timeline">
@@ -37,6 +37,16 @@ import { computed } from 'vue'
 import { useData } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
+const props = withDefaults(defineProps<{
+  limit?: number
+  title?: string
+  showMore?: boolean
+}>(), {
+  limit: 6,
+  title: '文章时间线',
+  showMore: true,
+})
+
 const { site } = useData()
 const base = site.value.base
 
@@ -44,7 +54,8 @@ function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const grouped = computed(() => {
   const m: Record<string, typeof posts> = {}
-  for (const p of posts.slice(0, 6)) {
+  const selectedPosts = props.limit > 0 ? posts.slice(0, props.limit) : posts
+  for (const p of selectedPosts) {
     const y = new Date(p.create).getFullYear().toString()
     if (!m[y]) m[y] = []
     m[y].push(p)
@@ -170,6 +181,9 @@ function fmtShort(ts: number) {
 .tag--more { color: var(--accent-color); }
 
 @media (max-width: 600px) {
+  .timeline { padding-left: 20px; }
+  .year-mark { margin-left: -20px; }
+  .marker { left: -18px; }
   .card { grid-template-columns: 1fr; }
   .date, .title, .tags { grid-column: 1; }
   .date { grid-row: auto; }

@@ -45,6 +45,7 @@ function getPost(md, file, postDir, asFeed = false) {
   if (!data.title) return null
 
   const slug = file.replace(/\.md$/, '')
+  const summarySource = data.description || excerpt || content
   const post = {
     title: data.title,
     href: `posts/${slug}`,
@@ -53,6 +54,7 @@ function getPost(md, file, postDir, asFeed = false) {
     tags: data.tags || [],
     cover: data.cover === false ? '' : (data.cover || `/covers/${slug}.svg`),
     excerpt: md.render(excerpt || ''),
+    summary: toPlainText(summarySource).slice(0, 220),
     readingTime: estimateReadingTime(content),
   }
   if (asFeed) {
@@ -61,6 +63,18 @@ function getPost(md, file, postDir, asFeed = false) {
 
   cache.set(cacheKey, { timestamp, post })
   return post
+}
+
+function toPlainText(markdown) {
+  return String(markdown)
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]*)`/g, '$1')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[#>*_|~-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function estimateReadingTime(markdown) {

@@ -33,6 +33,13 @@ function loadPosts(): PostMeta[] {
     .sort((a, b) => b.date - a.date)
 }
 
+function shortenNavTitle(title: string, maxLength = 24): string {
+  const characters = Array.from(title)
+  return characters.length > maxLength
+    ? `${characters.slice(0, maxLength).join('')}…`
+    : title
+}
+
 const posts = loadPosts()
 
 // https://vitepress.dev/reference/site-config
@@ -97,9 +104,16 @@ export default defineConfig({
     sidebar: {
       '/posts/': [
         {
-          text: '文章列表',
-          items: posts.map((p) => ({
-            text: p.title,
+          text: '文章导航',
+          items: [
+            { text: '全部文章', link: '/posts/' },
+            { text: '标签分类', link: '/tags/' },
+          ],
+        },
+        {
+          text: '最近更新',
+          items: posts.slice(0, 5).map((p) => ({
+            text: shortenNavTitle(p.title),
             link: `/posts/${p.slug}`,
           })),
         },

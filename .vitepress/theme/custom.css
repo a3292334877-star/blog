@@ -336,8 +336,41 @@ body {
 
 @media (max-width: 768px) {
   .doc-banner {
-    min-height: 190px;
+    min-height: 170px;
     border-radius: 0 0 18px 18px;
   }
   .vp-doc { line-height: 1.78; }
+}
+
+/* 文章中心默认展示卡片，时间线按需展开，避免两份长列表同时占据页面 */
+.archive-panel {
+  margin: 12px 0 36px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--sakura-light) 38%, var(--vp-c-bg));
+  overflow: hidden;
+}
+
+.archive-panel > summary {
+  padding: 15px 18px;
+  cursor: pointer;
+  color: var(--vp-c-text-1);
+  font-weight: 700;
+  user-select: none;
+}
+
+.archive-panel > summary:hover {
+  color: var(--accent-color);
+}
+
+.archive-panel[open] > summary {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.archive-panel .timeline-section {
+  padding: 26px 22px 8px;
+}
+
+@media (max-width: 600px) {
+  .archive-panel .timeline-section { padding: 22px 14px 4px; }
 }
