@@ -40,6 +40,31 @@ function shortenNavTitle(title: string, maxLength = 24): string {
     : title
 }
 
+/**
+ * MiniSearch 默认以空格分词，无法命中连续中文中间的词组。
+ * 使用浏览器原生分词器拆分中文，同时保留英文、数字和技术术语。
+ *
+ * 此函数会被 VitePress 序列化到客户端，因此必须保持自包含。
+ */
+function tokenizeSearchText(text: string): string[] {
+  const normalized = String(text)
+    .normalize('NFKC')
+    .toLowerCase()
+
+  if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
+    return Array.from(
+      new Intl.Segmenter('zh-CN', { granularity: 'word' }).segment(normalized),
+    )
+      .filter((part) => part.isWordLike)
+      .map((part) => part.segment)
+  }
+
+  // 老旧浏览器回退：中日韩字符按单字，其余内容按连续词组切分。
+  return normalized.match(
+    /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]|[\p{Letter}\p{Number}_+#.-]+/gu,
+  ) ?? []
+}
+
 const posts = loadPosts()
 
 // https://vitepress.dev/reference/site-config
@@ -50,9 +75,9 @@ export default defineConfig({
   description: SITE.description,
 
   head: [
-    // PWA 已关闭，此脚本清除旧 Service Worker
+    // PWA 已关闭：注销旧 Service Worker，并移除其遗留的 Cache Storage。
     ['script', {},
-      `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}`],
+      `if('serviceWorker'in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}if('caches'in window){caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k))))}`],
 
     ['link', { rel: 'icon', type: 'image/webp', href: `${SITE.base}avatar.webp` }],
     ['link', { rel: 'alternate', type: 'application/atom+xml', title: `${SITE.title} RSS`, href: `${SITE.base}feed.xml` }],
@@ -154,6 +179,31 @@ export default defineConfig({
     search: {
       provider: 'local',
       options: {
+        // 将 frontmatter 的标题、摘要和标签一起写入搜索索引。
+        _render(src, env, md) {
+          const { data, content } = matter(src)
+          if (data.search === false) return ''
+
+          const title = data.title ? `# ${String(data.title)}` : ''
+          const description = data.description ? String(data.description) : ''
+          const tags = Array.isArray(data.tags) ? data.tags.join(' ') : ''
+          const body = title
+            ? content.replace(/^\s*#\s+[^\n]+\n+/, '')
+            : content
+
+          return md.render(
+            [title, description, tags, body].filter(Boolean).join('\n\n'),
+            env,
+          )
+        },
+        miniSearch: {
+          options: {
+            tokenize: tokenizeSearchText,
+          },
+          searchOptions: {
+            combineWith: 'AND',
+          },
+        },
         translations: {
           button: {
             buttonText: '搜索',

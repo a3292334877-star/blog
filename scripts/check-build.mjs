@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
-import { extname, join, relative, resolve } from 'node:path'
+import { basename, extname, join, relative, resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '..')
 const dist = join(root, '.vitepress', 'dist')
@@ -68,8 +68,11 @@ if (!existsSync(dist)) {
   const maxJavaScriptBytes = 300 * 1024
   for (const file of files.filter((file) => extname(file) === '.js')) {
     const size = statSync(file).size
-    if (size > maxJavaScriptBytes) {
-      fail(`${relative(dist, file)} is ${(size / 1024).toFixed(1)} KB; limit is 300 KB`)
+    // 搜索索引按需加载，允许随文章数量增长，但仍保留独立上限。
+    const isSearchIndex = basename(file).startsWith('@localSearchIndex')
+    const limit = isSearchIndex ? 400 * 1024 : maxJavaScriptBytes
+    if (size > limit) {
+      fail(`${relative(dist, file)} is ${(size / 1024).toFixed(1)} KB; limit is ${limit / 1024} KB`)
     }
   }
 
