@@ -6,7 +6,7 @@
   "scripts": {
     "check": "node scripts/check-project.mjs",
     "dev": "node scripts/generate-covers.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress dev",
-    "build": "node scripts/generate-covers.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node scripts/check-build.mjs",
+    "build": "node scripts/clean-vitepress-cache.mjs && node scripts/generate-covers.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node scripts/check-build.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],

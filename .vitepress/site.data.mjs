@@ -9,7 +9,7 @@ import matter from 'gray-matter'
 const DAY = 24 * 60 * 60 * 1000
 
 export default {
-  watch: 'posts/*.md',
+  watch: ['posts/*.md', 'projects/*.md'],
   load() {
     const cwd = process.cwd()
     const postDir = path.join(cwd, 'posts')

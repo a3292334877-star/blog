@@ -54,10 +54,6 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: SITE.title }],
     ['meta', { property: 'og:description', content: SITE.description }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.cn' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.cn', crossorigin: '' }],
-    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@400;600&display=swap' }],
-
   ],
 
   cleanUrls: true,

@@ -18,8 +18,10 @@
   --vp-c-brand-3: #a8384f;
   --vp-c-brand-soft: rgba(228, 89, 111, 0.14);
 
-  --vp-font-family-base: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
-  --vp-font-family-title: "Noto Serif SC", "Source Han Serif SC", "Microsoft YaHei", serif;
+  --vp-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  --vp-font-family-title: "Noto Serif CJK SC", "Source Han Serif SC",
+    "Songti SC", STSong, SimSun, serif;
   --vp-font-family-mono: "Fira Code", "Cascadia Code", monospace;
 }
 
@@ -177,6 +179,10 @@ body {
 @media (max-width: 768px) {
   .doc-banner { padding: 64px 20px 28px; margin: 0 -20px 24px; }
   .doc-banner .doc-title { font-size: 24px; }
+  .doc-breadcrumb-current,
+  .doc-breadcrumb-current-separator {
+    display: none;
+  }
 }
 
 /* ========== 页脚 ========== */
@@ -302,6 +308,15 @@ body {
 .vp-doc div[class*='language-'] {
   border: 1px solid color-mix(in srgb, var(--vp-c-divider) 72%, transparent);
   box-shadow: var(--site-shadow-sm);
+}
+
+/* 长公式在窄屏内横向滚动，避免撑宽整页 */
+.vp-doc .katex-block {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.35rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .doc-banner {

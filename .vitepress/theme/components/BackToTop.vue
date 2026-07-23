@@ -83,4 +83,14 @@ onUnmounted(() => {
   line-height: 1;
   margin-top: -2px;
 }
+
+@media (max-width: 640px) {
+  .back-to-top {
+    right: 24px;
+    bottom: 24px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
 </style>

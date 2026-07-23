@@ -25,12 +25,12 @@
       <div class="doc-banner" :style="docBannerStyle" v-if="docBannerStyle">
         <nav class="doc-breadcrumb" aria-label="面包屑导航">
           <a :href="withBase('/')">首页</a>
-          <span aria-hidden="true">/</span>
           <template v-if="route.path.startsWith('/posts/')">
-            <a :href="withBase('/posts/')">文章</a>
             <span aria-hidden="true">/</span>
+            <a :href="withBase('/posts/')">文章</a>
           </template>
-          <span aria-current="page">{{ frontmatter.title }}</span>
+          <span class="doc-breadcrumb-current-separator" aria-hidden="true">/</span>
+          <span class="doc-breadcrumb-current" aria-current="page">{{ frontmatter.title }}</span>
         </nav>
         <h1 class="doc-title">{{ frontmatter.title }}</h1>
         <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
