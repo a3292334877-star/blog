@@ -16,13 +16,13 @@ layout: doc
 
 🌐 **自动识别，即刻翻译**
 
-输入文本后自动识别语言，并翻译成你选择的目标语言。支持网页、桌面与手机安装使用。
+输入文本后自动识别语言，并翻译成你选择的目标语言。支持网页、桌面 PWA 与 Android 原生 APK。
 
-- **技术栈**：React + TypeScript + PWA + Cloudflare Worker
+- **技术栈**：React + TypeScript + PWA + Android Java
 - **功能**：自动识别 · 14 种语言 · 复制朗读 · 历史收藏
 - **平台**：Web / Windows / macOS / Android / iOS
 
-[查看详情 →](/projects/qingyi) · <a href="https://qingyi-translator.a3292334877.chatgpt.site" target="_blank" rel="noopener noreferrer">在线体验 ↗</a>
+[查看详情 →](/projects/qingyi) · <a href="/downloads/qingyi-android-v1.0.0.apk" download>下载 Android APK ↓</a> · <a href="https://qingyi-translator.a3292334877.chatgpt.site" target="_blank" rel="noopener noreferrer">在线体验 ↗</a>
 
 </div>
 

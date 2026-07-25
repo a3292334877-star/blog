@@ -13,15 +13,13 @@ cover: /projects/qingyi.webp
 
 > 自动识别，即刻翻译
 
-轻译是一款面向个人使用的跨平台翻译器。输入文本后，它会自动识别源语言并翻译成选定语言，同一套应用可以在网页、桌面和手机上使用。
+轻译是一款跨平台翻译器。输入文本后，它会自动识别源语言并翻译成选定语言，可以通过网页、桌面 PWA 或 Android 原生应用使用。
 
 <!-- more -->
 
 ## 项目简介
 
-这个项目将常用翻译操作集中在一个简洁界面中：无需先选择输入语言，只要设置目标语言并开始输入即可。它既可以直接在浏览器中打开，也可以通过 PWA 安装到 Windows、macOS、Android 和 iOS 的桌面或主屏幕。
-
-当前版本为个人私密版本，访问时需要登录授权账号。
+这个项目将常用翻译操作集中在一个简洁界面中：无需先选择输入语言，只要设置目标语言并开始输入即可。网页版本已公开访问；Android 用户也可以下载安装原生 APK，不依赖 `chatgpt.site` 页面。
 
 ## 功能概览
 
@@ -34,6 +32,7 @@ cover: /projects/qingyi.webp
 - 支持浅色与深色主题
 - 响应式布局，适配桌面、平板与手机
 - 支持 PWA 安装，并提供基础离线应用外壳
+- 提供 Android 原生 APK，内置双翻译服务自动切换
 
 ## 技术栈
 
@@ -44,6 +43,7 @@ cover: /projects/qingyi.webp
 | 部署 | Cloudflare Worker |
 | 数据 | localStorage 本地历史与收藏 |
 | 跨平台 | Web App Manifest、Service Worker、PWA |
+| Android | Java、Android Framework API |
 
 ## 设计特色
 
@@ -58,14 +58,25 @@ cover: /projects/qingyi.webp
 
 > 翻译内容会发送至在线翻译服务，请勿输入密码、证件信息等敏感内容。
 
+## Android APK 下载
+
+<a href="/downloads/qingyi-android-v1.0.0.apk" download>下载轻译 Android v1.0.0 →</a>
+
+- 最低支持 Android 6.0
+- APK 已签名，可直接安装
+- 原生应用不需要打开 `chatgpt.site`
+- SHA-256：`0235F42BE83432DBE7EAFAF9F02F193340B715BB51CCCBA91D40AEB3012D7D96`
+
+> 首次安装时，Android 可能会提示允许浏览器安装未知来源应用。APK 仅申请网络权限，用于发送需要翻译的文本。
+
 ## 安装方式
 
 - **Windows / macOS**：使用 Chrome 或 Edge 打开应用，点击地址栏中的安装图标。
-- **Android**：在浏览器菜单中选择“安装应用”或“添加到主屏幕”。
+- **Android**：点击上方按钮下载 APK，打开下载文件并按系统提示安装。
 - **iPhone / iPad**：使用 Safari 打开应用，点击分享按钮，再选择“添加到主屏幕”。
 
 ## 当前版本
 
-- 版本：v1.0
+- 版本：Web v1.0 / Android v1.0.0
 - 平台：Web / Windows / macOS / Android / iOS
-- 状态：个人私密使用
+- 状态：公开使用
