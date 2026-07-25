@@ -10,6 +10,24 @@ layout: doc
 
 ---
 
+## 轻译
+
+<div class="project-card">
+
+🌐 **自动识别，即刻翻译**
+
+输入文本后自动识别语言，并翻译成你选择的目标语言。支持网页、桌面与手机安装使用。
+
+- **技术栈**：React + TypeScript + PWA + Cloudflare Worker
+- **功能**：自动识别 · 14 种语言 · 复制朗读 · 历史收藏
+- **平台**：Web / Windows / macOS / Android / iOS
+
+[查看详情 →](/projects/qingyi) · <a href="https://qingyi-translator.a3292334877.chatgpt.site" target="_blank" rel="noopener noreferrer">在线体验 ↗</a>
+
+</div>
+
+---
+
 ## StudyTracker
 
 <div class="project-card">
