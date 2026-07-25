@@ -54,7 +54,7 @@ cover: /projects/qingyi.webp
 
 ## 在线体验
 
-<a href="https://qingyi-translator.a3292334877.chatgpt.site" target="_blank" rel="noopener noreferrer">打开轻译 →</a>
+<a href="https://translate.sakikoblog.info" target="_blank" rel="noopener noreferrer">打开轻译 →</a>
 
 > 翻译内容会发送至在线翻译服务，请勿输入密码、证件信息等敏感内容。
 
