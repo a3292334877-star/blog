@@ -1,4 +1,4 @@
-const CACHE = "qingyi-static-v1";
+const CACHE = "qingyi-static-v2";
 const SHELL = [
   "/translate/",
   "/translate/index.html",

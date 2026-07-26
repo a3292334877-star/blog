@@ -127,14 +127,44 @@
       let result;
       try {
         result = await translateMyMemory(chunk, source, target);
+        if (isSuspiciousTranslation(chunk, result.translatedText, source, target)) {
+          throw new Error("Low quality translation");
+        }
       } catch (_) {
         result = await translateGoogle(chunk, source, target);
+      }
+      if (isSuspiciousTranslation(chunk, result.translatedText, source, target)) {
+        throw new Error("Translation quality check failed");
       }
       output.push(result.translatedText);
       if (!detected && result.detectedLanguage) detected = result.detectedLanguage;
     }
 
     return { translatedText: output.join(""), detectedLanguage: detected };
+  }
+
+  function isSuspiciousTranslation(original, translated, source, target) {
+    const inputValue = String(original || "").trim();
+    const outputValue = String(translated || "").trim();
+    if (!outputValue) return true;
+
+    const compactInput = inputValue.replace(/\s+/g, "");
+    const compactOutput = outputValue.replace(/\s+/g, "");
+    if (source !== target && compactInput.length > 1
+      && compactInput.toLocaleLowerCase() === compactOutput.toLocaleLowerCase()) return true;
+
+    if (/([A-Za-z])\1{7,}/.test(outputValue)) return true;
+
+    const latin = (outputValue.match(/[A-Za-z]/g) || []).length;
+    const han = (outputValue.match(/[\u3400-\u9FFF]/g) || []).length;
+    const meaningful = latin + han + (outputValue.match(/[0-9]/g) || []).length;
+    if ((target === "zh-CN" || target === "zh-TW")
+      && meaningful >= 4 && latin >= 6 && latin > han * 2) return true;
+
+    const letterPattern = /[A-Za-z\u3400-\u9FFF\u3040-\u30FF\uAC00-\uD7AF]/g;
+    const inputLetters = (inputValue.match(letterPattern) || []).length;
+    const outputLetters = (outputValue.match(letterPattern) || []).length;
+    return inputLetters >= 8 && outputLetters * 6 < inputLetters;
   }
 
   async function translateGoogle(text, source, target) {

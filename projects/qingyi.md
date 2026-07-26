@@ -65,7 +65,7 @@ cover: /projects/qingyi.webp
 - 最低支持 Android 6.0
 - APK 已签名，可直接安装
 - 原生应用不需要打开 `chatgpt.site`
-- SHA-256：`E723DD4D6D9B6BAD68B8054F134756A58CA89136376FC4B3DE78FE43D59FF38B`
+- SHA-256：`14B33B16408621771F2B45C379320C45C61212C92E1B9EF208097AE5A4DA90AA`
 
 > 首次安装时，Android 可能会提示允许浏览器安装未知来源应用。APK 仅申请网络权限，用于发送需要翻译的文本。
 
