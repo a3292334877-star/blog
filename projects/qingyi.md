@@ -19,7 +19,7 @@ cover: /projects/qingyi.webp
 
 ## 项目简介
 
-这个项目将常用翻译操作集中在一个简洁界面中：无需先选择输入语言，只要设置目标语言并开始输入即可。网页版本已公开访问；Android 用户也可以下载安装原生 APK，不依赖 `chatgpt.site` 页面。
+这个项目将常用翻译操作集中在一个简洁界面中：无需先选择输入语言，只要设置目标语言并开始输入即可。网页版本直接部署在博客域名下；Android 用户也可以下载安装原生 APK，两者都不依赖 `chatgpt.site` 页面。
 
 ## 功能概览
 
@@ -54,7 +54,7 @@ cover: /projects/qingyi.webp
 
 ## 在线体验
 
-<a href="https://translate.sakikoblog.info" target="_blank" rel="noopener noreferrer">打开轻译 →</a>
+<a href="/translate/" target="_blank" rel="noopener noreferrer">打开轻译 →</a>
 
 > 翻译内容会发送至在线翻译服务，请勿输入密码、证件信息等敏感内容。
 

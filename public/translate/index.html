@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f3">
+  <meta name="description" content="轻译：自动识别语言，即刻翻译。">
+  <meta property="og:title" content="轻译">
+  <meta property="og:description" content="自动识别，即刻翻译">
+  <meta property="og:image" content="https://sakikoblog.info/projects/qingyi.webp">
+  <title>轻译 · 自动识别，即刻翻译</title>
+  <link rel="manifest" href="/translate/manifest.webmanifest">
+  <link rel="icon" href="/avatar.webp">
+  <link rel="stylesheet" href="/translate/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/translate/" aria-label="轻译首页">
+      <span class="brand-mark">译</span>
+      <span><strong>轻译</strong><small>自动识别，即刻翻译</small></span>
+    </a>
+    <nav class="top-actions" aria-label="页面功能">
+      <button id="viewTranslate" class="nav-button active" type="button">翻译</button>
+      <button id="viewHistory" class="nav-button" type="button">历史</button>
+      <button id="themeButton" class="icon-button" type="button" aria-label="切换深浅主题">◐</button>
+      <a class="icon-button home-link" href="/" aria-label="返回博客">⌂</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="translateView" class="workspace" aria-labelledby="pageTitle">
+      <div class="intro">
+        <p class="eyebrow">QINGYI TRANSLATOR</p>
+        <h1 id="pageTitle">让语言转换，<span>轻一点。</span></h1>
+        <p>无需选择输入语言，开始输入即可自动识别并翻译。</p>
+      </div>
+
+      <div class="language-bar">
+        <label>
+          <span>原文语言</span>
+          <select id="sourceLanguage" aria-label="原文语言"></select>
+        </label>
+        <button id="swapButton" class="swap-button" type="button" aria-label="交换语言">⇄</button>
+        <label>
+          <span>目标语言</span>
+          <select id="targetLanguage" aria-label="目标语言"></select>
+        </label>
+      </div>
+
+      <div class="translator-grid">
+        <article class="translation-card">
+          <div class="card-heading">
+            <span>原文</span>
+            <span id="characterCount">0 / 5000</span>
+          </div>
+          <textarea id="sourceText" maxlength="5000" placeholder="输入或粘贴需要翻译的内容…" autofocus></textarea>
+          <div class="card-footer">
+            <button id="clearButton" class="text-button" type="button">清空</button>
+            <div>
+              <button id="copySourceButton" class="text-button" type="button">复制</button>
+              <button id="speakSourceButton" class="text-button" type="button">朗读</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="translation-card result-card">
+          <div class="card-heading">
+            <span>译文</span>
+            <span id="translationStatus">等待输入</span>
+          </div>
+          <div id="translatedText" class="translated-text empty">译文会显示在这里</div>
+          <div class="card-footer">
+            <button id="retryButton" class="text-button" type="button">重新翻译</button>
+            <div>
+              <button id="favoriteButton" class="text-button" type="button">收藏</button>
+              <button id="copyTargetButton" class="text-button" type="button">复制</button>
+              <button id="speakTargetButton" class="text-button" type="button">朗读</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="below-actions">
+        <p>停止输入约 650 毫秒后自动翻译，也可按 <kbd>Ctrl</kbd> + <kbd>Enter</kbd></p>
+        <button id="translateButton" class="primary-button" type="button">立即翻译</button>
+      </div>
+
+      <p class="privacy-note">翻译内容会直接发送至在线翻译服务，请勿输入密码、证件信息等敏感内容。</p>
+    </section>
+
+    <section id="historyView" class="history-view" aria-labelledby="historyTitle" hidden>
+      <div class="history-heading">
+        <div>
+          <p class="eyebrow">LOCAL HISTORY</p>
+          <h1 id="historyTitle">翻译记录</h1>
+          <p>记录仅保存在当前设备，不会上传到博客。</p>
+        </div>
+        <button id="clearHistoryButton" class="text-button danger" type="button">清空记录</button>
+      </div>
+      <div class="history-filters" role="tablist" aria-label="历史筛选">
+        <button id="allHistoryButton" class="filter-button active" type="button">全部</button>
+        <button id="favoriteHistoryButton" class="filter-button" type="button">已收藏</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/translate/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "轻译",
+  "short_name": "轻译",
+  "description": "自动识别语言，即刻翻译",
+  "start_url": "/translate/",
+  "scope": "/translate/",
+  "display": "standalone",
+  "background_color": "#fff8f3",
+  "theme_color": "#fff8f3",
+  "lang": "zh-CN"
+}
