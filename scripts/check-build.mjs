@@ -60,10 +60,10 @@ if (!existsSync(dist)) {
   console.log(`  ✓ internal links: ${checkedLinks.size} unique targets checked`)
 
   const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0)
-  // 文章会同时生成 HTML 与客户端数据；为新增长篇保留少量内容空间。
-  const maxTotalBytes = 10.75 * 1024 * 1024
+  // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据。
+  const maxTotalBytes = 11.25 * 1024 * 1024
   if (totalBytes > maxTotalBytes) {
-    fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds 10.75 MB budget`)
+    fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds 11.25 MB budget`)
   }
 
   const maxJavaScriptBytes = 300 * 1024
@@ -71,7 +71,7 @@ if (!existsSync(dist)) {
     const size = statSync(file).size
     // 搜索索引按需加载，允许随文章数量增长，但仍保留独立上限。
     const isSearchIndex = basename(file).startsWith('@localSearchIndex')
-    const limit = isSearchIndex ? 400 * 1024 : maxJavaScriptBytes
+    const limit = isSearchIndex ? 600 * 1024 : maxJavaScriptBytes
     if (size > limit) {
       fail(`${relative(dist, file)} is ${(size / 1024).toFixed(1)} KB; limit is ${limit / 1024} KB`)
     }
