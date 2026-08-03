@@ -339,6 +339,48 @@ body {
 }
 .doc-banner .doc-meta { align-items: center; }
 
+/* 桌面端横幅：面包屑、标题和元信息作为整体严格居中 */
+@media (min-width: 769px) {
+  .doc-banner {
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .doc-banner .doc-title {
+    width: 100%;
+    max-width: 880px;
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .doc-banner .doc-breadcrumb {
+    width: 100%;
+    max-width: 880px;
+    margin: 0;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .doc-banner .doc-meta {
+    width: 100%;
+    max-width: 880px;
+    margin: 0;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  .doc-banner .doc-tags { justify-content: center; }
+}
+
 .VPFooter {
   background: color-mix(in srgb, var(--sakura-light) 32%, var(--vp-c-bg));
 }
