@@ -1,6 +1,7 @@
 ---
 title: 学习路线
 layout: doc
+pageClass: learn-index-page
 ---
 
 # 学习路线 🛤️
@@ -9,15 +10,33 @@ layout: doc
 
 ## 日语手册入口
 
-::: tip 直接进入，不用去“文章”列表里找
-
-- [三卷总目录：标日同步语法与词汇手册](./standard-japanese/)
-- [入门必读：动词与形容词分类及变形总览](./standard-japanese/conjugation-guide)
-- [第一卷：初级篇（第 1～48 课）](./standard-japanese/elementary)
-- [第二卷：中级篇（第 1～32 课）](./standard-japanese/intermediate)
-- [第三卷：高级篇（第 1～24 课）](./standard-japanese/advanced)
-
-:::
+<nav class="japanese-entry-grid" aria-label="日语手册目录">
+  <a class="japanese-entry-card japanese-entry-card--featured" href="./standard-japanese/">
+    <span class="japanese-entry-icon" aria-hidden="true">📚</span>
+    <strong>三卷总目录</strong>
+    <small>标日同步语法与词汇手册</small>
+  </a>
+  <a class="japanese-entry-card" href="./standard-japanese/conjugation-guide">
+    <span class="japanese-entry-icon" aria-hidden="true">🔄</span>
+    <strong>词类与变形</strong>
+    <small>动词与形容词总览</small>
+  </a>
+  <a class="japanese-entry-card" href="./standard-japanese/elementary">
+    <span class="japanese-entry-icon" aria-hidden="true">🌱</span>
+    <strong>第一卷 · 初级</strong>
+    <small>第 1～48 课</small>
+  </a>
+  <a class="japanese-entry-card" href="./standard-japanese/intermediate">
+    <span class="japanese-entry-icon" aria-hidden="true">🌿</span>
+    <strong>第二卷 · 中级</strong>
+    <small>第 1～32 课</small>
+  </a>
+  <a class="japanese-entry-card" href="./standard-japanese/advanced">
+    <span class="japanese-entry-icon" aria-hidden="true">🌸</span>
+    <strong>第三卷 · 高级</strong>
+    <small>第 1～24 课</small>
+  </a>
+</nav>
 
 <!-- more -->
 
