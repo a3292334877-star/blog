@@ -120,12 +120,12 @@ export default defineConfig({
       { text: '文章', link: '/posts/' },
       { text: '标签', link: '/tags/' },
       { text: '项目', link: '/projects/' },
+      { text: '学习', link: '/learn/' },
       {
         text: '更多',
         items: [
           { text: '追番', link: '/anime/' },
           { text: '说说', link: '/shuoshuo/' },
-          { text: '学习', link: '/learn/' },
           { text: '友链', link: '/friends/' },
           { text: '关于', link: '/about/' },
         ],
@@ -147,6 +147,24 @@ export default defineConfig({
             text: shortenNavTitle(p.title),
             link: `/posts/${p.slug}`,
           })),
+        },
+      ],
+      '/learn/standard-japanese/': [
+        {
+          text: '标日同步手册',
+          items: [
+            { text: '三卷总目录', link: '/learn/standard-japanese/' },
+            { text: '词类与变形总览', link: '/learn/standard-japanese/conjugation-guide' },
+            { text: '第一卷：初级篇', link: '/learn/standard-japanese/elementary' },
+            { text: '第二卷：中级篇', link: '/learn/standard-japanese/intermediate' },
+            { text: '第三卷：高级篇', link: '/learn/standard-japanese/advanced' },
+          ],
+        },
+        {
+          text: '学习导航',
+          items: [
+            { text: '返回学习路线', link: '/learn/' },
+          ],
         },
       ],
     },
