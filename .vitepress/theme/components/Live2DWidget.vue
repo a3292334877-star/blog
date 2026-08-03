@@ -75,10 +75,10 @@ function initWidget(): void {
     },
     display: {
       superSample: 1,
-      width: 160,
-      height: 240,
+      width: 200,
+      height: 300,
       position: 'left',
-      hOffset: 0,
+      hOffset: -16,
       vOffset: -10,
     },
     mobile: {
@@ -190,7 +190,7 @@ onUnmounted(() => {
   cursor: pointer;
 }
 .live2d-close {
-  bottom: 226px;
+  bottom: 286px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
