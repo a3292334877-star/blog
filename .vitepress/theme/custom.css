@@ -390,3 +390,12 @@ body {
     max-width: 1120px;
   }
 }
+
+/* 变形总览的对照表在手机端保留完整词形，通过横向滑动阅读 */
+@media (max-width: 640px) {
+  .conjugation-guide-page .vp-doc table {
+    white-space: nowrap;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
