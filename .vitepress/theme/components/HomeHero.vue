@@ -1,6 +1,7 @@
 <template>
   <section class="home-hero" aria-labelledby="hero-title">
     <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-mobile-visual" aria-hidden="true"></div>
 
     <div class="hero-shell">
       <div class="hero-copy">
@@ -135,6 +136,8 @@ function scrollDown() {
   filter: saturate(.96) contrast(1.02);
   transform: scale(1.01);
 }
+
+.hero-mobile-visual { display: none; }
 
 .hero-shell {
   width: min(1240px, 100%);
@@ -288,29 +291,33 @@ h1 strong::after {
 :global(.dark) .hero-copy { background: linear-gradient(135deg, rgba(4, 8, 24, .84), rgba(8, 13, 31, .72)); }
 
 @media (max-width: 820px) {
-  .home-hero { padding: 88px 18px 28px; }
-  .hero-bg,
-  :global(.dark) .hero-bg {
-    background:
-      linear-gradient(0deg, rgba(3, 7, 23, .72) 0%, rgba(3, 8, 26, .26) 42%, rgba(3, 8, 26, .04) 76%, rgba(3, 7, 23, .16) 100%),
-      linear-gradient(90deg, rgba(3, 8, 25, .14), rgba(3, 8, 25, .02)),
-      url('/backgrounds/k-on-hero-mobile.webp') center center / cover no-repeat;
-    filter: saturate(.94) contrast(1.02);
+  .home-hero {
+    min-height: auto;
+    display: block;
+    padding: 0 0 88px;
+    background: var(--vp-c-bg);
   }
-  :global(.dark) .hero-bg {
-    background:
-      linear-gradient(0deg, rgba(2, 5, 18, .82) 0%, rgba(2, 6, 21, .36) 42%, rgba(2, 6, 21, .08) 76%, rgba(2, 5, 18, .22) 100%),
-      linear-gradient(90deg, rgba(2, 6, 21, .2), rgba(2, 6, 21, .04)),
-      url('/backgrounds/k-on-hero-mobile.webp') center center / cover no-repeat;
-    filter: saturate(.86) brightness(.92);
+  .hero-bg { display: none; }
+  .hero-mobile-visual {
+    display: block;
+    width: 100%;
+    aspect-ratio: 960 / 1357;
+    background: #eee0c7 url('/backgrounds/k-on-hero-mobile.webp') center / contain no-repeat;
   }
-  .hero-shell { display: flex; text-align: left; }
+  .hero-shell {
+    width: 100%;
+    padding: 20px 18px 0;
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+  }
   .hero-copy { width: min(620px, 100%); padding: 24px; }
   .scroll-hint { display: none; }
 }
 
 @media (max-width: 520px) {
-  .home-hero { padding: 72px 12px 72px; }
+  .home-hero { padding-bottom: 72px; }
+  .hero-shell { padding: 14px 12px 0; }
   .hero-copy { padding: 18px 16px; border-radius: 20px; }
   h1 { font-size: clamp(34px, 10.5vw, 43px); }
   .hero-lead { font-size: 14px; line-height: 1.62; }
@@ -318,9 +325,10 @@ h1 strong::after {
   .eyebrow span { width: 20px; }
   .hero-lead { margin-top: 11px; }
   .typewriter-line { min-height: 22px; margin-top: 5px; font-size: 12px; }
-  .hero-actions { margin-top: 14px; gap: 8px; }
+  .hero-actions { margin-top: 14px; margin-right: 52px; gap: 8px; }
   .hero-action { min-height: 43px; padding: 0 14px; flex: 1 1 130px; }
   .hero-badges { display: none; }
+  :global(body:has(.home-hero) .music-toggle) { right: 16px; }
 }
 
 @media (max-height: 680px) and (min-width: 821px) {
