@@ -60,10 +60,11 @@ if (!existsSync(dist)) {
   console.log(`  ✓ internal links: ${checkedLinks.size} unique targets checked`)
 
   const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0)
-  // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据。
-  const maxTotalBytes = 11.25 * 1024 * 1024
+  // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据，首页背景保持轻量 WebP。
+  const maxTotalMegabytes = 11.5
+  const maxTotalBytes = maxTotalMegabytes * 1024 * 1024
   if (totalBytes > maxTotalBytes) {
-    fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds 11.25 MB budget`)
+    fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds ${maxTotalMegabytes.toFixed(2)} MB budget`)
   }
 
   const maxJavaScriptBytes = 300 * 1024
