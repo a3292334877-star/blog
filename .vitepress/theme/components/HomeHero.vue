@@ -289,11 +289,20 @@ h1 strong::after {
 
 @media (max-width: 820px) {
   .home-hero { padding: 88px 18px 28px; }
-  .hero-bg {
+  .hero-bg,
+  :global(.dark) .hero-bg {
     background:
-      linear-gradient(0deg, rgba(3, 7, 23, .94) 0%, rgba(3, 8, 26, .68) 42%, rgba(3, 8, 26, .12) 76%, rgba(3, 7, 23, .28) 100%),
-      linear-gradient(90deg, rgba(3, 8, 25, .34), rgba(3, 8, 25, .08)),
-      url('/backgrounds/k-on-hero.webp') 52% center / cover no-repeat;
+      linear-gradient(0deg, rgba(3, 7, 23, .72) 0%, rgba(3, 8, 26, .26) 42%, rgba(3, 8, 26, .04) 76%, rgba(3, 7, 23, .16) 100%),
+      linear-gradient(90deg, rgba(3, 8, 25, .14), rgba(3, 8, 25, .02)),
+      url('/backgrounds/k-on-hero-mobile.webp') center center / cover no-repeat;
+    filter: saturate(.94) contrast(1.02);
+  }
+  :global(.dark) .hero-bg {
+    background:
+      linear-gradient(0deg, rgba(2, 5, 18, .82) 0%, rgba(2, 6, 21, .36) 42%, rgba(2, 6, 21, .08) 76%, rgba(2, 5, 18, .22) 100%),
+      linear-gradient(90deg, rgba(2, 6, 21, .2), rgba(2, 6, 21, .04)),
+      url('/backgrounds/k-on-hero-mobile.webp') center center / cover no-repeat;
+    filter: saturate(.86) brightness(.92);
   }
   .hero-shell { display: flex; text-align: left; }
   .hero-copy { width: min(620px, 100%); padding: 24px; }
@@ -302,7 +311,6 @@ h1 strong::after {
 
 @media (max-width: 520px) {
   .home-hero { padding: 72px 12px 72px; }
-  .hero-bg { background-position: 54% center; }
   .hero-copy { padding: 18px 16px; border-radius: 20px; }
   h1 { font-size: clamp(34px, 10.5vw, 43px); }
   .hero-lead { font-size: 14px; line-height: 1.62; }
