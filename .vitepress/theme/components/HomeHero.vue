@@ -1,7 +1,6 @@
 <template>
   <section class="home-hero" aria-labelledby="hero-title">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-mobile-visual" aria-hidden="true"></div>
+    <div class="hero-visual" aria-hidden="true"></div>
 
     <div class="hero-shell">
       <div class="hero-copy">
@@ -116,40 +115,34 @@ function scrollDown() {
 <style scoped>
 .home-hero {
   position: relative;
-  min-height: calc(100svh - var(--vp-nav-height, 64px));
+  min-height: auto;
   overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  padding: 112px 24px 64px;
+  display: block;
+  padding: 0 0 88px;
   isolation: isolate;
-  background: #071026;
+  background: var(--vp-c-bg);
 }
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  background:
-    linear-gradient(90deg, rgba(4, 9, 28, .78) 0%, rgba(4, 10, 31, .48) 38%, rgba(4, 10, 31, .1) 68%, rgba(4, 9, 28, .2) 100%),
-    linear-gradient(0deg, rgba(3, 7, 23, .9) 0%, rgba(3, 8, 26, .34) 46%, rgba(3, 8, 26, .12) 76%, rgba(3, 7, 23, .3) 100%),
-    url('/backgrounds/k-on-hero.webp') center center / cover no-repeat;
-  filter: saturate(.96) contrast(1.02);
-  transform: scale(1.01);
+.hero-visual {
+  width: 100%;
+  margin: 0 auto;
+  aspect-ratio: 2248 / 1264;
+  background: #071026 url('/backgrounds/k-on-hero.webp') center / contain no-repeat;
 }
-
-.hero-mobile-visual { display: none; }
 
 .hero-shell {
-  width: min(1240px, 100%);
+  width: 100%;
   margin: 0 auto;
+  padding: 24px 24px 0;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .hero-copy {
   position: relative;
   z-index: 2;
   width: min(720px, 100%);
+  margin: 0 auto;
   padding: 26px 30px;
   border: 1px solid rgba(255, 255, 255, .2);
   border-radius: 26px;
@@ -281,26 +274,21 @@ h1 strong::after {
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-:global(.dark) .hero-bg {
-  background:
-    linear-gradient(90deg, rgba(2, 6, 21, .82) 0%, rgba(3, 8, 26, .54) 42%, rgba(3, 8, 26, .18) 72%, rgba(2, 6, 21, .3) 100%),
-    linear-gradient(0deg, rgba(2, 5, 18, .94) 0%, rgba(2, 6, 21, .42) 48%, rgba(2, 6, 21, .2) 100%),
-    url('/backgrounds/k-on-hero.webp') center center / cover no-repeat;
-  filter: saturate(.82) brightness(.88);
-}
 :global(.dark) .hero-copy { background: linear-gradient(135deg, rgba(4, 8, 24, .84), rgba(8, 13, 31, .72)); }
 
+@media (min-width: 1200px) {
+  .hero-visual { width: min(1600px, calc(100% - 400px)); }
+}
+
+@media (min-width: 821px) and (max-width: 1199px) {
+  .hero-visual { width: calc(100% - 80px); }
+  :global(body:has(.home-hero) #live2d-widget),
+  :global(body:has(.home-hero) .live2d-controls),
+  :global(body:has(.home-hero) .music-toggle) { display: none !important; }
+}
+
 @media (max-width: 820px) {
-  .home-hero {
-    min-height: auto;
-    display: block;
-    padding: 0 0 88px;
-    background: var(--vp-c-bg);
-  }
-  .hero-bg { display: none; }
-  .hero-mobile-visual {
-    display: block;
-    width: 100%;
+  .hero-visual {
     aspect-ratio: 960 / 1357;
     background: #eee0c7 url('/backgrounds/k-on-hero-mobile.webp') center / contain no-repeat;
   }
@@ -331,12 +319,4 @@ h1 strong::after {
   :global(body:has(.home-hero) .music-toggle) { right: 16px; }
 }
 
-@media (max-height: 680px) and (min-width: 821px) {
-  .home-hero { padding-top: 88px; padding-bottom: 32px; }
-  .hero-copy { padding: 20px 24px; }
-  h1 { font-size: clamp(42px, 5.5vw, 60px); }
-  .hero-lead { margin-top: 12px; line-height: 1.55; }
-  .hero-actions { margin-top: 16px; }
-  .hero-badges { margin-top: 12px; }
-}
 </style>
