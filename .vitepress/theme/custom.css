@@ -156,7 +156,10 @@ body {
 .home-main .card,
 .home-main .project-card,
 .home-main .anime-card,
-.home-main .shuoshuo-card {
+.home-main .shuoshuo-card,
+.home-main .shuoshuo-item,
+.home-main .stat-card,
+.home-main .home-category {
   border-color: color-mix(in srgb, var(--sakura-pink) 42%, var(--vp-c-divider));
   box-shadow: 0 12px 32px rgba(93, 47, 59, .07);
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
@@ -164,7 +167,10 @@ body {
 .home-main .card:hover,
 .home-main .project-card:hover,
 .home-main .anime-card:hover,
-.home-main .shuoshuo-card:hover {
+.home-main .shuoshuo-card:hover,
+.home-main .shuoshuo-item:hover,
+.home-main .stat-card:hover,
+.home-main .home-category:hover {
   transform: translateY(-4px);
   border-color: var(--sakura-deep);
   box-shadow: 0 18px 42px rgba(93, 47, 59, .13);
@@ -437,10 +443,13 @@ body {
   .home-main > section:not(.home-hero)::before { top: 12px; right: 18px; font-size: 18px; }
   .home-main .section-heading,
   .home-main h2 { font-size: 1.45rem; }
-  .home-main .card:hover,
-  .home-main .project-card:hover,
-  .home-main .anime-card:hover,
-  .home-main .shuoshuo-card:hover { transform: none; }
+.home-main .card:hover,
+.home-main .project-card:hover,
+.home-main .anime-card:hover,
+.home-main .shuoshuo-card:hover,
+.home-main .shuoshuo-item:hover,
+.home-main .stat-card:hover,
+.home-main .home-category:hover { transform: none; }
   .doc-banner {
     min-height: 170px;
     border-radius: 0 0 18px 18px;
