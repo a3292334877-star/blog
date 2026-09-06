@@ -3,7 +3,7 @@
     <template #layout-top>
       <CursorGlow />
       <ReadingProgress />
-      <SakuraPetals />
+      <SakuraPetals v-if="isHome" />
     </template>
 
     <template #home-hero-before>
@@ -46,7 +46,7 @@
 
     <template #layout-bottom>
       <MusicPlayer />
-      <Live2DWidget />
+      <Live2DWidget v-if="isHome" />
       <BackToTop />
       <CopyToast />
     </template>
@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import { useData, useRoute, withBase } from 'vitepress'
-import { computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { computed, watch, nextTick, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import mediumZoom from 'medium-zoom'
 import HomeHero from './components/HomeHero.vue'
 import AboutStrip from './components/AboutStrip.vue'
@@ -70,13 +70,14 @@ import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
 import GiscusComment from './components/GiscusComment.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
-import Live2DWidget from './components/Live2DWidget.vue'
+const Live2DWidget = defineAsyncComponent(() => import('./components/Live2DWidget.vue'))
 import CursorGlow from './components/CursorGlow.vue'
 import PostNavigation from './components/PostNavigation.vue'
 import CopyToast from './components/CopyToast.vue'
 
 const { frontmatter } = useData()
 const route = useRoute()
+const isHome = computed(() => route.path === withBase('/'))
 
 // Image lightbox — re-attach on route change
 let zoom: ReturnType<typeof mediumZoom> | null = null

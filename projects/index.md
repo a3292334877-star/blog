@@ -8,6 +8,8 @@ layout: doc
 
 这里是我开发的一些项目，欢迎体验和使用。
 
+> 这些项目记录了我从需求、设计到开发和发布的完整实践。
+
 ---
 
 ## 轻译
@@ -21,6 +23,7 @@ layout: doc
 - **技术栈**：React + TypeScript + PWA + Android Java
 - **功能**：自动识别 · 14 种语言 · 复制朗读 · 历史收藏
 - **平台**：Web / Windows / macOS / Android / iOS
+- **状态**：公开使用，持续维护
 
 [查看详情 →](/projects/qingyi) · <a href="/downloads/qingyi-android-v1.0.0.apk" download>下载 Android APK ↓</a> · <a href="/translate/" target="_blank" rel="noopener noreferrer">在线体验 ↗</a>
 
@@ -39,6 +42,7 @@ layout: doc
 - **技术栈**：Flutter + Dart
 - **功能**：🍅 番茄钟 · 📖 CET-4 闪卡背词 · 📊 学习统计
 - **平台**：Android
+- **状态**：个人学习项目
 
 [查看详情 →](/projects/studytracker)
 
@@ -57,6 +61,7 @@ layout: doc
 - **技术栈**：Flutter + Provider + SQLite
 - **功能**：📅 课程表视图 · 🌐 教务系统导入 · 🔔 冲突检测 · 📤 课表分享
 - **平台**：Android
+- **状态**：校园场景实践项目
 
 [查看详情 →](/projects/henrycat)
 

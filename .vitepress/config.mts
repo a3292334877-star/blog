@@ -75,10 +75,6 @@ export default defineConfig({
   description: SITE.description,
 
   head: [
-    // PWA 已关闭：注销旧 Service Worker，并移除其遗留的 Cache Storage。
-    ['script', {},
-      `if('serviceWorker'in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()))}if('caches'in window){caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k))))}`],
-
     ['link', { rel: 'icon', type: 'image/webp', href: `${SITE.base}avatar.webp` }],
     ['link', { rel: 'alternate', type: 'application/atom+xml', title: `${SITE.title} RSS`, href: `${SITE.base}feed.xml` }],
     ['meta', { name: 'theme-color', content: '#e4596f' }],

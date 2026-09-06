@@ -4,6 +4,13 @@
     :style="{ '--live2d-control-bottom': `${controlBottom}px` }"
   >
     <button
+      v-if="!loaded && !disabled && desktopEligible"
+      class="live2d-restore live2d-load"
+      type="button"
+      title="加载看板娘"
+      @click="loadWidget"
+    >🌸 显示看板娘</button>
+    <button
       v-if="loaded && !disabled"
       class="live2d-close"
       type="button"
@@ -261,18 +268,6 @@ onMounted(() => {
   desktopEligible.value = shouldLoad()
   disabled.value = localStorage.getItem(STORAGE_KEY) === '1'
   if (!desktopEligible.value || disabled.value) return
-
-  // 浏览器空闲时再加载 1MB+ 的模型；不支持 idle callback 时延迟加载。
-  const idleWindow = window as IdleWindow
-  if (idleWindow.requestIdleCallback) {
-    idleHandle = idleWindow.requestIdleCallback(() => {
-      void loadWidget()
-    }, { timeout: 5000 })
-  } else {
-    loadTimer = setTimeout(() => {
-      void loadWidget()
-    }, 3000)
-  }
 })
 
 onUnmounted(() => {

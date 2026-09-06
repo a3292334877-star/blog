@@ -24,6 +24,7 @@ const REPO = 'a3292334877-star/blog'
 const REPO_ID = import.meta.env.VITE_GISCUS_REPO_ID ?? ''
 const CATEGORY = 'General'
 const CATEGORY_ID = import.meta.env.VITE_GISCUS_CATEGORY_ID ?? ''
+let missingConfigWarned = false
 
 const giscusContainer = ref<HTMLElement>()
 const { isDark, frontmatter } = useData()
@@ -38,10 +39,10 @@ function loadGiscus() {
 
   // 缺少 IDs 时不挂载 Giscus，避免加载失败
   if (!REPO_ID || !CATEGORY_ID) {
-    console.warn(
+    if (!missingConfigWarned) console.warn(
       '[GiscusComment] 缺少 VITE_GISCUS_REPO_ID / VITE_GISCUS_CATEGORY_ID 环境变量，评论功能未启用。' +
       ' 请复制 .env.example 为 .env 并填入 Giscus IDs。',
-    )
+    ); missingConfigWarned = true
     return
   }
 

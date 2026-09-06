@@ -8,7 +8,7 @@
         <p class="eyebrow"><span></span> PROGRAMMER · ACGN ENTHUSIAST</p>
         <h1 id="hero-title">你好，我是 <strong>Sakiko</strong></h1>
         <p class="hero-lead">
-          在代码、动画与日语之间持续探索。这里记录我的学习笔记、项目实践，以及那些值得反复回味的作品。
+          记录计算机学习、日语自学与个人项目实践，也收藏那些值得反复回味的动画与作品。
         </p>
 
         <p class="typewriter-line">
