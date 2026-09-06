@@ -122,6 +122,54 @@ body {
   padding: 0 !important;
 }
 
+/* 首页个性化层次：让樱花主题的卡片像同一套手账界面 */
+.home-main > section:not(.home-hero) {
+  position: relative;
+  isolation: isolate;
+}
+.home-main > section:not(.home-hero)::before {
+  content: '✿';
+  position: absolute;
+  top: 18px;
+  right: clamp(18px, 5vw, 72px);
+  color: var(--sakura-pink);
+  opacity: .28;
+  font-size: 22px;
+  transform: rotate(14deg);
+  pointer-events: none;
+}
+.home-main .section-heading,
+.home-main h2 {
+  letter-spacing: .025em;
+  text-wrap: balance;
+}
+.home-main .section-heading::after,
+.home-main h2::after {
+  content: '  ✦';
+  color: var(--sakura-deep);
+  font-size: .72em;
+  vertical-align: .12em;
+}
+.home-main a {
+  text-underline-offset: 3px;
+}
+.home-main .card,
+.home-main .project-card,
+.home-main .anime-card,
+.home-main .shuoshuo-card {
+  border-color: color-mix(in srgb, var(--sakura-pink) 42%, var(--vp-c-divider));
+  box-shadow: 0 12px 32px rgba(93, 47, 59, .07);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.home-main .card:hover,
+.home-main .project-card:hover,
+.home-main .anime-card:hover,
+.home-main .shuoshuo-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--sakura-deep);
+  box-shadow: 0 18px 42px rgba(93, 47, 59, .13);
+}
+
 /* ========== 文章页 ========== */
 .doc-banner {
   padding: 80px 24px 40px;
@@ -386,6 +434,13 @@ body {
 }
 
 @media (max-width: 768px) {
+  .home-main > section:not(.home-hero)::before { top: 12px; right: 18px; font-size: 18px; }
+  .home-main .section-heading,
+  .home-main h2 { font-size: 1.45rem; }
+  .home-main .card:hover,
+  .home-main .project-card:hover,
+  .home-main .anime-card:hover,
+  .home-main .shuoshuo-card:hover { transform: none; }
   .doc-banner {
     min-height: 170px;
     border-radius: 0 0 18px 18px;
