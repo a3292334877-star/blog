@@ -531,8 +531,8 @@ function makeSvg({ title, subtitle, gradient, decor, date, issue }) {
   <line x1="80" y1="104" x2="1120" y2="104" stroke="#fff" stroke-opacity="0.28"/>
 
   <g>
-    <rect x="80" y="154" width="128" height="38" rx="19" fill="#fff" opacity="0.16"/>
-    <text x="144" y="179" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="2" fill="#fff">ARTICLE</text>
+    <rect x="80" y="154" width="${Math.min(360, Math.max(128, visualWidth(subtitle) * 13 + 34))}" height="38" rx="19" fill="#fff" opacity="0.18"/>
+    <text x="98" y="179" font-size="15" font-weight="700" letter-spacing="1.2" fill="#fff">${esc(subtitle)}</text>
   </g>
 
   <text font-size="${titleSize}" font-weight="750" fill="#fff" letter-spacing="-1">${titleSvg}</text>
