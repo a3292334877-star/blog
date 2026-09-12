@@ -22,6 +22,7 @@
           <div class="card-meta">
             <time class="card-date">{{ fmtDate(p.create) }}</time>
             <span class="reading-time">阅读 {{ p.readingTime }} 分钟</span>
+            <span class="post-type">{{ p.type }}</span>
           </div>
           <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
           <p class="card-excerpt">{{ p.summary }}</p>
@@ -100,6 +101,7 @@ function fmtDate(ts: number) {
 .section-more { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--accent-color); }
 .card-meta { display: flex; align-items: center; gap: 10px; }
 .reading-time { font-size: 12px; color: var(--vp-c-text-3); }
+.post-type { font-size: 12px; color: var(--accent-color); padding: 2px 8px; border-radius: 999px; background: var(--sakura-light); }
 
 /* 2 列卡片网格，窄屏自动单列 */
 .post-grid {

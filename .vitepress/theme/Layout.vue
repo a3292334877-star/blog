@@ -32,7 +32,10 @@
         </nav>
         <h1 class="doc-title">{{ frontmatter.title }}</h1>
         <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
-          <span v-if="frontmatter.date" class="doc-date">{{ formatDate(frontmatter.date) }}</span>
+          <span v-if="frontmatter.date" class="doc-date">发布于 {{ formatDate(frontmatter.date) }}</span>
+          <span v-if="frontmatter.type || frontmatter.tags" class="doc-type">{{ frontmatter.type || inferredType }}</span>
+          <span v-if="frontmatter.source" class="doc-source">来源：{{ frontmatter.source }}</span>
+          <span v-if="frontmatter.date" class="doc-updated">更新于 {{ formatDate(frontmatter.lastUpdated || frontmatter.date) }}</span>
           <span v-if="frontmatter.tags" class="doc-tags">
             <a v-for="t in frontmatter.tags" :key="t" :href="tagHref(t)">{{ t }}</a>
           </span>
@@ -132,4 +135,12 @@ function formatDate(d: string | Date): string {
     day: 'numeric',
   })
 }
+
+const inferredType = computed(() => {
+  const key = `${frontmatter.value.title || ''} ${(frontmatter.value.tags || []).join(' ')}`
+  if (/真题|专插本|考点|考试/.test(key)) return '资料整理'
+  if (/教程|指南|入门|技巧|基础|学习/.test(key)) return '教程'
+  if (/随笔|生活|日常/.test(key)) return '随笔'
+  return '学习笔记'
+})
 </script>

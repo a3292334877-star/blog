@@ -392,6 +392,8 @@ body {
   box-shadow: var(--site-shadow-lg);
 }
 .doc-banner .doc-meta { align-items: center; }
+.doc-type { padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.2); }
+.doc-source, .doc-updated { opacity: .82; }
 
 /* 桌面端横幅：面包屑、标题和元信息作为整体严格居中 */
 @media (min-width: 769px) {

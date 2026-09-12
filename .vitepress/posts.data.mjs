@@ -56,6 +56,8 @@ function getPost(md, file, postDir, asFeed = false) {
     excerpt: md.render(excerpt || ''),
     summary: toPlainText(summarySource).slice(0, 220),
     readingTime: estimateReadingTime(content),
+    type: data.type || inferPostType(data.tags || [], data.title),
+    source: data.source || '',
   }
   if (asFeed) {
     post.data = data
@@ -63,6 +65,14 @@ function getPost(md, file, postDir, asFeed = false) {
 
   cache.set(cacheKey, { timestamp, post })
   return post
+}
+
+function inferPostType(tags, title) {
+  const key = `${title} ${tags.join(' ')}`
+  if (/真题|专插本|考点|考试/.test(key)) return '资料整理'
+  if (/教程|指南|入门|技巧|基础|学习/.test(key)) return '教程'
+  if (/随笔|生活|日常/.test(key)) return '随笔'
+  return '学习笔记'
 }
 
 function toPlainText(markdown) {
