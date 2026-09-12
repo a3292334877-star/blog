@@ -5,6 +5,15 @@
       <a v-if="showMore" class="section-more" :href="withBase('/posts/')">查看全部 →</a>
     </h2>
 
+    <div class="post-filters" v-if="posts.length > 1">
+      <label>类型
+        <select v-model="selectedType"><option v-for="item in types" :key="item">{{ item }}</option></select>
+      </label>
+      <label>标签
+        <select v-model="selectedTag"><option v-for="item in tags" :key="item">{{ item }}</option></select>
+      </label>
+    </div>
+
     <div class="post-grid">
       <article
         v-for="(p, i) in visiblePosts"
@@ -46,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useData } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
@@ -63,9 +72,16 @@ const props = withDefaults(defineProps<{
 const { site } = useData()
 const base = site.value.base
 
-const visiblePosts = computed(() => (
-  props.limit > 0 ? posts.slice(0, props.limit) : posts
+const selectedType = ref('全部')
+const selectedTag = ref('全部')
+const types = computed(() => ['全部', ...new Set(posts.map((p) => p.type).filter(Boolean))])
+const tags = computed(() => ['全部', ...new Set(posts.flatMap((p) => p.tags || []))])
+const filteredPosts = computed(() => posts.filter((p) =>
+  (selectedType.value === '全部' || p.type === selectedType.value)
+  && (selectedTag.value === '全部' || p.tags?.includes(selectedTag.value)),
 ))
+const visiblePosts = computed(() => props.limit > 0 && selectedType.value === '全部' && selectedTag.value === '全部'
+  ? filteredPosts.value.slice(0, props.limit) : filteredPosts.value)
 
 function withBase(p: string) {
   return base + p.replace(/^\//, '')
@@ -102,6 +118,9 @@ function fmtDate(ts: number) {
 .card-meta { display: flex; align-items: center; gap: 10px; }
 .reading-time { font-size: 12px; color: var(--vp-c-text-3); }
 .post-type { font-size: 12px; color: var(--accent-color); padding: 2px 8px; border-radius: 999px; background: var(--sakura-light); }
+.post-filters { display: flex; gap: 12px; margin: -10px 0 22px; flex-wrap: wrap; }
+.post-filters label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--vp-c-text-2); }
+.post-filters select { border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); color: var(--vp-c-text-1); padding: 6px 10px; }
 
 /* 2 列卡片网格，窄屏自动单列 */
 .post-grid {
