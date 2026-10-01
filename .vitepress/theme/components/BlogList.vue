@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useData } from 'vitepress'
 import { data as posts } from '../../posts.data.mjs'
 
@@ -88,6 +88,24 @@ const filteredPosts = computed(() => posts.filter((p) =>
 ))
 const visiblePosts = computed(() => props.limit > 0 && selectedType.value === '全部' && selectedTag.value === '全部' && selectedYear.value === '全部'
   ? filteredPosts.value.slice(0, props.limit) : filteredPosts.value)
+
+function syncFilters() {
+  if (typeof window === 'undefined') return
+  const url = new URL(window.location.href)
+  for (const [key, value] of [['type', selectedType.value], ['tag', selectedTag.value], ['year', selectedYear.value]]) {
+    if (value === '全部') url.searchParams.delete(key)
+    else url.searchParams.set(key, value)
+  }
+  window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`)
+}
+
+onMounted(() => {
+  const query = new URLSearchParams(window.location.search)
+  if (types.value.includes(query.get('type') || '')) selectedType.value = query.get('type')!
+  if (tags.value.includes(query.get('tag') || '')) selectedTag.value = query.get('tag')!
+  if (years.value.includes(query.get('year') || '')) selectedYear.value = query.get('year')!
+})
+watch([selectedType, selectedTag, selectedYear], syncFilters)
 
 function withBase(p: string) {
   return base + p.replace(/^\//, '')

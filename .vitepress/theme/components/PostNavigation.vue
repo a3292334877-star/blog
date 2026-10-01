@@ -16,8 +16,9 @@
       <h2>相关文章</h2>
       <div class="related-grid">
         <a v-for="post in related" :key="post.href" :href="withBase(post.href)" class="related-card">
+          <img v-if="post.cover" :src="post.cover" :alt="post.title" loading="lazy">
           <strong>{{ post.title }}</strong>
-          <span>{{ post.tags.slice(0, 3).join(' · ') }} · 阅读 {{ post.readingTime }} 分钟</span>
+          <span>{{ post.summary }} · 阅读 {{ post.readingTime }} 分钟</span>
         </a>
       </div>
     </div>
@@ -70,6 +71,7 @@ const related = computed(() => {
 .related-posts h2 { margin: 0 0 16px; border: 0; font-size: 20px; }
 .related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .related-card { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--vp-c-divider); border-radius: 14px; color: var(--vp-c-text-1); }
+.related-card img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: 10px; }
 .related-card:hover { border-color: var(--sakura-pink); }
 .related-card strong { font-size: 14px; line-height: 1.5; }
 .related-card span { color: var(--vp-c-text-3); font-size: 11px; }
