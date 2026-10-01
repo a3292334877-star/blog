@@ -12,6 +12,9 @@
       <label>标签
         <select v-model="selectedTag"><option v-for="item in tags" :key="item">{{ item }}</option></select>
       </label>
+      <label>年份
+        <select v-model="selectedYear"><option v-for="item in years" :key="item">{{ item }}</option></select>
+      </label>
     </div>
 
     <div class="post-grid">
@@ -74,13 +77,16 @@ const base = site.value.base
 
 const selectedType = ref('全部')
 const selectedTag = ref('全部')
+const selectedYear = ref('全部')
 const types = computed(() => ['全部', ...new Set(posts.map((p) => p.type).filter(Boolean))])
 const tags = computed(() => ['全部', ...new Set(posts.flatMap((p) => p.tags || []))])
+const years = computed(() => ['全部', ...new Set(posts.map((p) => String(new Date(p.create).getFullYear())))])
 const filteredPosts = computed(() => posts.filter((p) =>
   (selectedType.value === '全部' || p.type === selectedType.value)
-  && (selectedTag.value === '全部' || p.tags?.includes(selectedTag.value)),
+  && (selectedTag.value === '全部' || p.tags?.includes(selectedTag.value))
+  && (selectedYear.value === '全部' || String(new Date(p.create).getFullYear()) === selectedYear.value),
 ))
-const visiblePosts = computed(() => props.limit > 0 && selectedType.value === '全部' && selectedTag.value === '全部'
+const visiblePosts = computed(() => props.limit > 0 && selectedType.value === '全部' && selectedTag.value === '全部' && selectedYear.value === '全部'
   ? filteredPosts.value.slice(0, props.limit) : filteredPosts.value)
 
 function withBase(p: string) {
