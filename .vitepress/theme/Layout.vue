@@ -35,7 +35,7 @@
           <span v-if="frontmatter.date" class="doc-date">发布于 {{ formatDate(frontmatter.date) }}</span>
           <span v-if="frontmatter.type || frontmatter.tags" class="doc-type">{{ frontmatter.type || inferredType }}</span>
           <span v-if="frontmatter.source" class="doc-source">来源：{{ frontmatter.source }}</span>
-          <span v-if="frontmatter.date" class="doc-updated">更新于 {{ formatDate(frontmatter.lastUpdated || frontmatter.date) }}</span>
+          <span v-if="frontmatter.lastUpdated" class="doc-updated">更新于 {{ formatDate(frontmatter.lastUpdated) }}</span>
           <span v-if="frontmatter.tags" class="doc-tags">
             <a v-for="t in frontmatter.tags" :key="t" :href="tagHref(t)">{{ t }}</a>
           </span>

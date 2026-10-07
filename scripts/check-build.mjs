@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { basename, extname, join, relative, resolve } from 'node:path'
+import { SITE_URL } from '../.vitepress/site.constants.mjs'
 
 const root = resolve(import.meta.dirname, '..')
 const dist = join(root, '.vitepress', 'dist')
@@ -59,9 +60,25 @@ if (!existsSync(dist)) {
   }
   console.log(`  ✓ internal links: ${checkedLinks.size} unique targets checked`)
 
+  // og:image 指向分享卡片，缺文件时链接预览会变成空白，这里提前拦截。
+  const ogImages = new Set()
+  for (const htmlFile of htmlFiles) {
+    const html = readFileSync(htmlFile, 'utf8')
+    for (const match of html.matchAll(/<meta (?:property="og:image"|name="twitter:image") content="([^"]+)"/g)) {
+      ogImages.add(match[1])
+    }
+  }
+  for (const url of ogImages) {
+    if (!url.startsWith(`${SITE_URL}/`)) continue
+    const assetPath = decodeURIComponent(url.slice(SITE_URL.length + 1))
+    if (!existsSync(join(dist, assetPath))) fail(`og:image is missing from build: ${url}`)
+  }
+  console.log(`  ✓ og:image: ${ogImages.size} unique targets checked`)
+
   const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0)
-  // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据，首页背景保持轻量 WebP。
-  const maxTotalMegabytes = 11.75
+  // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据；public/og 下还有
+  // 文章对应的社交分享图（约 0.4 MB）。首页背景保持轻量 WebP。
+  const maxTotalMegabytes = 12.25
   const maxTotalBytes = maxTotalMegabytes * 1024 * 1024
   if (totalBytes > maxTotalBytes) {
     fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds ${maxTotalMegabytes.toFixed(2)} MB budget`)

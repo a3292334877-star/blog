@@ -4,6 +4,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { katex } from '@mdit/plugin-katex'
 import { SITE, absoluteAsset, absoluteUrl } from './site.constants.mjs'
+import { gitLastUpdated } from './last-updated.mjs'
 
 interface PostMeta {
   title: string
@@ -38,6 +39,23 @@ function shortenNavTitle(title: string, maxLength = 24): string {
   return characters.length > maxLength
     ? `${characters.slice(0, maxLength).join('')}…`
     : title
+}
+
+/** 取日期（或日期字符串）的 YYYY-MM-DD，用于比较“发布”与“更新”是否同一天。 */
+function dayKey(value: unknown): string {
+  const date = new Date(value as string)
+  return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10)
+}
+
+/**
+ * 社交平台的爬虫不会渲染 SVG 缩略图，所以 og:image 使用脚本光栅化好的
+ * /og/<slug>.webp；页面横幅依旧用矢量封面，保持清晰度。
+ */
+function socialCoverPath(assetPath: string): { path: string; rasterized: boolean } {
+  const isGeneratedCover = assetPath.startsWith('/covers/') && assetPath.endsWith('.svg')
+  if (!isGeneratedCover) return { path: assetPath, rasterized: false }
+  const slug = assetPath.slice('/covers/'.length).replace(/\.svg$/, '')
+  return { path: `/og/${slug}.webp`, rasterized: true }
 }
 
 /**
@@ -277,10 +295,13 @@ export default defineConfig({
     const slug = pageData.relativePath.replace(/^posts\//, '').replace(/\.md$/, '')
     const defaultCover = isPost ? `/covers/${slug}.svg` : null
     const coverSource = fm.cover === false ? null : (fm.cover || defaultCover)
+    const socialCover = coverSource && !String(coverSource).startsWith('http')
+      ? socialCoverPath(String(coverSource))
+      : null
     const cover = coverSource
       ? (String(coverSource).startsWith('http')
           ? String(coverSource)
-          : absoluteAsset(coverSource))
+          : absoluteAsset(socialCover!.path))
       : (isHome ? absoluteAsset('/avatar.webp') : null)
     const pagePath = pageData.relativePath
       .replace(/\.md$/, '')
@@ -300,6 +321,11 @@ export default defineConfig({
     if (cover) {
       head.push(['meta', { property: 'og:image', content: cover }])
       head.push(['meta', { name: 'twitter:image', content: cover }])
+      if (socialCover?.rasterized) {
+        head.push(['meta', { property: 'og:image:type', content: 'image/webp' }])
+        head.push(['meta', { property: 'og:image:width', content: '1200' }])
+        head.push(['meta', { property: 'og:image:height', content: '630' }])
+      }
     }
 
     const breadcrumbItems = [
@@ -343,10 +369,16 @@ export default defineConfig({
       })
     }
     head.push(['script', { type: 'application/ld+json' }, JSON.stringify(structuredData).replace(/</g, '\\u003c')])
+    // “更新于”取 Git 提交时间，且只在确实晚于发布日期时显示；
+    // 否则页面上会出现“发布于 X … 更新于 X”这种重复又误导的信息。
+    const gitUpdated = fm.date && !fm.lastUpdated ? gitLastUpdated(pageData.relativePath) : null
+    const lastUpdated =
+      gitUpdated && gitUpdated.slice(0, 10) !== dayKey(fm.date) ? gitUpdated.slice(0, 10) : null
     const existingHead = Array.isArray(fm.head) ? fm.head : []
     pageData.frontmatter = {
       ...fm,
       ...(isPost && fm.cover == null ? { cover: defaultCover } : {}),
+      ...(lastUpdated ? { lastUpdated } : {}),
       head: [...existingHead, ...head],
     }
   },

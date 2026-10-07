@@ -496,7 +496,11 @@ function wrapTitle(title, maxWidth = 18) {
 function makeSvg({ title, subtitle, gradient, decor, date, issue }) {
   const [c1, c2] = gradient
   const titleLines = wrapTitle(title)
-  const titleSize = titleLines.length > 1 || visualWidth(title) > 15 ? 43 : 50
+  // 左侧文字区从 x=80 开始，插画面板从 x=760 开始。长标题如果固定 43/50px，
+  // 会横穿到插画上（观感像“花屏”），所以按最长一行收窄字号，让标题始终留在文字区。
+  const longestLine = titleLines.reduce((max, line) => Math.max(max, visualWidth(line)), 0)
+  const baseTitleSize = titleLines.length > 1 || visualWidth(title) > 15 ? 43 : 50
+  const titleSize = Math.min(baseTitleSize, Math.max(30, Math.floor(660 / Math.max(longestLine, 1))))
   const titleSvg = titleLines
     .map((line, index) => `<tspan x="80" y="${270 + index * 62}">${esc(line)}</tspan>`)
     .join('')

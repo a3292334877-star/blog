@@ -5,8 +5,8 @@
   "description": "Sakikoの博客 - VitePress",
   "scripts": {
     "check": "node scripts/check-project.mjs",
-    "dev": "node scripts/generate-covers.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress dev",
-    "build": "node scripts/clean-vitepress-cache.mjs && node scripts/generate-covers.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node scripts/check-build.mjs",
+    "dev": "node scripts/generate-covers.mjs && node scripts/generate-og-images.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress dev",
+    "build": "node scripts/clean-vitepress-cache.mjs && node scripts/generate-covers.mjs && node scripts/generate-og-images.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node scripts/check-build.mjs",
     "preview": "vitepress preview"
   },
   "keywords": [],
@@ -22,6 +22,7 @@
     "vitepress": "^1.6.4"
   },
   "devDependencies": {
-    "sass-embedded": "^1.100.0"
+    "sass-embedded": "^1.100.0",
+    "sharp": "^0.35.5"
   }
 }
