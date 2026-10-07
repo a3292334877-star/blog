@@ -302,6 +302,15 @@ export default defineConfig({
       .replace(/(^|\/)index$/, '$1')
     const url = absoluteUrl(pagePath)
 
+    // “更新于”取 Git 提交时间，且只在确实晚于发布日期时显示；
+    // 否则页面上会出现“发布于 X … 更新于 X”这种重复又误导的信息。
+    const gitUpdated = fm.date && fm.lastUpdated == null ? gitLastUpdated(pageData.relativePath) : null
+    const lastUpdated =
+      gitUpdated && gitUpdated.slice(0, 10) !== dayKey(fm.date) ? gitUpdated.slice(0, 10) : null
+    // 头部横幅已经展示“发布于 / 更新于”的文章页，不再让 VitePress 页脚重复同一条信息。
+    const lastModifiedAt = pageData.lastUpdated ?? (gitUpdated ? +new Date(gitUpdated) : undefined)
+    if (fm.date) delete pageData.lastUpdated
+
     const head: any[] = [
       ['link', { rel: 'canonical', href: url }],
       ['meta', { property: 'og:type', content: isPost ? 'article' : 'website' }],
@@ -348,7 +357,7 @@ export default defineConfig({
         mainEntityOfPage: url,
         image: cover || undefined,
         datePublished: fm.date ? new Date(fm.date).toISOString() : undefined,
-        dateModified: pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : undefined,
+        dateModified: lastModifiedAt ? new Date(lastModifiedAt).toISOString() : undefined,
         author: {
           '@type': 'Person',
           name: SITE.author,
@@ -363,11 +372,6 @@ export default defineConfig({
       })
     }
     head.push(['script', { type: 'application/ld+json' }, JSON.stringify(structuredData).replace(/</g, '\\u003c')])
-    // “更新于”取 Git 提交时间，且只在确实晚于发布日期时显示；
-    // 否则页面上会出现“发布于 X … 更新于 X”这种重复又误导的信息。
-    const gitUpdated = fm.date && !fm.lastUpdated ? gitLastUpdated(pageData.relativePath) : null
-    const lastUpdated =
-      gitUpdated && gitUpdated.slice(0, 10) !== dayKey(fm.date) ? gitUpdated.slice(0, 10) : null
     const existingHead = Array.isArray(fm.head) ? fm.head : []
     pageData.frontmatter = {
       ...fm,

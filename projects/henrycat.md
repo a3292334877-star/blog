@@ -3,7 +3,7 @@ title: Henrycat - 你的课表，优雅掌控
 date: 2026-05-20
 description: Henrycat 是一款 Material 3 风格的 Flutter 课表应用，支持教务系统导入、时间冲突检测与课表分享，覆盖 Android、iOS 与桌面端。
 tags: [项目, Flutter, Dart, SQLite]
-cover: https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800
+cover: /projects/henrycat.webp
 ---
 
 # Henrycat - 你的课表，优雅掌控 📅
