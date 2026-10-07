@@ -1,5 +1,6 @@
 ---
 title: 关于我
+description: 关于 Sakiko：计算机专业学生、日语 N1 学习者，记录学习路线、原创项目与 ACGN 日常。
 comments: false
 ---
 

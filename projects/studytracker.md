@@ -1,6 +1,7 @@
 ---
 title: StudyTracker - 初音未来主题学习助手
 date: 2026-03-15
+description: StudyTracker 是初音未来主题的 Flutter 学习助手，把番茄钟、CET-4 背单词和学习统计集中在一个应用里。
 tags: [项目, Flutter, Dart]
 cover: https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=800
 ---

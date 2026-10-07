@@ -1,6 +1,7 @@
 ---
 title: 你好，世界
 date: 2026-06-01
+description: 这个博客的第一篇文章：为什么想建一个小窝，以及之后打算在这里写些什么。
 tags: [生活, 博客]
 cover: /covers/hello-world.svg
 ---

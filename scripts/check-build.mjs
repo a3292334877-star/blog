@@ -37,6 +37,22 @@ if (!existsSync(dist)) {
     }
   }
 
+  // 仓库说明文档不应该变成公开页面（之前 README.md 会被编译成 /README 并进 sitemap）。
+  if (existsSync(join(dist, 'README.html'))) fail('README.md was built into a public page')
+
+  // 搜索结果里不该出现 404 页。
+  const sitemapPath = join(dist, 'sitemap.xml')
+  if (existsSync(sitemapPath) && /<loc>[^<]*\/404<\/loc>/.test(readFileSync(sitemapPath, 'utf8'))) {
+    fail('sitemap.xml should not list the 404 page')
+  }
+  const notFoundPath = join(dist, '404.html')
+  if (
+    existsSync(notFoundPath) &&
+    !readFileSync(notFoundPath, 'utf8').includes('<meta name="robots" content="noindex">')
+  ) {
+    fail('404.html is missing <meta name="robots" content="noindex">')
+  }
+
   const files = filesUnder(dist)
 
   // 检查构建后的站内链接与资源，避免部署后出现 404。

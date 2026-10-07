@@ -1,6 +1,7 @@
 ---
 title: Git 入门与实用技巧
 date: 2026-06-02
+description: Git 日常高频命令与技巧整理：基础配置、工作流、分支操作、撤销与回退、提交信息规范，以及新手常踩的坑。
 tags: [教程, Git]
 cover: /covers/git-tips.svg
 ---

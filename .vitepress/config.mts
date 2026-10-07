@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { katex } from '@mdit/plugin-katex'
-import { SITE, absoluteAsset, absoluteUrl } from './site.constants.mjs'
+import { SITE, absoluteAsset, absoluteUrl, toSocialImage } from './site.constants.mjs'
 import { gitLastUpdated } from './last-updated.mjs'
 
 interface PostMeta {
@@ -45,17 +45,6 @@ function shortenNavTitle(title: string, maxLength = 24): string {
 function dayKey(value: unknown): string {
   const date = new Date(value as string)
   return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10)
-}
-
-/**
- * 社交平台的爬虫不会渲染 SVG 缩略图，所以 og:image 使用脚本光栅化好的
- * /og/<slug>.webp；页面横幅依旧用矢量封面，保持清晰度。
- */
-function socialCoverPath(assetPath: string): { path: string; rasterized: boolean } {
-  const isGeneratedCover = assetPath.startsWith('/covers/') && assetPath.endsWith('.svg')
-  if (!isGeneratedCover) return { path: assetPath, rasterized: false }
-  const slug = assetPath.slice('/covers/'.length).replace(/\.svg$/, '')
-  return { path: `/og/${slug}.webp`, rasterized: true }
 }
 
 /**
@@ -105,9 +94,14 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
 
+  // README 是给仓库看的说明，之前会被编译成 /README 页面并进入 sitemap 和搜索索引。
+  srcExclude: ['README.md', '**/CODEX-HANDOFF.md'],
+
   // Sitemap
   sitemap: {
     hostname: SITE.origin,
+    // 404 页不需要被搜索引擎收录。
+    transformItems: (items) => items.filter((item) => !/(^|\/)404\/?$/.test(String(item.url))),
   },
 
   themeConfig: {
@@ -296,7 +290,7 @@ export default defineConfig({
     const defaultCover = isPost ? `/covers/${slug}.svg` : null
     const coverSource = fm.cover === false ? null : (fm.cover || defaultCover)
     const socialCover = coverSource && !String(coverSource).startsWith('http')
-      ? socialCoverPath(String(coverSource))
+      ? toSocialImage(String(coverSource))
       : null
     const cover = coverSource
       ? (String(coverSource).startsWith('http')

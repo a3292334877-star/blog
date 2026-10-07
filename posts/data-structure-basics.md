@@ -1,6 +1,7 @@
 ---
 title: 数据结构基础：从数组到并查集
 date: 2026-06-02
+description: 从数组、栈与队列、堆、set/map 到并查集，串讲 C++ 竞赛最常用的基础数据结构、选型思路与复杂度速查表。
 tags: [教程, C++, 数据结构]
 cover: /covers/data-structure-basics.svg
 ---

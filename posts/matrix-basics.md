@@ -1,6 +1,7 @@
 ---
 title: 矩阵入门：从高斯消元到特征值
 date: 2026-06-03
+description: 从零学矩阵：矩阵运算、初等行变换与高斯消元、行列式、秩、向量空间、特征值与对角化，并附 C++ 实现。
 tags: [教程, 线性代数, 高等数学]
 cover: /covers/matrix-basics.svg
 ---

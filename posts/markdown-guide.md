@@ -1,6 +1,7 @@
 ---
 title: Markdown 写作指南
 date: 2026-06-01
+description: Markdown 写作指南：基础与扩展语法、frontmatter 配置与写作建议，附常用编辑器与工具推荐。
 tags: [教程, Markdown]
 cover: /covers/markdown-guide.svg
 ---

@@ -1,5 +1,6 @@
 ---
 title: 说说
+description: Sakiko 的碎碎念与随手记，记录日常、学习进度和项目动态。
 layout: doc
 ---
 

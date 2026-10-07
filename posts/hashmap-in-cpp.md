@@ -1,6 +1,7 @@
 ---
 title: C++ 中哈希 Map 的应用与竞赛技巧
 date: 2026-06-02
+description: C++ 哈希表实战笔记：unordered_map 与 map 的区别、常用操作速查、自定义哈希、竞赛应用与防坑技巧。
 tags: [教程, C++, 算法]
 cover: /covers/hashmap-in-cpp.svg
 ---

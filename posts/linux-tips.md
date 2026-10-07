@@ -1,6 +1,7 @@
 ---
 title: Linux 常用操作技巧
 date: 2026-06-02
+description: Linux 常用命令速查：文件与目录、文本处理、进程管理、权限、网络调试与 SSH 技巧，附常用工具推荐。
 tags: [教程, Linux]
 cover: /covers/linux-tips.svg
 ---

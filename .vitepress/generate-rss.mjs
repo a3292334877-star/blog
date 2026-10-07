@@ -5,7 +5,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
-import { SITE as SITE_CONFIG, SITE_URL, absoluteAsset } from './site.constants.mjs'
+import { SITE as SITE_CONFIG, SITE_URL, absoluteAsset, toSocialImage } from './site.constants.mjs'
+import { gitLastUpdated } from './last-updated.mjs'
 
 const SITE = {
   title: SITE_CONFIG.title,
@@ -41,16 +42,23 @@ function main() {
       const slug = f.replace(/\.md$/, '')
       const date = +new Date(data.date) || fs.statSync(path.join(POST_DIR, f)).mtimeMs
       const coverSource = data.cover === false ? null : (data.cover || `/covers/${slug}.svg`)
-      const cover = coverSource
-        ? (String(coverSource).startsWith('http') ? String(coverSource) : absoluteAsset(coverSource))
+      // 阅读器普遍不渲染 SVG，封面改用光栅化后的分享图。
+      const coverAsset = coverSource ? toSocialImage(coverSource).path : null
+      const cover = coverAsset
+        ? (String(coverAsset).startsWith('http') ? String(coverAsset) : absoluteAsset(coverAsset))
         : null
       const desc = data.description || (excerpt || '').trim() || SITE.desc
-      return { title: data.title, date, slug, excerpt: desc, cover }
+      // 真实更新时间取 Git 提交时间，且不早于发布时间。
+      const gitDate = gitLastUpdated(`posts/${f}`)
+      const updated = gitDate ? Math.max(+new Date(gitDate) || date, date) : date
+      return { title: data.title, date, slug, excerpt: desc, cover, updated }
     })
     .filter(Boolean)
     .sort((a, b) => b.date - a.date)
 
-  const updated = posts.length > 0 ? rfc3339(posts[0].date) : rfc3339(Date.now())
+  const updated = posts.length > 0
+    ? rfc3339(Math.max(...posts.map(p => p.updated)))
+    : rfc3339(Date.now())
 
   const items = posts.map(p => {
     const media = p.cover
@@ -62,7 +70,7 @@ function main() {
       <link href="${SITE.url}/posts/${p.slug}"/>
       <id>${SITE.url}/posts/${p.slug}</id>
       <published>${rfc3339(p.date)}</published>
-      <updated>${rfc3339(p.date)}</updated>
+      <updated>${rfc3339(p.updated)}</updated>
       <summary type="html">${escapeXml(p.excerpt)}</summary>${media}
       <author><name>${SITE.author}</name></author>
     </entry>`

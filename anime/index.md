@@ -1,5 +1,6 @@
 ---
 title: 追番列表
+description: Sakiko 的追番记录与个人评分，按神作级、强烈推荐、值得一看分类整理，附追番方法论。
 layout: doc
 ---
 

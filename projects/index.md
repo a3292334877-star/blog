@@ -1,5 +1,6 @@
 ---
 title: 项目展示
+description: Sakiko 的项目合集：轻译翻译器、Henrycat 课表、StudyTracker 学习助手，含在线体验与下载入口。
 comments: false
 layout: doc
 ---

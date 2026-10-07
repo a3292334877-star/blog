@@ -1,6 +1,7 @@
 ---
 title: Java 零基础入门教程：从 Hello World 到面向对象
 date: 2026-06-06
+description: 面向零基础的 Java 教程：环境搭建、基础语法、控制流程、数组、面向对象、常用类库与异常处理，学完能看懂大部分 Java 代码。
 tags: [教程, Java, 面向对象, 入门]
 cover: /covers/java-tutorial.svg
 ---

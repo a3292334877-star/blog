@@ -1,6 +1,7 @@
 ---
 title: C++ 高精度算法详解与竞赛模板
 date: 2026-06-02
+description: 讲清 C++ 高精度算法的完整实现：加减乘除、比大小、符号处理与压位优化，附竞赛常用场景和可直接复制的模板代码。
 tags: [教程, C++, 算法]
 cover: /covers/bigint-in-cpp.svg
 ---
