@@ -1,4 +1,4 @@
-import DefaultTheme from 'vitepress/theme'
+﻿import DefaultTheme from 'vitepress/theme'
 import Layout from './Layout.vue'
 import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
@@ -9,6 +9,8 @@ import AnimePreview from './components/AnimePreview.vue'
 import ProjectsPreview from './components/ProjectsPreview.vue'
 import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
 import FriendLinks from './components/FriendLinks.vue'
+import AnimeList from './components/AnimeList.vue'
+import ShuoshuoTimeline from './components/ShuoshuoTimeline.vue'
 import './custom.css'
 
 export default {
@@ -24,5 +26,7 @@ export default {
     app.component('ProjectsPreview', ProjectsPreview)
     app.component('ShuoshuoPreview', ShuoshuoPreview)
     app.component('FriendLinks', FriendLinks)
+    app.component('AnimeList', AnimeList)
+    app.component('ShuoshuoTimeline', ShuoshuoTimeline)
   },
 }

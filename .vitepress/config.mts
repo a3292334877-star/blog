@@ -275,6 +275,26 @@ export default defineConfig({
         origin: /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/,
       },
     },
+    build: {
+      chunkSizeWarningLimit: 650,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('katex') || id.includes('@mdit/plugin-katex')) {
+                return 'vendor-katex'
+              }
+              if (id.includes('minisearch')) {
+                return 'vendor-minisearch'
+              }
+              if (id.includes('@supabase')) {
+                return 'vendor-supabase'
+              }
+            }
+          },
+        },
+      },
+    },
   },
 
   // SEO meta：文章页注入 og:* / twitter:* （build 时静态注入到 frontmatter.head）

@@ -1,14 +1,21 @@
----
+﻿---
 title: 说说
-description: Sakiko 的碎碎念与随手记，记录日常、学习进度和项目动态。
+description: Sakiko 的日常碎碎念、心路历程与生活随笔。
 layout: doc
 ---
 
 # 说说 💬
 
-一些碎碎念和随手记。
+记录日常灵感、学习打卡与成长足迹。
+
+<ShuoshuoTimeline />
 
 <!-- more -->
+
+---
+
+<details class="shuoshuo-raw-details" style="margin-top: 24px; padding: 12px 16px; border-radius: 12px; background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider);">
+<summary style="cursor: pointer; font-weight: 600; color: var(--vp-c-text-2);">📜 原始归档清单（点击展开）</summary>
 
 ## 2026
 
@@ -82,6 +89,4 @@ N1 成绩出来了，179，努力终究没有白费
 
 大学开学了,选择了计科，期待!
 
----
-
-> 人生はチョコレートの箱のようなもの、開けてみるまで何が入っているか分からない 🍫
+</details>
