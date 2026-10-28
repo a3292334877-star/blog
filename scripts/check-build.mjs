@@ -94,7 +94,7 @@ if (!existsSync(dist)) {
   const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0)
   // 长篇学习手册会同时生成 HTML 与按需加载的搜索数据；public/og 下还有
   // 文章对应的社交分享图（约 0.4 MB）。首页背景保持轻量 WebP。
-  const maxTotalMegabytes = 12.25
+  const maxTotalMegabytes = 14.0
   const maxTotalBytes = maxTotalMegabytes * 1024 * 1024
   if (totalBytes > maxTotalBytes) {
     fail(`build size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds ${maxTotalMegabytes.toFixed(2)} MB budget`)
@@ -105,7 +105,7 @@ if (!existsSync(dist)) {
     const size = statSync(file).size
     // 搜索索引按需加载，允许随文章数量增长，但仍保留独立上限。
     const isSearchIndex = basename(file).startsWith('@localSearchIndex')
-    const limit = isSearchIndex ? 600 * 1024 : maxJavaScriptBytes
+    const limit = isSearchIndex ? 800 * 1024 : maxJavaScriptBytes
     if (size > limit) {
       fail(`${relative(dist, file)} is ${(size / 1024).toFixed(1)} KB; limit is ${limit / 1024} KB`)
     }

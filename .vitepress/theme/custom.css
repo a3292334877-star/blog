@@ -585,3 +585,252 @@ html {
 .VPButton.brand:active {
   transform: translateY(0);
 }
+
+
+/* ========== 数学文章与教学卡片美化扩展 ========== */
+.math-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 24px;
+}
+
+.math-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--sakura-pink) 20%, transparent);
+  color: var(--accent-color);
+  font-weight: 500;
+  border: 1px solid color-mix(in srgb, var(--sakura-pink) 35%, transparent);
+}
+
+.dark .math-badge {
+  background: color-mix(in srgb, var(--sakura-pink) 15%, transparent);
+  border-color: color-mix(in srgb, var(--sakura-pink) 25%, transparent);
+}
+
+/* 数学公式高亮展示卡片 */
+.math-showcase {
+  position: relative;
+  margin: 24px 0;
+  padding: 22px 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--sakura-light) 65%, var(--vp-c-bg)) 0%, color-mix(in srgb, var(--sakura-warm) 25%, var(--vp-c-bg)) 100%);
+  border: 1px solid color-mix(in srgb, var(--sakura-pink) 30%, transparent);
+  box-shadow: 0 6px 20px rgba(193, 63, 87, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .math-showcase {
+  background: linear-gradient(135deg, rgba(37, 31, 46, 0.95) 0%, rgba(45, 34, 48, 0.95) 100%);
+  border-color: rgba(239, 143, 162, 0.22);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.math-showcase:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(193, 63, 87, 0.1);
+}
+
+.math-showcase-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 12px;
+}
+
+/* 步骤进度卡片 */
+.step-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.step-card {
+  display: flex;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  transition: all 0.25s ease;
+}
+
+.step-card:hover {
+  border-color: var(--sakura-pink);
+  box-shadow: 0 6px 18px rgba(193, 63, 87, 0.06);
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sakura-pink), var(--accent-color));
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(193, 63, 87, 0.3);
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h4 {
+  margin: 0 0 6px !important;
+  font-size: 16px;
+  color: var(--vp-c-text-1);
+}
+
+.step-content p {
+  margin: 0 !important;
+  font-size: 14.5px;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+}
+
+/* 例题精解交互卡片 */
+.example-box {
+  margin: 24px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 16px;
+  background: var(--vp-c-bg-elv);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.example-box:hover {
+  border-color: color-mix(in srgb, var(--sakura-pink) 50%, var(--vp-c-divider));
+}
+
+.example-header {
+  padding: 16px 20px;
+  background: color-mix(in srgb, var(--sakura-light) 40%, var(--vp-c-bg-elv));
+  border-bottom: 1px solid var(--vp-c-divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.example-tag {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--sakura-warm);
+  color: #8c4e0b;
+  font-weight: 600;
+}
+
+.dark .example-tag {
+  background: #3e2e1a;
+  color: #f6c888;
+}
+
+.example-body {
+  padding: 20px;
+}
+
+.example-details {
+  margin-top: 14px;
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--vp-c-bg) 60%, transparent);
+}
+
+.example-details > summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-color);
+  user-select: none;
+  font-size: 14.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.example-details > summary:hover {
+  text-decoration: underline;
+}
+
+.example-details[open] > summary {
+  border-bottom: 1px dashed var(--vp-c-divider);
+}
+
+.example-solution {
+  padding: 18px;
+}
+
+/* 交互测试卡片 */
+.quiz-panel {
+  margin: 16px 0;
+  border-radius: 14px;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  overflow: hidden;
+}
+
+.quiz-panel > summary {
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  user-select: none;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: color-mix(in srgb, var(--sakura-light) 25%, var(--vp-c-bg-elv));
+}
+
+.quiz-panel[open] > summary {
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.quiz-answer {
+  padding: 16px 18px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+/* SVG 图表外层容器 */
+.math-diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.math-diagram-caption {
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+  text-align: center;
+}
