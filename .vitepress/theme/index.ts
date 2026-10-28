@@ -1,4 +1,4 @@
-﻿import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme'
 import Layout from './Layout.vue'
 import HomeHero from './components/HomeHero.vue'
 import BlogList from './components/BlogList.vue'
@@ -11,6 +11,14 @@ import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
 import FriendLinks from './components/FriendLinks.vue'
 import AnimeList from './components/AnimeList.vue'
 import ShuoshuoTimeline from './components/ShuoshuoTimeline.vue'
+import MathShowcase from './components/MathShowcase.vue'
+import ExampleBox from './components/ExampleBox.vue'
+import ExampleSolution from './components/ExampleSolution.vue'
+import StepCards from './components/StepCards.vue'
+import StepCard from './components/StepCard.vue'
+import QuizPanel from './components/QuizPanel.vue'
+import OdeDecisionTree from './components/OdeDecisionTree.vue'
+import OdeIntegralCurves from './components/OdeIntegralCurves.vue'
 import './custom.css'
 
 export default {
@@ -28,5 +36,13 @@ export default {
     app.component('FriendLinks', FriendLinks)
     app.component('AnimeList', AnimeList)
     app.component('ShuoshuoTimeline', ShuoshuoTimeline)
+    app.component('MathShowcase', MathShowcase)
+    app.component('ExampleBox', ExampleBox)
+    app.component('ExampleSolution', ExampleSolution)
+    app.component('StepCards', StepCards)
+    app.component('StepCard', StepCard)
+    app.component('QuizPanel', QuizPanel)
+    app.component('OdeDecisionTree', OdeDecisionTree)
+    app.component('OdeIntegralCurves', OdeIntegralCurves)
   },
 }

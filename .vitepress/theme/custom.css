@@ -834,3 +834,68 @@ html {
   color: var(--vp-c-text-2);
   text-align: center;
 }
+
+
+/* ========== 数学教学卡片 Vue 组件适配 ========== */
+.math-showcase-body > :first-child { margin-top: 0 !important; }
+.math-showcase-body > :last-child { margin-bottom: 0 !important; }
+.math-showcase-body .katex-block { margin: 0; }
+
+.example-body > :first-child { margin-top: 0 !important; }
+.example-solution > :first-child { margin-top: 0 !important; }
+.example-solution > :last-child { margin-bottom: 0 !important; }
+.example-solution .katex-block { margin: 14px 0; }
+
+.step-content > :last-child { margin-bottom: 0 !important; }
+.step-content .katex-block { margin: 10px 0; }
+
+.quiz-panel > summary > p {
+  margin: 0 !important;
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.quiz-hint {
+  flex-shrink: 0;
+  margin-left: 12px;
+  color: var(--accent-color);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.quiz-answer > :first-child { margin-top: 0 !important; }
+.quiz-answer > :last-child { margin-bottom: 0 !important; }
+.quiz-answer .katex-block { margin: 12px 0; }
+
+/* SVG 图表主题配色变量 */
+.math-diagram-container svg {
+  --dg-axis: #94a3b8;
+  --dg-label: #64748b;
+  --dg-card-bg: #ffffff;
+  --dg-pink: #e11d48;
+  --dg-amber: #f59e0b;
+  --dg-title-a: #9f1239;
+  --dg-title-b: #92400e;
+  --dg-c1: #e11d48;
+  --dg-c2: #f43f5e;
+  --dg-c3: #059669;
+  --dg-c4: #3b82f6;
+  --dg-c5: #1d4ed8;
+}
+
+.dark .math-diagram-container svg {
+  --dg-axis: #64748b;
+  --dg-label: #94a3b8;
+  --dg-card-bg: var(--vp-c-bg-soft);
+  --dg-pink: #fb7185;
+  --dg-amber: #f59e0b;
+  --dg-title-a: #fb7185;
+  --dg-title-b: #fbbf24;
+  --dg-c1: #fb7185;
+  --dg-c2: #fda4af;
+  --dg-c3: #34d399;
+  --dg-c4: #60a5fa;
+  --dg-c5: #818cf8;
+}

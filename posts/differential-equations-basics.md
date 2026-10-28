@@ -27,70 +27,7 @@ cover: /covers/differential-equations-basics.svg
 
 在面对一道一阶微分方程时，最关键的能力是**快速识别类型并选择最直接的算法通道**：
 
-<div class="math-diagram-container">
-<svg viewBox="0 0 760 340" width="100%" height="100%" style="max-width: 720px; font-family: system-ui, -apple-system, sans-serif;">
-  <defs>
-    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.85" />
-      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.9" />
-    </linearGradient>
-    <linearGradient id="grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.85" />
-      <stop offset="100%" stop-color="#d97a8c" stop-opacity="0.9" />
-    </linearGradient>
-    <linearGradient id="grad-amber" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.85" />
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.9" />
-    </linearGradient>
-    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.12"/>
-    </filter>
-  </defs>
-
-  <!-- 根节点 -->
-  <g filter="url(#shadow)">
-    <rect x="250" y="15" width="260" height="54" rx="14" fill="url(#grad-blue)" />
-    <text x="380" y="42" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle" dominant-baseline="middle">一阶微分方程 dy/dx = F(x, y)</text>
-  </g>
-
-  <!-- 连线 -->
-  <path d="M 320 69 L 320 115 L 180 115 L 180 145" fill="none" stroke="#d97a8c" stroke-width="2.5" stroke-dasharray="4 4" />
-  <path d="M 440 69 L 440 115 L 580 115 L 580 145" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="4 4" />
-
-  <!-- 分支 A: 可分离变量 -->
-  <g filter="url(#shadow)">
-    <rect x="60" y="145" width="240" height="75" rx="14" fill="url(#grad-pink)" />
-    <text x="180" y="172" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">类型一：可分离变量方程</text>
-    <text x="180" y="198" fill="#ffe4e6" font-size="13" text-anchor="middle">dy/dx = f(x) · g(y)</text>
-  </g>
-
-  <!-- 分支 B: 齐次方程 -->
-  <g filter="url(#shadow)">
-    <rect x="460" y="145" width="240" height="75" rx="14" fill="url(#grad-amber)" />
-    <text x="580" y="172" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">类型二：齐次方程</text>
-    <text x="580" y="198" fill="#fef3c7" font-size="13" text-anchor="middle">dy/dx = f(y / x)</text>
-  </g>
-
-  <!-- 动作箭头向下 -->
-  <line x1="180" y1="220" x2="180" y2="255" stroke="#d97a8c" stroke-width="2.5" />
-  <line x1="580" y1="220" x2="580" y2="255" stroke="#f59e0b" stroke-width="2.5" />
-
-  <!-- 操作卡片 A -->
-  <g filter="url(#shadow)">
-    <rect x="40" y="255" width="280" height="65" rx="12" fill="#ffffff" stroke="#f43f5e" stroke-width="1.5" />
-    <text x="180" y="280" fill="#9f1239" font-size="13.5" font-weight="bold" text-anchor="middle">操作：x 归 x，y 归 y</text>
-    <text x="180" y="302" fill="#475569" font-size="13" text-anchor="middle">两端同时积分 ∫(1/g(y))dy = ∫f(x)dx + C</text>
-  </g>
-
-  <!-- 操作卡片 B -->
-  <g filter="url(#shadow)">
-    <rect x="440" y="255" width="280" height="65" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" />
-    <text x="580" y="280" fill="#92400e" font-size="13.5" font-weight="bold" text-anchor="middle">操作：令 u = y/x 换元降维</text>
-    <text x="580" y="302" fill="#475569" font-size="13" text-anchor="middle">dy/dx = u + x(du/dx) 转化为分离变量</text>
-  </g>
-</svg>
-<div class="math-diagram-caption">💡 图 1：一阶微分方程题型识别与解法流向图</div>
-</div>
+<OdeDecisionTree />
 
 ---
 
@@ -100,18 +37,13 @@ cover: /covers/differential-equations-basics.svg
 
 包含**自变量**、**未知函数**以及**未知函数的各阶导数（或微分）**的方程，称为**微分方程**（Differential Equation）。若未知函数仅有一个自变量，则称为**常微分方程**（Ordinary Differential Equation, 简称 ODE）。
 
-<div class="math-showcase">
-  <div class="math-showcase-title">
-    <span>📐 常微分方程的一般形式</span>
-  </div>
-  <div class="math-showcase-body">
+<MathShowcase title="📐 常微分方程的一般形式">
 
 $$
 F(x, y, y', y'', \cdots, y^{(n)}) = 0 \qquad \text{或显式形式：} \quad y^{(n)} = f(x, y, y', \cdots, y^{(n-1)})
 $$
 
-  </div>
-</div>
+</MathShowcase>
 
 ::: warning ⚠️ 准入红线：方程中必须出现导数或微分
 判断一个式子是否是微分方程，**唯一的标准是看它是否含有未知函数的导数（如 $y', y'', \frac{dy}{dx}$）或微分（如 $dy, dx$）**。
@@ -163,19 +95,11 @@ $$
 
 ### 4. 严密验证题：二阶方程通解判定
 
-<div class="example-box">
-  <div class="example-header">
-    <div class="example-title">
-      <span>📐 概念自检：验证二阶方程的通解</span>
-    </div>
-    <span class="example-tag">必考概念</span>
-  </div>
-  <div class="example-body">
-    <p><strong>题目</strong>：验证 $y = C_1 \cos x + C_2 \sin x$ 是微分方程 $y'' + y = 0$ 的通解。</p>
-    
-    <details class="example-details" open>
-      <summary>🔍 展开完整推导与得分要点</summary>
-      <div class="example-solution">
+<ExampleBox title="📐 概念自检：验证二阶方程的通解" tag="必考概念">
+
+**题目**：验证 $y = C_1 \cos x + C_2 \sin x$ 是微分方程 $y'' + y = 0$ 的通解。
+
+<ExampleSolution summary="🔍 展开完整推导与得分要点" :open="true">
 
 **【证】**
 
@@ -201,10 +125,9 @@ $$
 
 原方程的最高阶导数为 $y''$，阶数为 **2**；解中包含 $C_1, C_2$ 两个无法通过初等化简消除的**独立任意常数**。常数个数与方程阶数完全相等，故该解为原方程的**通解**。
 
-      </div>
-    </details>
-  </div>
-</div>
+</ExampleSolution>
+
+</ExampleBox>
 
 ---
 
@@ -224,29 +147,27 @@ $$
 
 ### 2. 标准解题三步法
 
-<div class="step-container">
-  <div class="step-card">
-    <div class="step-number">1</div>
-    <div class="step-content">
-      <h4>步骤一：分离变量（两军分立）</h4>
-      <p>将含 $y$ 和 $dy$ 的所有项移至左边，含 $x$ 和 $dx$ 的所有项移至右边：让左边只有 $y$，右边只有 $x$。</p>
-    </div>
-  </div>
-  <div class="step-card">
-    <div class="step-number">2</div>
-    <div class="step-content">
-      <h4>步骤二：两端同时求不定积分</h4>
-      <p>两边同时套上积分号，且只需在某一端加上一个任意常数 $C$：$\int \frac{1}{g(y)} dy = \int f(x) dx + C$。</p>
-    </div>
-  </div>
-  <div class="step-card">
-    <div class="step-number">3</div>
-    <div class="step-content">
-      <h4>步骤三：化简整理与常数吸收</h4>
-      <p>利用指数或对数性质去绝对值，将任意常数吸收整合（如令 $C = \pm e^{C_1}$），得出整洁漂亮的通解表达式。</p>
-    </div>
-  </div>
-</div>
+<StepCards>
+
+<StepCard num="1" title="步骤一：分离变量（两军分立）">
+
+将含 $y$ 和 $dy$ 的所有项移至左边，含 $x$ 和 $dx$ 的所有项移至右边：让左边只有 $y$，右边只有 $x$。
+
+</StepCard>
+
+<StepCard num="2" title="步骤二：两端同时求不定积分">
+
+两边同时套上积分号，且只需在某一端加上一个任意常数 $C$：$\int \frac{1}{g(y)} \, dy = \int f(x) \, dx + C$。
+
+</StepCard>
+
+<StepCard num="3" title="步骤三：化简整理与常数吸收">
+
+利用指数或对数性质去绝对值，将任意常数吸收整合（如令 $C = \pm e^{C_1}$），得出整洁漂亮的通解表达式。
+
+</StepCard>
+
+</StepCards>
 
 ---
 
@@ -254,59 +175,19 @@ $$
 
 我们在求解方程 $y' + xy = 0$ 时，求得通解为 $y = C e^{-\frac{x^2}{2}}$。**在几何上，常数 $C$ 的取值不同对应着平面上一组平滑伸展的积分曲线族**：
 
-<div class="math-diagram-container">
-<svg viewBox="0 0 680 300" width="100%" height="100%" style="max-width: 650px; font-family: system-ui, -apple-system, sans-serif;">
-  <!-- 坐标轴 -->
-  <line x1="60" y1="150" x2="620" y2="150" stroke="#94a3b8" stroke-width="1.8" />
-  <line x1="340" y1="280" x2="340" y2="20" stroke="#94a3b8" stroke-width="1.8" />
-  <polygon points="620,146 628,150 620,154" fill="#94a3b8" />
-  <polygon points="336,20 340,12 344,20" fill="#94a3b8" />
-  <text x="625" y="142" fill="#64748b" font-size="14" font-style="italic">x</text>
-  <text x="352" y="24" fill="#64748b" font-size="14" font-style="italic">y</text>
-  <text x="326" y="168" fill="#94a3b8" font-size="13">O</text>
-
-  <!-- 解曲线族：高斯型钟形曲线 y = C * exp(-x^2 / 2) -->
-  <!-- C = 2 (峰值在 y = 150 - 100 = 50) -->
-  <path d="M 120 148 Q 240 140 290 85 T 340 50 T 390 85 Q 440 140 560 148" fill="none" stroke="#e11d48" stroke-width="2.5" />
-  <text x="345" y="44" fill="#e11d48" font-size="12" font-weight="bold">C = 2</text>
-
-  <!-- C = 1 (峰值在 y = 150 - 50 = 100) -->
-  <path d="M 120 149 Q 240 145 290 115 T 340 100 T 390 115 Q 440 145 560 149" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3 2" />
-  <text x="345" y="94" fill="#f43f5e" font-size="12" font-weight="bold">C = 1</text>
-
-  <!-- C = 0 (y = 0 特解，沿 x 轴) -->
-  <line x1="100" y1="150" x2="580" y2="150" stroke="#059669" stroke-width="2" />
-  <text x="540" y="142" fill="#059669" font-size="12" font-weight="bold">C = 0 (y = 0)</text>
-
-  <!-- C = -1 (下凹高斯) -->
-  <path d="M 120 151 Q 240 155 290 185 T 340 200 T 390 185 Q 440 155 560 151" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="3 2" />
-  <text x="345" y="215" fill="#3b82f6" font-size="12" font-weight="bold">C = -1</text>
-
-  <!-- C = -2 (下凹高斯深谷) -->
-  <path d="M 120 152 Q 240 160 290 215 T 340 250 T 390 215 Q 440 160 560 152" fill="none" stroke="#1d4ed8" stroke-width="2.5" />
-  <text x="345" y="265" fill="#1d4ed8" font-size="12" font-weight="bold">C = -2</text>
-</svg>
-<div class="math-diagram-caption">💡 图 2：微分方程 y' + xy = 0 的积分曲线族 y = C · exp(-x²/2) 几何直观</div>
-</div>
+<OdeIntegralCurves />
 
 ---
 
 ### 4. 经典例题手把手精解
 
-<div class="example-box">
-  <div class="example-header">
-    <div class="example-title">
-      <span>📝 【例题 1】可分离变量基础题：求解 y' + xy = 0</span>
-    </div>
-    <span class="example-tag">常数吸收技巧</span>
-  </div>
-  <div class="example-body">
-    <p><strong>题目</strong>：求微分方程 $y' + xy = 0$ 的通解。</p>
-    <p>💡 <em>思路点拨：将 $y'$ 改写为 $\frac{dy}{dx}$，移项分离 $x$ 与 $y$。注意常数取绝对值时的合并手法。</em></p>
+<ExampleBox title="📝 【例题 1】可分离变量基础题：求解 y' + xy = 0" tag="常数吸收技巧">
 
-    <details class="example-details" open>
-      <summary>🔍 点击展开分步演算与避坑分析</summary>
-      <div class="example-solution">
+**题目**：求微分方程 $y' + xy = 0$ 的通解。
+
+💡 *思路点拨：将 $y'$ 改写为 $\frac{dy}{dx}$，移项分离 $x$ 与 $y$。注意常数取绝对值时的合并手法。*
+
+<ExampleSolution summary="🔍 点击展开分步演算与避坑分析" :open="true">
 
 **【解】**
 
@@ -352,24 +233,15 @@ $$
 y = C e^{-\frac{1}{2}x^2} \quad (C \text{ 为任意实常数})
 $$
 
-      </div>
-    </details>
-  </div>
-</div>
+</ExampleSolution>
 
-<div class="example-box">
-  <div class="example-header">
-    <div class="example-title">
-      <span>🎯 【例题 2】初值问题（求特解）：dy/dx = 2xy, y(0) = 1</span>
-    </div>
-    <span class="example-tag">特解锁定</span>
-  </div>
-  <div class="example-body">
-    <p><strong>题目</strong>：求微分方程 $\frac{dy}{dx} = 2xy$ 满足初始条件 $y(0) = 1$ 的特解。</p>
+</ExampleBox>
 
-    <details class="example-details">
-      <summary>🔍 点击展开求特解推导</summary>
-      <div class="example-solution">
+<ExampleBox title="🎯 【例题 2】初值问题（求特解）：dy/dx = 2xy, y(0) = 1" tag="特解锁定">
+
+**题目**：求微分方程 $\frac{dy}{dx} = 2xy$ 满足初始条件 $y(0) = 1$ 的特解。
+
+<ExampleSolution summary="🔍 点击展开求特解推导">
 
 **【解】**
 
@@ -397,10 +269,9 @@ $$
 y = e^{x^2}
 $$
 
-      </div>
-    </details>
-  </div>
-</div>
+</ExampleSolution>
+
+</ExampleBox>
 
 ---
 
@@ -425,11 +296,7 @@ $$
 
 齐次方程本身并不满足分离变量条件，但**只要换元，就能立刻化归为上一节的“可分离变量方程”**。
 
-<div class="math-showcase">
-  <div class="math-showcase-title">
-    <span>🔥 齐次方程灵魂换元三板斧（务必背诵）</span>
-  </div>
-  <div class="math-showcase-body">
+<MathShowcase title="🔥 齐次方程灵魂换元三板斧（务必背诵）">
 
 $$
 \begin{cases}
@@ -439,8 +306,7 @@ $$
 \end{cases}
 $$
 
-  </div>
-</div>
+</MathShowcase>
 
 ::: tip 💡 乘积求导法则解析
 很多初学者容易在这里漏掉项。因为 $u = u(x)$ 是 $x$ 的未知函数，根据乘积导数公式 $(uv)' = u'v + uv'$：
@@ -468,19 +334,11 @@ $$
 
 ### 3. 经典考题深入剖析
 
-<div class="example-box">
-  <div class="example-header">
-    <div class="example-title">
-      <span>⚡ 【例题 3】基础入门：求解 dy/dx = (x + y) / x</span>
-    </div>
-    <span class="example-tag">换元标准流</span>
-  </div>
-  <div class="example-body">
-    <p><strong>题目</strong>：求微分方程 $\frac{dy}{dx} = \frac{x + y}{x}$ 的通解。</p>
+<ExampleBox title="⚡ 【例题 3】基础入门：求解 dy/dx = (x + y) / x" tag="换元标准流">
 
-    <details class="example-details" open>
-      <summary>🔍 点击展开四步推导</summary>
-      <div class="example-solution">
+**题目**：求微分方程 $\frac{dy}{dx} = \frac{x + y}{x}$ 的通解。
+
+<ExampleSolution summary="🔍 点击展开四步推导" :open="true">
 
 **【解】**
 
@@ -520,25 +378,17 @@ $$
 
 此即原微分方程的通解。
 
-      </div>
-    </details>
-  </div>
-</div>
+</ExampleSolution>
 
-<div class="example-box">
-  <div class="example-header">
-    <div class="example-title">
-      <span>🏆 【例题 4】高频真题：求解 (x² + y²)dx - xy dy = 0</span>
-    </div>
-    <span class="example-tag">同次齐次项拆分</span>
-  </div>
-  <div class="example-body">
-    <p><strong>题目</strong>：求微分方程 $(x^2 + y^2) \, dx - xy \, dy = 0$ 的通解。</p>
-    <p>💡 <em>思路点拨：各项均为 2 次（$x^2, y^2, xy$），同除以 $x^2$ 瞬间呈现齐次比值。</em></p>
+</ExampleBox>
 
-    <details class="example-details" open>
-      <summary>🔍 点击展开完整解题细节</summary>
-      <div class="example-solution">
+<ExampleBox title="🏆 【例题 4】高频真题：求解 (x² + y²)dx - xy dy = 0" tag="同次齐次项拆分">
+
+**题目**：求微分方程 $(x^2 + y^2) \, dx - xy \, dy = 0$ 的通解。
+
+💡 *思路点拨：各项均为 2 次（$x^2, y^2, xy$），同除以 $x^2$ 瞬间呈现齐次比值。*
+
+<ExampleSolution summary="🔍 点击展开完整解题细节" :open="true">
 
 **【解】**
 
@@ -592,10 +442,9 @@ $$
 
 此即原方程的隐式通解。
 
-      </div>
-    </details>
-  </div>
-</div>
+</ExampleSolution>
+
+</ExampleBox>
 
 ---
 
@@ -603,47 +452,47 @@ $$
 
 读完这篇讲义，来测一测你对核心考点的掌握程度吧！（点击卡片即可展开解析）：
 
-<details class="quiz-panel">
-  <summary>
-    <span>❓ 测验 1：方程 $((y')^3)^2 + y''' = \sin x$ 的阶数是多少？</span>
-    <span style="color: var(--accent-color); font-size: 13px;">点击查看解析 ▼</span>
-  </summary>
-  <div class="quiz-answer">
+<QuizPanel>
+
+<template #question>
+
+❓ 测验 1：方程 $((y')^3)^2 + y''' = \sin x$ 的阶数是多少？
+
+</template>
 
 **【答案】**：**3 阶**。
 
 **【深度解析】**：阶数只取决于未知函数出现的**最高阶导数的阶数**。方程中最高阶导数为 $y'''$（三阶导数），虽然 $y'$ 的复合幂次达到了 6 次，但导数本身仍是一阶，因此整方程的阶数为 3。
 
-  </div>
-</details>
+</QuizPanel>
 
-<details class="quiz-panel">
-  <summary>
-    <span>❓ 测验 2：函数 $y = C_1 e^x + C_2 e^{x+2}$ 能否作为二阶方程的通解？</span>
-    <span style="color: var(--accent-color); font-size: 13px;">点击查看解析 ▼</span>
-  </summary>
-  <div class="quiz-answer">
+<QuizPanel>
+
+<template #question>
+
+❓ 测验 2：函数 $y = C_1 e^x + C_2 e^{x+2}$ 能否作为二阶方程的通解？
+
+</template>
 
 **【答案】**：**不能**。
 
 **【深度解析】**：利用指数性质，$C_2 e^{x+2} = (C_2 e^2) e^x$。原式可化为 $y = (C_1 + C_2 e^2) e^x = C e^x$。这里的两个常数并不独立，本质上只有 1 个独立任意常数，不能作为二阶方程的通解（二阶方程通解必须含有 2 个独立任意常数）。
 
-  </div>
-</details>
+</QuizPanel>
 
-<details class="quiz-panel">
-  <summary>
-    <span>❓ 测验 3：齐次方程在分离变量后积出 $\ln|y/x| = \ln|x| + C$，如何化简最优雅？</span>
-    <span style="color: var(--accent-color); font-size: 13px;">点击查看解析 ▼</span>
-  </summary>
-  <div class="quiz-answer">
+<QuizPanel>
+
+<template #question>
+
+❓ 测验 3：齐次方程分离变量后积出 $\ln\left|\frac{y}{x}\right| = \ln|x| + C$，如何化简最优雅？
+
+</template>
 
 **【答案】**：通解可优雅写为 **$y = C x^2$**。
 
-**【深度解析】**：将右边常数写为 $\ln C_1$（$C_1 > 0$），则 $\ln|\frac{y}{x}| = \ln(C_1 |x|) \implies |\frac{y}{x}| = C_1 |x| \implies y = \pm C_1 x^2$。将 $\pm C_1$ 结合 $y=0$ 统一吸收为任意常数 $C$，即得 $y = C x^2$。
+**【深度解析】**：将右边常数写为 $\ln C_1$（$C_1 > 0$），则 $\ln\left|\frac{y}{x}\right| = \ln(C_1 |x|) \implies \left|\frac{y}{x}\right| = C_1 |x| \implies y = \pm C_1 x^2$。将 $\pm C_1$ 结合 $y=0$ 统一吸收为任意常数 $C$，即得 $y = C x^2$。
 
-  </div>
-</details>
+</QuizPanel>
 
 ---
 
