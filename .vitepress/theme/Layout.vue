@@ -77,6 +77,7 @@ const Live2DWidget = defineAsyncComponent(() => import('./components/Live2DWidge
 import CursorGlow from './components/CursorGlow.vue'
 import PostNavigation from './components/PostNavigation.vue'
 import CopyToast from './components/CopyToast.vue'
+import { inferPostType } from '../post-utils.mjs'
 
 const { frontmatter } = useData()
 const route = useRoute()
@@ -136,11 +137,7 @@ function formatDate(d: string | Date): string {
   })
 }
 
-const inferredType = computed(() => {
-  const key = `${frontmatter.value.title || ''} ${(frontmatter.value.tags || []).join(' ')}`
-  if (/真题|专插本|考点|考试/.test(key)) return '资料整理'
-  if (/教程|指南|入门|技巧|基础|学习/.test(key)) return '教程'
-  if (/随笔|生活|日常/.test(key)) return '随笔'
-  return '学习笔记'
-})
+const inferredType = computed(() =>
+  inferPostType(frontmatter.value.tags || [], frontmatter.value.title || ''),
+)
 </script>

@@ -1,38 +1,10 @@
 import { defineConfig } from 'vitepress'
-import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { katex } from '@mdit/plugin-katex'
 import { SITE, absoluteAsset, absoluteUrl, toSocialImage } from './site.constants.mjs'
 import { gitLastUpdated } from './last-updated.mjs'
-
-interface PostMeta {
-  title: string
-  date: number
-  slug: string
-}
-
-function loadPosts(): PostMeta[] {
-  const cwd = process.cwd()
-  const postDir = path.join(cwd, 'posts')
-  if (!fs.existsSync(postDir)) return []
-
-  return fs
-    .readdirSync(postDir)
-    .filter((f) => f.endsWith('.md') && f !== 'index.md')
-    .map((f) => {
-      const raw = fs.readFileSync(path.join(postDir, f), 'utf-8')
-      const { data } = matter(raw)
-      if (!data.title) return null
-      return {
-        title: data.title as string,
-        date: +new Date(data.date) || fs.statSync(path.join(postDir, f)).mtimeMs,
-        slug: f.replace(/\.md$/, ''),
-      }
-    })
-    .filter((p): p is PostMeta => p !== null)
-    .sort((a, b) => b.date - a.date)
-}
+import { loadPosts } from './posts.mjs'
 
 function shortenNavTitle(title: string, maxLength = 24): string {
   const characters = Array.from(title)
@@ -72,7 +44,7 @@ function tokenizeSearchText(text: string): string[] {
   ) ?? []
 }
 
-const posts = loadPosts()
+const posts = loadPosts(path.join(process.cwd(), 'posts'))
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({

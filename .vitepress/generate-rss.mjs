@@ -4,9 +4,9 @@
  */
 import fs from 'node:fs'
 import path from 'node:path'
-import matter from 'gray-matter'
 import { SITE as SITE_CONFIG, SITE_URL, absoluteAsset, toSocialImage } from './site.constants.mjs'
 import { gitLastUpdated } from './last-updated.mjs'
+import { loadPosts } from './posts.mjs'
 
 const SITE = {
   title: SITE_CONFIG.title,
@@ -32,29 +32,18 @@ function rfc3339(ts) {
 }
 
 function main() {
-  const files = fs.readdirSync(POST_DIR).filter(f => f.endsWith('.md') && f !== 'index.md')
-
-  const posts = files
-    .map(f => {
-      const raw = fs.readFileSync(path.join(POST_DIR, f), 'utf-8')
-      const { data, content, excerpt } = matter(raw, { excerpt: true, excerpt_separator: '<!-- more -->' })
-      if (!data.title) return null
-      const slug = f.replace(/\.md$/, '')
-      const date = +new Date(data.date) || fs.statSync(path.join(POST_DIR, f)).mtimeMs
-      const coverSource = data.cover === false ? null : (data.cover || `/covers/${slug}.svg`)
-      // 阅读器普遍不渲染 SVG，封面改用光栅化后的分享图。
-      const coverAsset = coverSource ? toSocialImage(coverSource).path : null
-      const cover = coverAsset
-        ? (String(coverAsset).startsWith('http') ? String(coverAsset) : absoluteAsset(coverAsset))
-        : null
-      const desc = data.description || (excerpt || '').trim() || SITE.desc
-      // 真实更新时间取 Git 提交时间，且不早于发布时间。
-      const gitDate = gitLastUpdated(`posts/${f}`)
-      const updated = gitDate ? Math.max(+new Date(gitDate) || date, date) : date
-      return { title: data.title, date, slug, excerpt: desc, cover, updated }
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.date - a.date)
+  const posts = loadPosts(POST_DIR).map(post => {
+    // 阅读器通常不渲染 SVG，所以改用光栅化后的分享图。
+    const coverAsset = post.cover ? toSocialImage(post.cover).path : null
+    const cover = coverAsset
+      ? (String(coverAsset).startsWith('http') ? String(coverAsset) : absoluteAsset(coverAsset))
+      : null
+    const desc = post.data.description || (post.excerpt || '').trim() || SITE.desc
+    // 真实更新时间取 Git 提交时间，且不能早于发布时间。
+    const gitDate = gitLastUpdated(`posts/${post.file}`)
+    const updated = gitDate ? Math.max(+new Date(gitDate) || post.date, post.date) : post.date
+    return { title: post.data.title, date: post.date, slug: post.slug, excerpt: desc, cover, updated }
+  })
 
   const updated = posts.length > 0
     ? rfc3339(Math.max(...posts.map(p => p.updated)))
