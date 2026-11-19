@@ -5,6 +5,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { loadPosts } from './posts.mjs'
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -15,15 +16,7 @@ export default {
     const postDir = path.join(cwd, 'posts')
     const now = Date.now()
 
-    const posts = fs
-      .readdirSync(postDir)
-      .filter((f) => f.endsWith('.md') && f !== 'index.md')
-      .map((f) => {
-        const raw = fs.readFileSync(path.join(postDir, f), 'utf-8')
-        const { data, content } = matter(raw)
-        return { date: +new Date(data.date) || 0, content }
-      })
-      .filter((p) => p.date > 0)
+    const posts = loadPosts(postDir)
 
     // 总字数（中文字 + 英文单词）
     let totalWords = 0
