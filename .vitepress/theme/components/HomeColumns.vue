@@ -5,7 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import BlogList from './BlogList.vue'
+import { defineAsyncComponent } from 'vue'
+
+const BlogList = defineAsyncComponent(() => import('./BlogList.vue'))
 </script>
 
 <style scoped>
