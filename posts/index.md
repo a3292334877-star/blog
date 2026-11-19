@@ -1,7 +1,6 @@
 ---
 title: 文章列表
 comments: false
-banner: false
 aside: false
 pageClass: posts-index-page
 ---

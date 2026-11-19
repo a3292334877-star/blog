@@ -312,11 +312,14 @@ export default defineConfig({
     const socialCover = coverSource && !String(coverSource).startsWith('http')
       ? toSocialImage(String(coverSource))
       : null
+    // 栏目页没有专属封面时回退到站点默认分享图（scripts/generate-og-images.mjs 生成），
+    // 否则 /posts/、/tags/、/about/ 等页面分享出去没有缩略图。
+    const usesDefaultSocial = !coverSource && !isHome
     const cover = coverSource
       ? (String(coverSource).startsWith('http')
           ? String(coverSource)
           : absoluteAsset(socialCover!.path))
-      : (isHome ? absoluteAsset('/avatar.webp') : null)
+      : (isHome ? absoluteAsset('/avatar.webp') : absoluteAsset('/og/site.webp'))
     const pagePath = pageData.relativePath
       .replace(/\.md$/, '')
       .replace(/(^|\/)index$/, '$1')
@@ -344,7 +347,7 @@ export default defineConfig({
     if (cover) {
       head.push(['meta', { property: 'og:image', content: cover }])
       head.push(['meta', { name: 'twitter:image', content: cover }])
-      if (socialCover?.rasterized) {
+      if (socialCover?.rasterized || usesDefaultSocial) {
         head.push(['meta', { property: 'og:image:type', content: 'image/webp' }])
         head.push(['meta', { property: 'og:image:width', content: '1200' }])
         head.push(['meta', { property: 'og:image:height', content: '630' }])

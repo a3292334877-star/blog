@@ -4,8 +4,6 @@ description: 关于 Sakiko：计算机专业学生、日语 N1 学习者，记�
 comments: false
 ---
 
-# 关于我 👤
-
 ## Sakiko
 
 - 计算机小白，梦想是全球旅游，最后定居日本，想去美国欧洲

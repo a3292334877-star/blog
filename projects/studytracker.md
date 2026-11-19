@@ -6,8 +6,6 @@ tags: [项目, Flutter, Dart]
 cover: /projects/studytracker.webp
 ---
 
-# StudyTracker - 初音未来主题学习助手 📱
-
 一款以初音未来为主题的二次元风格学习辅助工具，集番茄钟、背单词和学习统计于一体。
 
 <!-- more -->

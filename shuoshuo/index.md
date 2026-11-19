@@ -4,8 +4,6 @@ description: Sakiko 的日常碎碎念、心路历程与生活随笔。
 layout: doc
 ---
 
-# 说说 💬
-
 记录日常灵感、学习打卡与成长足迹。
 
 <ShuoshuoTimeline />

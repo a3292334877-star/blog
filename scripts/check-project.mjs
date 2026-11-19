@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
-import { dirname, extname, join, relative, resolve } from 'node:path'
+import { basename, dirname, extname, join, relative, resolve } from 'node:path'
 import matter from 'gray-matter'
 import { SITE } from '../.vitepress/site.constants.mjs'
 
@@ -40,7 +40,8 @@ for (const file of filesUnder(postsDir).filter((path) => extname(path) === '.md'
   }
   if (typeof data.title !== 'string' || !data.title.trim()) fail(`${name}: missing title`)
   if (!data.date || Number.isNaN(new Date(data.date).valueOf())) fail(`${name}: invalid date`)
-  const slug = file.slice(file.lastIndexOf('/') + 1).replace(/\.md$/, '')
+  // 不能按 '/' 切分：Windows 上路径分隔符是 '\\'，会把整条绝对路径当成 slug。
+  const slug = basename(file).replace(/\.md$/, '')
   const cover = data.cover === false ? null : (data.cover || `/covers/${slug}.svg`)
   if (cover) checkLocalAsset(String(cover), `${name} cover`)
 }

@@ -4,8 +4,6 @@ description: Sakiko 的追番记录与个人评分，按神作级、强烈推荐
 layout: doc
 ---
 
-# 追番列表 🎬
-
 这里是 Sakiko 的追番记录。评分纯属个人观感，仅供参考。包含京都动画专题、年度力作与个人私心神作。
 
 <AnimeList />

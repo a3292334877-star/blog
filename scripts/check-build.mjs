@@ -27,9 +27,9 @@ if (!existsSync(dist)) {
   if (existsSync(homepagePath)) {
     const homepage = readFileSync(homepagePath, 'utf8')
     const requiredFragments = [
-      '<link rel="canonical" href="https://sakikoblog.info/">',
-      '<meta property="og:url" content="https://sakikoblog.info/">',
-      '<meta property="og:image" content="https://sakikoblog.info/avatar.webp">',
+      `<link rel="canonical" href="${SITE_URL}/">`,
+      `<meta property="og:url" content="${SITE_URL}/">`,
+      `<meta property="og:image" content="${SITE_URL}/avatar.webp">`,
       '<script type="application/ld+json">',
     ]
     for (const fragment of requiredFragments) {

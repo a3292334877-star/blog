@@ -6,8 +6,6 @@ tags: [项目, Flutter, Dart, SQLite]
 cover: /projects/henrycat.webp
 ---
 
-# Henrycat - 你的课表，优雅掌控 📅
-
 一款面向大学生的课程表管理应用，支持手动添加课程、教务系统一键导入、时间冲突检测和课表分享。
 
 <!-- more -->
