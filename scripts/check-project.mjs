@@ -61,6 +61,40 @@ try {
   fail(`public/live2d/model.json: ${error.message}`)
 }
 
+/** 校验 public 下的站点绝对路径是否存在且非空。 */
+function checkPublicPath(sitePath, label) {
+  if (!sitePath || !String(sitePath).startsWith('/')) return
+  const relativePath = String(sitePath).replace(/^\//, '').replace(/\/$/, '/index.html')
+  const target = join(root, 'public', relativePath)
+  if (!existsSync(target)) fail(`${label}: missing public/${relativePath}`)
+  else if (statSync(target).size === 0) fail(`${label}: empty public/${relativePath}`)
+}
+
+// 轻译 PWA：manifest 图标与 service worker 预缓存文件必须真实存在。
+const translateManifest = join(root, 'public', 'translate', 'manifest.webmanifest')
+try {
+  const manifest = JSON.parse(readFileSync(translateManifest, 'utf8'))
+  const icons = Array.isArray(manifest.icons) ? manifest.icons : []
+  if (!icons.length) fail('translate manifest: missing icons')
+  for (const icon of icons) checkPublicPath(icon?.src, 'translate manifest icon')
+} catch (error) {
+  fail(`public/translate/manifest.webmanifest: ${error.message}`)
+}
+
+const serviceWorkerPath = join(root, 'public', 'translate', 'sw.js')
+try {
+  const source = readFileSync(serviceWorkerPath, 'utf8')
+  const shell = source.match(/const SHELL\s*=\s*\[([\s\S]*?)\]/)
+  if (!shell) fail('public/translate/sw.js: SHELL list not found')
+  else {
+    for (const entry of shell[1].matchAll(/["']([^"']+)["']/g)) {
+      checkPublicPath(entry[1], 'translate service worker shell')
+    }
+  }
+} catch (error) {
+  fail(`public/translate/sw.js: ${error.message}`)
+}
+
 if (errors.length) {
   console.error(`Project check failed with ${errors.length} error(s):`)
   for (const error of errors) console.error(`- ${error}`)

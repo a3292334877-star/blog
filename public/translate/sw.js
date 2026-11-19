@@ -1,10 +1,14 @@
-const CACHE = "qingyi-static-v2";
+const CACHE = "qingyi-static-v3";
 const SHELL = [
   "/translate/",
   "/translate/index.html",
   "/translate/app.css",
   "/translate/app.js",
-  "/translate/manifest.webmanifest"
+  "/translate/manifest.webmanifest",
+  "/translate/icons/icon-192.png",
+  "/translate/icons/icon-512.png",
+  "/translate/icons/icon-maskable-512.png",
+  "/translate/icons/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", (event) => {
