@@ -79,7 +79,6 @@ async function main() {
 
   const covers = fs.readdirSync(COVER_DIR).filter((file) => file.endsWith('.svg'))
   let built = 0
-  let skipped = 0
 
   for (const file of covers) {
     const source = path.join(COVER_DIR, file)
@@ -87,7 +86,6 @@ async function main() {
 
     // 封面没变就跳过，避免每次 build 都重新光栅化。
     if (fs.existsSync(target) && fs.statSync(target).mtimeMs >= fs.statSync(source).mtimeMs) {
-      skipped += 1
       continue
     }
 

@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import { useData } from 'vitepress'
+// @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data } from '../../home.data.mjs'
 
 const { site } = useData()

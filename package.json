@@ -5,6 +5,8 @@
   "description": "Sakikoの博客 - VitePress",
   "scripts": {
     "check": "node scripts/check-project.mjs",
+    "lint": "eslint .",
+    "typecheck": "vue-tsc --noEmit",
     "dev": "node scripts/generate-covers.mjs && node scripts/generate-og-images.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress dev",
     "build": "node scripts/clean-vitepress-cache.mjs && node scripts/generate-covers.mjs && node scripts/generate-og-images.mjs && npm run check && node .vitepress/generate-music.mjs && vitepress build && node .vitepress/generate-rss.mjs && node .vitepress/generate-robots.mjs && node scripts/check-build.mjs",
     "preview": "vitepress preview"
@@ -22,7 +24,15 @@
     "vitepress": "^1.6.4"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.15.0",
+    "eslint-plugin-vue": "^10.12.1",
+    "globals": "^17.14.0",
     "sass-embedded": "^1.100.0",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vue-tsc": "^3.3.14"
   }
 }

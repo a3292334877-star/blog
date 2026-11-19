@@ -49,7 +49,7 @@
 
     <!-- 时光轴主体 -->
     <div class="timeline-stream">
-      <div v-for="(group, yIndex) in groupedShuoshuo" :key="group.year" class="year-group">
+      <div v-for="group in groupedShuoshuo" :key="group.year" class="year-group">
         <div class="year-marker">
           <span class="year-flag">{{ group.year }}</span>
           <div class="year-line"></div>

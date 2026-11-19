@@ -79,6 +79,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+// @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as stats } from '../../site.data.mjs'
 import { useVisitorCounter } from '../composables/useVisitorCounter'
 import { useCountUp } from '../composables/useCountUp'

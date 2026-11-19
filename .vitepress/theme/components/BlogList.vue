@@ -60,6 +60,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted } from 'vue'
 import { useData } from 'vitepress'
+// @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
 
 const props = withDefaults(defineProps<{
@@ -78,9 +79,9 @@ const base = site.value.base
 const selectedType = ref('全部')
 const selectedTag = ref('全部')
 const selectedYear = ref('全部')
-const types = computed(() => ['全部', ...new Set(posts.map((p) => p.type).filter(Boolean))])
-const tags = computed(() => ['全部', ...new Set(posts.flatMap((p) => p.tags || []))])
-const years = computed(() => ['全部', ...new Set(posts.map((p) => String(new Date(p.create).getFullYear())))])
+const types = computed<string[]>(() => ['全部', ...new Set<string>(posts.map((p) => String(p.type)))])
+const tags = computed<string[]>(() => ['全部', ...new Set<string>(posts.flatMap((p) => (p.tags || []).map(String)))])
+const years = computed<string[]>(() => ['全部', ...new Set<string>(posts.map((p) => String(new Date(p.create).getFullYear())))])
 const filteredPosts = computed(() => posts.filter((p) =>
   (selectedType.value === '全部' || p.type === selectedType.value)
   && (selectedTag.value === '全部' || p.tags?.includes(selectedTag.value))

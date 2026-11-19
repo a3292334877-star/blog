@@ -456,7 +456,7 @@ function esc(s) {
 }
 
 function visualWidth(text) {
-  return [...text].reduce((sum, char) => sum + (/^[\x00-\xff]$/.test(char) ? 0.55 : 1), 0)
+  return [...text].reduce((sum, char) => sum + ((char.codePointAt(0) ?? 0) <= 0xff ? 0.55 : 1), 0)
 }
 
 function wrapTitle(title, maxWidth = 18) {

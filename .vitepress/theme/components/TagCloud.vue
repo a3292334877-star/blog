@@ -37,8 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useData } from 'vitepress'
+// @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
 
 const { site } = useData()
@@ -63,11 +64,12 @@ function syncFromUrl() {
   active.value = q && tagMap.value[q] ? q : null
 }
 
-const route = useRoute()
-
-// 首次挂载后读取 URL 参数；之后前进/后退或 query 变化时同步筛选状态。
-onMounted(syncFromUrl)
-watch(() => route.fullPath, syncFromUrl)
+// 首次挂载后读取 URL 参数；浏览器前进/后退时同步筛选状态。
+onMounted(() => {
+  syncFromUrl()
+  window.addEventListener('popstate', syncFromUrl)
+})
+onUnmounted(() => window.removeEventListener('popstate', syncFromUrl))
 
 const maxCount = computed(() => Math.max(...Object.values(tagMap.value).map(a => a.length), 1))
 
