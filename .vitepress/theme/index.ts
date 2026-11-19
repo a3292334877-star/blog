@@ -18,6 +18,8 @@ const AnimeList = defineAsyncComponent(() => import('./components/AnimeList.vue'
 const ShuoshuoTimeline = defineAsyncComponent(() => import('./components/ShuoshuoTimeline.vue'))
 const OdeDecisionTree = defineAsyncComponent(() => import('./components/OdeDecisionTree.vue'))
 const OdeIntegralCurves = defineAsyncComponent(() => import('./components/OdeIntegralCurves.vue'))
+const CalculusMethodTree = defineAsyncComponent(() => import('./components/CalculusMethodTree.vue'))
+const DerivativeIntegralVisual = defineAsyncComponent(() => import('./components/DerivativeIntegralVisual.vue'))
 
 export default {
   extends: DefaultTheme,
@@ -37,5 +39,7 @@ export default {
     app.component('QuizPanel', QuizPanel)
     app.component('OdeDecisionTree', OdeDecisionTree)
     app.component('OdeIntegralCurves', OdeIntegralCurves)
+    app.component('CalculusMethodTree', CalculusMethodTree)
+    app.component('DerivativeIntegralVisual', DerivativeIntegralVisual)
   },
 }
