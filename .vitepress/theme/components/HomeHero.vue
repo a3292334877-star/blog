@@ -1,7 +1,7 @@
 <template>
   <section class="home-hero" aria-labelledby="hero-title">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-mobile-visual" aria-hidden="true"></div>
+    <div class="hero-bg" :style="heroImageStyle" aria-hidden="true"></div>
+    <div class="hero-mobile-visual" :style="mobileImageStyle" aria-hidden="true"></div>
 
     <div class="hero-shell">
       <div class="hero-copy">
@@ -55,6 +55,14 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { withBase } from 'vitepress'
+
+// 背景图路径交给 withBase，部署到子路径时也不会失效。
+const heroImageStyle = {
+  '--hero-image': `url("${withBase('/backgrounds/k-on-hero.webp')}")`,
+}
+const mobileImageStyle = {
+  '--hero-image-mobile': `url("${withBase('/backgrounds/k-on-hero-mobile.webp')}")`,
+}
 
 const mottos = [
   '至死不渝地追逐清华梦 🩷',
@@ -132,7 +140,7 @@ function scrollDown() {
   background:
     linear-gradient(90deg, rgba(4, 9, 28, .78) 0%, rgba(4, 10, 31, .48) 38%, rgba(4, 10, 31, .1) 68%, rgba(4, 9, 28, .2) 100%),
     linear-gradient(0deg, rgba(3, 7, 23, .9) 0%, rgba(3, 8, 26, .34) 46%, rgba(3, 8, 26, .12) 76%, rgba(3, 7, 23, .3) 100%),
-    url('/backgrounds/k-on-hero.webp') center center / cover no-repeat;
+    var(--hero-image) center center / cover no-repeat;
   filter: saturate(.96) contrast(1.02);
   transform: scale(1.01);
 }
@@ -285,7 +293,7 @@ h1 strong::after {
   background:
     linear-gradient(90deg, rgba(2, 6, 21, .82) 0%, rgba(3, 8, 26, .54) 42%, rgba(3, 8, 26, .18) 72%, rgba(2, 6, 21, .3) 100%),
     linear-gradient(0deg, rgba(2, 5, 18, .94) 0%, rgba(2, 6, 21, .42) 48%, rgba(2, 6, 21, .2) 100%),
-    url('/backgrounds/k-on-hero.webp') center center / cover no-repeat;
+    var(--hero-image) center center / cover no-repeat;
   filter: saturate(.82) brightness(.88);
 }
 :global(.dark) .hero-copy { background: linear-gradient(135deg, rgba(4, 8, 24, .84), rgba(8, 13, 31, .72)); }
@@ -302,7 +310,7 @@ h1 strong::after {
     display: block;
     width: 100%;
     aspect-ratio: 960 / 1357;
-    background: #eee0c7 url('/backgrounds/k-on-hero-mobile.webp') center / contain no-repeat;
+    background: #eee0c7 var(--hero-image-mobile) center / contain no-repeat;
   }
   .hero-shell {
     width: 100%;

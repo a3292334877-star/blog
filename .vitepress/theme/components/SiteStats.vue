@@ -96,11 +96,11 @@ const monthNewRef = ref(stats.monthNew)
 const weekNewRef = ref(stats.weekNew)
 const projectCountRef = ref(stats.projectCount)
 
-const wordsDisplay = useCountUp(wordsRef, 1200)
-const runDaysDisplay = useCountUp(runDaysRef, 1000)
-const monthNewDisplay = useCountUp(monthNewRef, 800)
-const weekNewDisplay = useCountUp(weekNewRef, 800)
-const projectCountDisplay = useCountUp(projectCountRef, 800)
+const wordsDisplay = useCountUp(wordsRef, 1200, true)
+const runDaysDisplay = useCountUp(runDaysRef, 1000, true)
+const monthNewDisplay = useCountUp(monthNewRef, 800, true)
+const weekNewDisplay = useCountUp(weekNewRef, 800, true)
+const projectCountDisplay = useCountUp(projectCountRef, 800, true)
 
 function fmtNum(n: number) {
   return n.toLocaleString('zh-CN')

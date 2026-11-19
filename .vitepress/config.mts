@@ -312,6 +312,7 @@ export default defineConfig({
       ['meta', { property: 'og:title', content: title }],
       ['meta', { property: 'og:description', content: desc }],
       ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:locale', content: 'zh_CN' }],
       ['meta', { name: 'twitter:card', content: cover ? 'summary_large_image' : 'summary' }],
       ['meta', { name: 'twitter:title', content: title }],
       ['meta', { name: 'twitter:description', content: desc }],
@@ -319,10 +320,20 @@ export default defineConfig({
     if (cover) {
       head.push(['meta', { property: 'og:image', content: cover }])
       head.push(['meta', { name: 'twitter:image', content: cover }])
+      head.push(['meta', { property: 'og:image:alt', content: title }])
+      head.push(['meta', { name: 'twitter:image:alt', content: title }])
       if (socialCover?.rasterized || usesDefaultSocial) {
         head.push(['meta', { property: 'og:image:type', content: 'image/webp' }])
         head.push(['meta', { property: 'og:image:width', content: '1200' }])
         head.push(['meta', { property: 'og:image:height', content: '630' }])
+      }
+    }
+
+    // 文章页补充 Open Graph / Twitter 之外的时间信息，社交平台和阅读器可直接读取。
+    if (isPost && fm.date) {
+      head.push(['meta', { property: 'article:published_time', content: new Date(fm.date).toISOString() }])
+      if (lastModifiedAt) {
+        head.push(['meta', { property: 'article:modified_time', content: new Date(lastModifiedAt).toISOString() }])
       }
     }
 

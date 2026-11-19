@@ -8,11 +8,13 @@ head:
       as: image
       href: /backgrounds/k-on-hero.webp
       media: '(min-width: 821px)'
+      fetchpriority: high
   - - link
     - rel: preload
       as: image
       href: /backgrounds/k-on-hero-mobile.webp
       media: '(max-width: 820px)'
+      fetchpriority: high
 ---
 
 <!-- 首页内容通过 home-hero-before / home-hero-after 插槽注入 -->

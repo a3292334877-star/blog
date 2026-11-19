@@ -1,15 +1,18 @@
-import { ref, watch, onUnmounted, type Ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted, type Ref } from 'vue'
 
 /**
  * 数字 count-up 动画
  *
  * @param target 目标数值（响应式，可为 null 表示尚未就绪）
  * @param duration 动画时长（毫秒），默认 1200
+ * @param animateOnMount 初始值即目标值的静态数据，挂载后再从 0 滚到目标；
+ *   服务端和客户端首次渲染仍是目标值，不会出现 hydration mismatch。
  * @returns 当前显示值（从 0 平滑增长到 target）
  */
 export function useCountUp(
   target: Ref<number | null>,
   duration = 1200,
+  animateOnMount = false,
 ): Ref<number> {
   // 静态数据在 SSR 与客户端首次渲染时保持一致，避免 hydration mismatch。
   // 异步数据（初始为 null）仍会在抵达后从 0 开始动画。
@@ -60,6 +63,13 @@ export function useCountUp(
       if (v !== null && v !== undefined && v !== display.value) start(v)
     },
   )
+
+  // 静态数据（如站点统计）不会触发 watch，挂载后主动滚一次。
+  onMounted(() => {
+    if (!animateOnMount || target.value === null || target.value === undefined) return
+    display.value = 0
+    start(target.value)
+  })
 
   onUnmounted(() => {
     if (rafId !== null) cancelAnimationFrame(rafId)
