@@ -4,7 +4,7 @@
 
 ## 本地开发
 
-要求 Node.js 20 或更高版本（CI 使用 Node.js 22）。
+Node.js 版本以 `.nvmrc` 为准（当前为 22）。
 
 ```bash
 npm ci
@@ -14,11 +14,13 @@ npm run dev
 提交前执行：
 
 ```bash
+npm run lint
+npm run typecheck
 npm run check
 npm run build
 ```
 
-`npm run check` 会检查文章 frontmatter、封面资源和 Live2D 核心资源，避免无效资源进入部署产物。
+`npm run lint` 使用 ESLint 检查脚本与 Vue 组件，`npm run typecheck` 使用 vue-tsc 做类型检查；`npm run check` 会检查文章 frontmatter、封面资源、Live2D 核心资源和翻译 PWA 预缓存文件，避免无效资源进入部署产物。
 
 ## 可选服务
 
