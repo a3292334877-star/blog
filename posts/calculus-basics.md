@@ -21,6 +21,8 @@ cover: /covers/calculus-basics.svg
 
 <!-- more -->
 
+![暖光书桌上的微积分手绘笔记：曲线、割线与曲边阴影面积](/images/posts/calculus-study-desk.webp)
+
 ---
 
 ## 🧭 不定积分方法决策导图

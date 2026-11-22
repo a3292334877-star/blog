@@ -21,6 +21,8 @@ cover: /covers/differential-equations-basics.svg
 
 <!-- more -->
 
+![墨绿色黑板上用粉笔绘制的对称高斯钟形积分曲线族](/images/posts/ode-curves-board.webp)
+
 ---
 
 ## 🧭 一阶微分方程解法决策导图

@@ -21,6 +21,8 @@ cover: /covers/japan-master-application.svg
 
 <!-- more -->
 
+![春日樱花掩映下的日本大学红砖校园与前往图书馆的学生](/images/posts/japan-master-campus.webp)
+
 ::: warning ⚠️ 信息时效说明
 本文基于 2026 年前后的普遍情况整理，**具体条件、金额与截止日期以目标校最新《募集要項》和入管局要求为准**。文中的费用均为日元参考区间，汇率与个人消费习惯会带来较大差异。
 :::

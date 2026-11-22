@@ -10,6 +10,8 @@ cover: /covers/hello-world.svg
 
 <!-- more -->
 
+![黄昏樱花窗边的程序员书桌：代码编辑器、机械键盘与热茶](/images/posts/sakiko-coding-desk.webp)
+
 ## 关于这个博客
 
 使用了 VitePress 构建，樱花风格的静态博客。
