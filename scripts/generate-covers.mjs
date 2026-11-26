@@ -106,6 +106,13 @@ const COVERS = [
     gradient: ['#1d4ed8', '#0f172a'],
     decor: decorCodeWindow,
   },
+  {
+    slug: 'cpp-tutorial',
+    title: 'C++ 从零到进阶',
+    subtitle: '教程 · C++ · 编程',
+    gradient: ['#0e7490', '#1e1b4b'],
+    decor: decorCpp,
+  },
 ]
 
 const AUTO_PALETTES = [
@@ -140,7 +147,8 @@ function inferDecor(title, tags) {
     [/矩阵|线性代数/, decorMatrix],
     [/高数|数学|微积分/, decorIntegral],
     [/java/, decorCoffee],
-    [/c\+\+|c语言|编程|代码|算法/, decorCodeWindow],
+    [/c\+\+/, decorCpp],
+    [/c语言|编程|代码|算法/, decorCodeWindow],
   ]
   return rules.find(([pattern]) => pattern.test(key))?.[1] ?? decorSakuraEarth
 }
@@ -419,6 +427,28 @@ function decorIntegral() {
   <!-- 坐标轴 -->
   <line x1="830" y1="340" x2="1080" y2="340" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
   <line x1="830" y1="120" x2="830" y2="340" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+  `
+}
+
+/** C++：大号标识 + STL 标签 */
+function decorCpp() {
+  return `
+  <text x="795" y="300" font-size="150" fill="rgba(255,255,255,0.14)" font-family="'Fira Code',monospace">{</text>
+  <text x="1075" y="300" font-size="150" fill="rgba(255,255,255,0.14)" font-family="'Fira Code',monospace" text-anchor="end">}</text>
+  <text x="940" y="190" font-size="104" font-weight="800" fill="rgba(255,255,255,0.94)" font-family="'Fira Code',monospace" text-anchor="middle">C++</text>
+  <text x="940" y="232" font-size="17" fill="rgba(255,255,255,0.72)" font-family="'Fira Code',monospace" text-anchor="middle">#include &lt;iostream&gt;</text>
+  <g font-family="'Fira Code',monospace" font-size="15" fill="rgba(255,255,255,0.9)" text-anchor="middle">
+    <rect x="800" y="280" width="96" height="30" rx="8" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+    <text x="848" y="300">vector</text>
+    <rect x="908" y="280" width="70" height="30" rx="8" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+    <text x="943" y="300">map</text>
+    <rect x="990" y="280" width="92" height="30" rx="8" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+    <text x="1036" y="300">string</text>
+    <rect x="818" y="332" width="128" height="30" rx="8" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+    <text x="882" y="352">unique_ptr</text>
+    <rect x="958" y="332" width="84" height="30" rx="8" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+    <text x="1000" y="352">lambda</text>
+  </g>
   `
 }
 
