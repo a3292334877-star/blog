@@ -60,36 +60,43 @@
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import { useData, useRoute, withBase } from 'vitepress'
 import { computed, watch, nextTick, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
-import mediumZoom from 'medium-zoom'
-import HomeHero from './components/HomeHero.vue'
-import AboutStrip from './components/AboutStrip.vue'
-import HomeCategories from './components/HomeCategories.vue'
-import HomeColumns from './components/HomeColumns.vue'
-import AnimePreview from './components/AnimePreview.vue'
-import ProjectsPreview from './components/ProjectsPreview.vue'
-import ShuoshuoPreview from './components/ShuoshuoPreview.vue'
-import SiteStats from './components/SiteStats.vue'
-import SakuraPetals from './components/SakuraPetals.vue'
-import ReadingProgress from './components/ReadingProgress.vue'
 import BackToTop from './components/BackToTop.vue'
-import GiscusComment from './components/GiscusComment.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
-const Live2DWidget = defineAsyncComponent(() => import('./components/Live2DWidget.vue'))
 import CursorGlow from './components/CursorGlow.vue'
-import PostNavigation from './components/PostNavigation.vue'
 import CopyToast from './components/CopyToast.vue'
 import { inferPostType } from '../post-utils.mjs'
+
+const HomeHero = defineAsyncComponent(() => import('./components/HomeHero.vue'))
+const AboutStrip = defineAsyncComponent(() => import('./components/AboutStrip.vue'))
+const HomeCategories = defineAsyncComponent(() => import('./components/HomeCategories.vue'))
+const HomeColumns = defineAsyncComponent(() => import('./components/HomeColumns.vue'))
+const AnimePreview = defineAsyncComponent(() => import('./components/AnimePreview.vue'))
+const ProjectsPreview = defineAsyncComponent(() => import('./components/ProjectsPreview.vue'))
+const ShuoshuoPreview = defineAsyncComponent(() => import('./components/ShuoshuoPreview.vue'))
+const SiteStats = defineAsyncComponent(() => import('./components/SiteStats.vue'))
+const SakuraPetals = defineAsyncComponent(() => import('./components/SakuraPetals.vue'))
+const Live2DWidget = defineAsyncComponent(() => import('./components/Live2DWidget.vue'))
+const ReadingProgress = defineAsyncComponent(() => import('./components/ReadingProgress.vue'))
+const PostNavigation = defineAsyncComponent(() => import('./components/PostNavigation.vue'))
+const GiscusComment = defineAsyncComponent(() => import('./components/GiscusComment.vue'))
 
 const { frontmatter } = useData()
 const route = useRoute()
 const isHome = computed(() => route.path === withBase('/'))
 
 // Image lightbox — re-attach on route change
-let zoom: ReturnType<typeof mediumZoom> | null = null
+let zoom: { detach: () => void } | null = null
+let zoomRequestId = 0
 
-function attachZoom() {
+async function attachZoom() {
+  const requestId = ++zoomRequestId
   zoom?.detach()
-  zoom = mediumZoom('.main img:not([data-no-zoom])', {
+  zoom = null
+  const targets = document.querySelectorAll('.main img:not([data-no-zoom])')
+  if (!targets.length) return
+  const { default: mediumZoom } = await import('medium-zoom')
+  if (requestId !== zoomRequestId) return
+  zoom = mediumZoom(targets, {
     background: 'var(--vp-c-bg)',
     margin: 24,
   })
@@ -98,12 +105,16 @@ function attachZoom() {
 onMounted(() => {
   watch(
     () => route.path,
-    () => nextTick(attachZoom),
+    () => nextTick(() => { void attachZoom() }),
     { immediate: true },
   )
 })
 
-onUnmounted(() => zoom?.detach())
+onUnmounted(() => {
+  zoomRequestId++
+  zoom?.detach()
+  zoom = null
+})
 
 // 文章页顶部横幅样式
 // 使用对象绑定而非字符串拼接，避免 cover 字段含 ; / ) 破坏样式或注入新属性

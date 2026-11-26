@@ -15,7 +15,19 @@ function shortenNavTitle(title: string, maxLength = 24): string {
 
 /** 仅在特定页面使用的异步组件 chunk，避免在全站所有页面提前 modulepreload。 */
 const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
+  HomeHero: (page) => page === 'index.md',
+  AboutStrip: (page) => page === 'index.md',
+  HomeCategories: (page) => page === 'index.md',
+  HomeColumns: (page) => page === 'index.md',
+  AnimePreview: (page) => page === 'index.md',
+  ProjectsPreview: (page) => page === 'index.md',
+  ShuoshuoPreview: (page) => page === 'index.md',
+  SiteStats: (page) => page === 'index.md',
+  SakuraPetals: (page) => page === 'index.md',
   Live2DWidget: (page) => page === 'index.md',
+  ReadingProgress: (page) => page !== 'index.md',
+  PostNavigation: (page) => page !== 'index.md',
+  GiscusComment: (page) => page !== 'index.md',
   BlogList: (page) => page === 'index.md' || page === 'posts/index.md',
   BlogTimeline: (page) => page === 'posts/index.md',
   TagCloud: (page) => page === 'tags/index.md',
@@ -26,6 +38,7 @@ const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
   DerivativeIntegralVisual: (page) => page === 'posts/calculus-basics.md',
   OdeDecisionTree: (page) => page === 'posts/differential-equations-basics.md',
   OdeIntegralCurves: (page) => page === 'posts/differential-equations-basics.md',
+  'medium-zoom': () => false,
   VPLocalSearchBox: () => false,
 }
 

@@ -109,15 +109,6 @@ declare global {
 }
 
 async function loadResources(): Promise<void> {
-  // Font Awesome（live2d-widget 依赖）
-  if (!document.querySelector('link[data-live2d="fa"]')) {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = withBase('/live2d/font-awesome.min.css')
-    link.setAttribute('data-live2d', 'fa')
-    document.head.appendChild(link)
-  }
-
   // L2Dwidget JS（已本地化，不依赖 CDN）
   if (!window.L2Dwidget) {
     await new Promise<void>((resolve, reject) => {
