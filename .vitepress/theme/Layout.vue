@@ -2,7 +2,7 @@
   <DefaultTheme.Layout>
     <template #layout-top>
       <CursorGlow />
-      <ReadingProgress />
+      <ReadingProgress v-if="!isHome" />
       <SakuraPetals v-if="isHome" />
     </template>
 
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme-without-fonts'
 import { useData, useRoute, withBase } from 'vitepress'
 import { computed, watch, nextTick, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import mediumZoom from 'medium-zoom'

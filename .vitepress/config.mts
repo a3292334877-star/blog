@@ -13,6 +13,29 @@ function shortenNavTitle(title: string, maxLength = 24): string {
     : title
 }
 
+/** 仅在特定页面使用的异步组件 chunk，避免在全站所有页面提前 modulepreload。 */
+const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
+  Live2DWidget: (page) => page === 'index.md',
+  BlogList: (page) => page === 'index.md' || page === 'posts/index.md',
+  BlogTimeline: (page) => page === 'posts/index.md',
+  TagCloud: (page) => page === 'tags/index.md',
+  FriendLinks: (page) => page === 'friends/index.md',
+  AnimeList: (page) => page === 'anime/index.md',
+  ShuoshuoTimeline: (page) => page === 'shuoshuo/index.md',
+  CalculusMethodTree: (page) => page === 'posts/calculus-basics.md',
+  DerivativeIntegralVisual: (page) => page === 'posts/calculus-basics.md',
+  OdeDecisionTree: (page) => page === 'posts/differential-equations-basics.md',
+  OdeIntegralCurves: (page) => page === 'posts/differential-equations-basics.md',
+  VPLocalSearchBox: () => false,
+}
+
+function shouldKeepPreloadTag(tag: string, page: string): boolean {
+  const match = tag.match(/href="[^"]*\/assets\/chunks\/([^./"]+)\.[^"]+\.js"/)
+  if (!match) return true
+  const rule = SCOPED_PRELOAD_CHUNKS[match[1]]
+  return rule ? rule(page) : true
+}
+
 /** 取日期（或日期字符串）的 YYYY-MM-DD，用于比较“发布”与“更新”是否同一天。 */
 function dayKey(value: unknown): string {
   const date = new Date(value as string)
@@ -381,5 +404,12 @@ export default defineConfig({
       ...(lastUpdated ? { lastUpdated } : {}),
       head: [...existingHead, ...head],
     }
+  },
+
+  transformHtml(code: string, _id: string, ctx: { page: string }) {
+    return code.replace(
+      /[ \t]*<link rel="modulepreload" href="[^"]+">\r?\n?/g,
+      (tag) => (shouldKeepPreloadTag(tag, ctx.page) ? tag : ''),
+    )
   },
 })

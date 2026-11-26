@@ -1,4 +1,4 @@
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme-without-fonts'
 import { defineAsyncComponent } from 'vue'
 import Layout from './Layout.vue'
 import MathShowcase from './components/MathShowcase.vue'
