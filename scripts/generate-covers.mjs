@@ -99,6 +99,13 @@ const COVERS = [
     gradient: ['#e17055', '#fdcb6e'],
     decor: decorCoffee,
   },
+  {
+    slug: 'ruankao-intermediate-guide',
+    title: '软考中级（软件设计师）通关指南',
+    subtitle: '软考 · 软件设计师 · 备考',
+    gradient: ['#1d4ed8', '#0f172a'],
+    decor: decorCodeWindow,
+  },
 ]
 
 const AUTO_PALETTES = [
