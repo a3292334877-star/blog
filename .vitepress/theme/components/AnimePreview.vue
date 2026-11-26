@@ -2,14 +2,14 @@
   <section class="home-preview anime-preview">
     <h2 class="section-heading">
       <span class="icon">🎬</span> 最近追番
-      <a :href="withBase('anime/')" class="more-link">全部 →</a>
+      <a :href="resolveSitePath('anime/')" class="more-link">全部 →</a>
     </h2>
 
     <div class="anime-grid">
       <a
         v-for="a in anime"
         :key="a.name"
-        :href="withBase('anime/')"
+        :href="resolveSitePath('anime/')"
         class="anime-card"
         :style="{ animationDelay: indexDelay(a) }"
       >
@@ -25,13 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { resolveSitePath } from '../utils'
 // @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data } from '../../home.data.mjs'
-
-const { site } = useData()
-const base = site.value.base
-function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const anime = data.anime
 function rank(a: { name: string }) { return anime.findIndex(x => x.name === a.name) + 1 }

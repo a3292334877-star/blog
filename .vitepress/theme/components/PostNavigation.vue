@@ -1,12 +1,12 @@
 <template>
   <section v-if="current" class="post-navigation" aria-label="文章导航与推荐">
     <nav class="post-pagination" aria-label="上一篇和下一篇">
-      <a v-if="older" :href="withBase(older.href)" class="post-link post-link--older">
+      <a v-if="older" :href="resolveSitePath(older.href)" class="post-link post-link--older">
         <span>← 上一篇</span>
         <strong>{{ older.title }}</strong>
       </a>
       <span v-else class="post-link post-link--empty" aria-hidden="true"></span>
-      <a v-if="newer" :href="withBase(newer.href)" class="post-link post-link--newer">
+      <a v-if="newer" :href="resolveSitePath(newer.href)" class="post-link post-link--newer">
         <span>下一篇 →</span>
         <strong>{{ newer.title }}</strong>
       </a>
@@ -15,8 +15,8 @@
     <div v-if="related.length" class="related-posts">
       <h2>相关文章</h2>
       <div class="related-grid">
-        <a v-for="post in related" :key="post.href" :href="withBase(post.href)" class="related-card">
-          <img v-if="post.cover" :src="post.cover" :alt="post.title" loading="lazy">
+        <a v-for="post in related" :key="post.href" :href="resolveSitePath(post.href)" class="related-card">
+          <img v-if="post.cover" :src="resolveSitePath(post.cover)" :alt="post.title" loading="lazy">
           <strong>{{ post.title }}</strong>
           <span>{{ post.summary }} · 阅读 {{ post.readingTime }} 分钟</span>
         </a>
@@ -28,21 +28,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
+import { normalizeSitePath, resolveSitePath } from '../utils'
 // @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
 
 const route = useRoute()
 const { site } = useData()
 
-function normalized(path: string) {
-  return path.replace(site.value.base, '/').replace(/^\//, '').replace(/\/$/, '')
-}
-
-function withBase(path: string) {
-  return site.value.base + path.replace(/^\//, '')
-}
-
-const currentIndex = computed(() => posts.findIndex((post) => normalized(route.path) === post.href))
+const currentIndex = computed(() => posts.findIndex((post) => normalizeSitePath(route.path, site.value.base) === post.href))
 const current = computed(() => currentIndex.value >= 0 ? posts[currentIndex.value] : null)
 const newer = computed(() => currentIndex.value > 0 ? posts[currentIndex.value - 1] : null)
 const older = computed(() => currentIndex.value >= 0 && currentIndex.value < posts.length - 1 ? posts[currentIndex.value + 1] : null)

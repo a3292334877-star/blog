@@ -67,6 +67,7 @@ body {
 
 /* 选中 */
 ::selection { background: var(--sakura-light); color: #333; }
+.dark ::selection { color: var(--vp-c-text-1); }
 
 /* 链接 */
 .vp-doc a {
@@ -94,22 +95,11 @@ body {
 }
 
 /* ========== 导航栏定制 ========== */
-.VPNavBar {
+.VPNavBar,
+.VPNavBar.has-sidebar {
   background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-}
-
-.dark .VPNavBar {
-  background: rgba(26, 26, 26, 0.85) !important;
-}
-
-.VPNavBar.has-sidebar {
-  background: rgba(255, 255, 255, 0.85) !important;
-}
-
-.dark .VPNavBar.has-sidebar {
-  background: rgba(26, 26, 26, 0.85) !important;
 }
 
 /* ========== 首页定制 ========== */

@@ -11,36 +11,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
+import { useWindowScroll } from '../composables/useWindowScroll'
 
-const show = ref(false)
-let ticking = false
-
-function update() {
-  show.value = window.scrollY > 300
-}
-
-function onScroll() {
-  if (ticking) return
-  ticking = true
-  requestAnimationFrame(() => {
-    update()
-    ticking = false
-  })
-}
+const { scrollY } = useWindowScroll()
+const show = computed(() => scrollY.value > 300)
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-
-onMounted(() => {
-  update()
-  window.addEventListener('scroll', onScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
-})
 </script>
 
 <style scoped>

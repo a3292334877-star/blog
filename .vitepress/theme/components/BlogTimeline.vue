@@ -2,7 +2,7 @@
   <section class="timeline-section">
     <h2 class="section-heading">
       <span class="icon">📅</span> {{ title }}
-      <a v-if="showMore" class="section-more" :href="withBase('/posts/')">全部文章 →</a>
+      <a v-if="showMore" class="section-more" :href="resolveSitePath('/posts/')">全部文章 →</a>
     </h2>
 
     <div class="timeline">
@@ -18,7 +18,7 @@
             <span class="mdot"></span>
             <span class="mline"></span>
           </div>
-          <a :href="withBase(p.href)" class="card">
+          <a :href="resolveSitePath(p.href)" class="card">
             <time class="date">{{ fmtShort(p.create) }}</time>
             <span class="title">{{ p.title }}</span>
             <span class="tags" v-if="p.tags?.length">
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+import { resolveSitePath } from '../utils'
 // @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
 
@@ -47,11 +47,6 @@ const props = withDefaults(defineProps<{
   title: '文章时间线',
   showMore: true,
 })
-
-const { site } = useData()
-const base = site.value.base
-
-function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const grouped = computed(() => {
   const m: Record<string, typeof posts> = {}

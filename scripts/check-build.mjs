@@ -39,6 +39,7 @@ if (!existsSync(dist)) {
 
   // 仓库说明文档不应该变成公开页面（之前 README.md 会被编译成 /README 并进 sitemap）。
   if (existsSync(join(dist, 'README.html'))) fail('README.md was built into a public page')
+  if (existsSync(join(dist, 'AGENTS.html'))) fail('AGENTS.md was built into a public page')
 
   // 搜索结果里不该出现 404 页。
   const sitemapPath = join(dist, 'sitemap.xml')

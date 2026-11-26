@@ -67,7 +67,7 @@ export default defineConfig({
   lastUpdated: true,
 
   // README 是给仓库看的说明，之前会被编译成 /README 页面并进入 sitemap 和搜索索引。
-  srcExclude: ['README.md', '**/CODEX-HANDOFF.md'],
+  srcExclude: ['README.md', 'AGENTS.md', '**/AGENTS.md', '**/CODEX-HANDOFF.md'],
 
   // Sitemap
   sitemap: {
@@ -189,10 +189,12 @@ export default defineConfig({
             ? content.replace(/^\s*#\s+[^\n]+\n+/, '')
             : content
 
-          return md.render(
+          const html = md.render(
             [title, description, tags, body].filter(Boolean).join('\n\n'),
             env,
           )
+          // KaTeX MathML 会附带原始 TeX <annotation>，去掉该标签避免公式语法词条膨胀搜索索引。
+          return html.replace(/<annotation[^>]*>[\s\S]*?<\/annotation>/g, '')
         },
         miniSearch: {
           options: {
@@ -253,14 +255,8 @@ export default defineConfig({
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (id.includes('katex') || id.includes('@mdit/plugin-katex')) {
-                return 'vendor-katex'
-              }
               if (id.includes('minisearch')) {
                 return 'vendor-minisearch'
-              }
-              if (id.includes('@supabase')) {
-                return 'vendor-supabase'
               }
             }
           },

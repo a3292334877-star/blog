@@ -2,7 +2,7 @@
   <section class="blog-list-section">
     <h2 class="section-heading">
       <span class="icon">📖</span> {{ title }}
-      <a v-if="showMore" class="section-more" :href="withBase('/posts/')">查看全部 →</a>
+      <a v-if="showMore" class="section-more" :href="resolveSitePath('/posts/')">查看全部 →</a>
     </h2>
 
     <div class="post-filters" v-if="posts.length > 1">
@@ -24,10 +24,10 @@
         class="post-card"
         :style="{ animationDelay: i * 80 + 'ms' }"
       >
-        <a :href="withBase(p.href)" class="card-cover" v-if="p.cover">
-          <img :src="p.cover" :alt="p.title" loading="lazy" />
+        <a :href="resolveSitePath(p.href)" class="card-cover" v-if="p.cover">
+          <img :src="resolveSitePath(p.cover)" :alt="p.title" loading="lazy" />
         </a>
-        <a :href="withBase(p.href)" class="card-cover card-cover--placeholder" v-else aria-hidden="true">
+        <a :href="resolveSitePath(p.href)" class="card-cover card-cover--placeholder" v-else aria-hidden="true">
           <span class="placeholder-icon">🌸</span>
         </a>
         <div class="card-body">
@@ -36,7 +36,7 @@
             <span class="reading-time">阅读 {{ p.readingTime }} 分钟</span>
             <span class="post-type">{{ p.type }}</span>
           </div>
-          <a :href="withBase(p.href)" class="card-title">{{ p.title }}</a>
+          <a :href="resolveSitePath(p.href)" class="card-title">{{ p.title }}</a>
           <p class="card-excerpt">{{ p.summary }}</p>
           <div class="card-tags" v-if="p.tags?.length">
             <a
@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch, onMounted } from 'vue'
-import { useData } from 'vitepress'
+import { resolveSitePath } from '../utils'
 // @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
 
@@ -72,9 +72,6 @@ const props = withDefaults(defineProps<{
   title: '最新文章',
   showMore: true,
 })
-
-const { site } = useData()
-const base = site.value.base
 
 const selectedType = ref('全部')
 const selectedTag = ref('全部')
@@ -108,12 +105,8 @@ onMounted(() => {
 })
 watch([selectedType, selectedTag, selectedYear], syncFilters)
 
-function withBase(p: string) {
-  return base + p.replace(/^\//, '')
-}
-
 function tagHref(tag: string) {
-  return withBase(`tags/?q=${encodeURIComponent(tag)}`)
+  return resolveSitePath(`tags/?q=${encodeURIComponent(tag)}`)
 }
 
 function fmtDate(ts: number) {

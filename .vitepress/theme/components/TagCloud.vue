@@ -17,7 +17,7 @@
     <!-- 筛选文章 -->
     <div v-if="active" class="filtered">
       <h2>{{ active }} <span class="n">{{ tagMap[active].length }} 篇</span></h2>
-      <a v-for="p in tagMap[active]" :key="p.href" :href="withBase(p.href)" class="link">
+      <a v-for="p in tagMap[active]" :key="p.href" :href="resolveSitePath(p.href)" class="link">
         <span>{{ p.title }}</span>
         <time>{{ fmt(p.create) }}</time>
       </a>
@@ -27,7 +27,7 @@
     <div v-else>
       <div v-for="(arr, tag) in tagMap" :key="tag" class="group">
         <h2>{{ tag }} <span class="n">{{ arr.length }} 篇</span></h2>
-        <a v-for="p in arr" :key="p.href" :href="withBase(p.href)" class="link">
+        <a v-for="p in arr" :key="p.href" :href="resolveSitePath(p.href)" class="link">
           <span>{{ p.title }}</span>
           <time>{{ fmt(p.create) }}</time>
         </a>
@@ -38,13 +38,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useData } from 'vitepress'
+import { resolveSitePath } from '../utils'
 // @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
 import { data as posts } from '../../posts.data.mjs'
-
-const { site } = useData()
-const base = site.value.base
-function withBase(p: string) { return base + p.replace(/^\//, '') }
 
 const active = ref<string | null>(null)
 

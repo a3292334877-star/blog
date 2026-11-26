@@ -3,36 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useWindowScroll } from '../composables/useWindowScroll'
 
-const progress = ref(0)
-let ticking = false
-
-function update() {
-  const scrollTop = window.scrollY
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight
-  progress.value = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0
-}
-
-function onScroll() {
-  if (ticking) return
-  ticking = true
-  requestAnimationFrame(() => {
-    update()
-    ticking = false
-  })
-}
-
-onMounted(() => {
-  update()
-  window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', onScroll)
-})
+const { progress } = useWindowScroll()
 </script>
 
 <style scoped>
