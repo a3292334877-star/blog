@@ -71,6 +71,9 @@ function checkPublicPath(sitePath, label) {
 }
 
 // 轻译 PWA：manifest 图标与 service worker 预缓存文件必须真实存在。
+checkPublicPath('/music.json', 'music metadata')
+checkPublicPath('/music.lrc', 'music lyrics')
+
 const translateManifest = join(root, 'public', 'translate', 'manifest.webmanifest')
 try {
   const manifest = JSON.parse(readFileSync(translateManifest, 'utf8'))
