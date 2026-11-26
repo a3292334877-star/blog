@@ -22,6 +22,13 @@
         <button
           class="lyrics-mini-btn"
           type="button"
+          :aria-label="isMuted ? '取消静音' : '静音'"
+          :title="isMuted ? '取消静音' : `音量 ${volumePercent}%（点击静音）`"
+          @click="toggleMute"
+        >{{ volumeIcon }}</button>
+        <button
+          class="lyrics-mini-btn"
+          type="button"
           aria-label="展开歌词面板"
           title="展开歌词面板"
           @click="lyricsMode = 'drawer'"
@@ -88,6 +95,28 @@
           <span class="lyrics-time">{{ formatClock(duration) }}</span>
         </div>
 
+        <div class="lyrics-volume-row">
+          <button
+            class="lyrics-icon-btn"
+            type="button"
+            :aria-label="isMuted ? '取消静音' : '静音'"
+            :title="isMuted ? '取消静音' : '静音'"
+            @click="toggleMute"
+          >{{ volumeIcon }}</button>
+          <input
+            class="lyrics-volume-slider"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            :value="isMuted ? 0 : volumePercent"
+            aria-label="音量调节"
+            :aria-valuetext="isMuted ? '静音' : `${volumePercent}%`"
+            @input="onVolumeInput"
+          >
+          <span class="lyrics-volume-value">{{ isMuted ? '静音' : `${volumePercent}%` }}</span>
+        </div>
+
         <div ref="scrollBox" class="lyrics-scroll">
           <p v-if="lyricsLoading" class="lyrics-empty">歌词加载中…</p>
           <p v-else-if="lyricsError" class="lyrics-empty">暂无歌词内容</p>
@@ -150,6 +179,10 @@ const playing = ref(false)
 const buffering = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
+const VOLUME_STORAGE_KEY = 'sakiko-music-volume'
+const MUTED_STORAGE_KEY = 'sakiko-music-muted'
+const volumePercent = ref(80)
+const muted = ref(false)
 const lyricsMode = ref<LyricsMode>('hidden')
 const lyricsDismissed = ref(false)
 const lyricsLoading = ref(false)
@@ -225,6 +258,11 @@ const activeIndex = computed(() => {
 })
 
 const activeLine = computed(() => (activeIndex.value >= 0 ? lyrics.value[activeIndex.value] : null))
+const isMuted = computed(() => muted.value || volumePercent.value === 0)
+const volumeIcon = computed(() => {
+  if (isMuted.value) return '🔇'
+  return volumePercent.value < 50 ? '🔉' : '🔊'
+})
 
 const pillMainText = computed(() => {
   if (lyricsLoading.value) return '正在加载歌词…'
@@ -309,10 +347,22 @@ const onError = (e: Event) => {
 }
 
 onMounted(() => {
+  try {
+    const rawVol = localStorage.getItem(VOLUME_STORAGE_KEY)
+    if (rawVol !== null && rawVol !== '') {
+      const savedVol = Number(rawVol)
+      if (Number.isFinite(savedVol) && savedVol >= 0 && savedVol <= 100) {
+        volumePercent.value = Math.round(savedVol)
+      }
+    }
+    muted.value = localStorage.getItem(MUTED_STORAGE_KEY) === '1'
+  } catch {}
+
   // 不在首屏设置 src；只有用户主动播放时才开始请求 4MB+ 音频。
   audio = new Audio()
   audio.loop = true
   audio.preload = 'none'
+  applyAudioVolume()
   audio.addEventListener('play', onPlay)
   audio.addEventListener('pause', onPause)
   audio.addEventListener('ended', onEnded)
@@ -407,6 +457,40 @@ function onSeekInput(event: Event) {
   if (!Number.isFinite(value)) return
   audio.currentTime = value
   currentTime.value = value
+}
+
+function applyAudioVolume() {
+  if (!audio) return
+  audio.volume = Math.min(1, Math.max(0, volumePercent.value / 100))
+  audio.muted = muted.value
+}
+
+function persistVolume() {
+  try {
+    localStorage.setItem(VOLUME_STORAGE_KEY, String(volumePercent.value))
+    localStorage.setItem(MUTED_STORAGE_KEY, muted.value ? '1' : '0')
+  } catch {}
+}
+
+function onVolumeInput(event: Event) {
+  const target = event.target as HTMLInputElement
+  const next = Math.round(Number(target.value))
+  if (!Number.isFinite(next)) return
+  volumePercent.value = Math.min(100, Math.max(0, next))
+  muted.value = volumePercent.value === 0
+  applyAudioVolume()
+  persistVolume()
+}
+
+function toggleMute() {
+  if (isMuted.value) {
+    if (volumePercent.value === 0) volumePercent.value = 80
+    muted.value = false
+  } else {
+    muted.value = true
+  }
+  applyAudioVolume()
+  persistVolume()
 }
 
 function formatClock(sec: number): string {
@@ -610,6 +694,26 @@ function formatClock(sec: number): string {
   gap: 8px;
   padding: 8px 14px;
   border-bottom: 1px solid color-mix(in srgb, var(--vp-c-divider) 60%, transparent);
+}
+.lyrics-volume-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--vp-c-divider) 60%, transparent);
+}
+.lyrics-volume-slider {
+  flex: 1;
+  height: 4px;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+.lyrics-volume-value {
+  min-width: 36px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
 }
 .lyrics-time {
   font-size: 11px;
