@@ -6,6 +6,14 @@ import { SITE, absoluteAsset, absoluteUrl, toSocialImage } from './site.constant
 import { gitLastUpdated } from './last-updated.mjs'
 import { loadPosts } from './posts.mjs'
 
+/**
+ * 搜索索引中剔除代码块：源码对正文检索帮助有限，却会随长文迅速撑大索引。
+ * 正文里的行内代码（如 `std::vector`）仍然保留，文章标题与摘要不受影响。
+ */
+function stripCodeBlocks(content: string): string {
+  return content.replace(/^```[^\n]*\n[\s\S]*?^```[^\n]*$/gm, '')
+}
+
 function shortenNavTitle(title: string, maxLength = 24): string {
   const characters = Array.from(title)
   return characters.length > maxLength
@@ -221,9 +229,11 @@ export default defineConfig({
           const title = data.title ? `# ${String(data.title)}` : ''
           const description = data.description ? String(data.description) : ''
           const tags = Array.isArray(data.tags) ? data.tags.join(' ') : ''
-          const body = title
-            ? content.replace(/^\s*#\s+[^\n]+\n+/, '')
-            : content
+          const body = stripCodeBlocks(
+            title
+              ? content.replace(/^\s*#\s+[^\n]+\n+/, '')
+              : content,
+          )
 
           const html = md.render(
             [title, description, tags, body].filter(Boolean).join('\n\n'),
