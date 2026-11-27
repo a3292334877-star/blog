@@ -11,7 +11,8 @@ import { loadPosts } from './posts.mjs'
  * 正文里的行内代码（如 `std::vector`）仍然保留，文章标题与摘要不受影响。
  */
 function stripCodeBlocks(content: string): string {
-  return content.replace(/^```[^\n]*\n[\s\S]*?^```[^\n]*$/gm, '')
+  // 同时匹配缩进与引用块内的围栏代码（如 `> ```c`）。
+  return content.replace(/^[ \t]*(?:>[ \t]*)*(?:```|~~~)[^\n]*\n[\s\S]*?^[ \t]*(?:>[ \t]*)*(?:```|~~~)[^\n]*$/gm, '')
 }
 
 function shortenNavTitle(title: string, maxLength = 24): string {
@@ -20,6 +21,22 @@ function shortenNavTitle(title: string, maxLength = 24): string {
     ? `${characters.slice(0, maxLength).join('')}…`
     : title
 }
+
+const MATH_POST_PAGES = new Set([
+  'posts/calculus-basics.md',
+  'posts/differential-equations-basics.md',
+])
+const STEP_CARD_PAGES = new Set([
+  ...MATH_POST_PAGES,
+  'posts/japan-master-application.md',
+])
+const QUIZ_PANEL_PAGES = new Set([
+  ...STEP_CARD_PAGES,
+  'posts/cet6-practical-guide.md',
+  'posts/cpp-tutorial.md',
+  'posts/japanese-grammar-watershed.md',
+  'posts/ruankao-intermediate-guide.md',
+])
 
 /** 仅在特定页面使用的异步组件 chunk，避免在全站所有页面提前 modulepreload。 */
 const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
@@ -46,6 +63,12 @@ const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
   DerivativeIntegralVisual: (page) => page === 'posts/calculus-basics.md',
   OdeDecisionTree: (page) => page === 'posts/differential-equations-basics.md',
   OdeIntegralCurves: (page) => page === 'posts/differential-equations-basics.md',
+  MathShowcase: (page) => MATH_POST_PAGES.has(page),
+  ExampleBox: (page) => MATH_POST_PAGES.has(page),
+  ExampleSolution: (page) => MATH_POST_PAGES.has(page),
+  StepCards: (page) => STEP_CARD_PAGES.has(page),
+  StepCard: (page) => STEP_CARD_PAGES.has(page),
+  QuizPanel: (page) => QUIZ_PANEL_PAGES.has(page),
   'medium-zoom': () => false,
   VPLocalSearchBox: () => false,
 }
@@ -86,6 +109,19 @@ function tokenizeSearchText(text: string): string[] {
   return normalized.match(
     /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]|[\p{Letter}\p{Number}_+#.-]+/gu,
   ) ?? []
+}
+
+/**
+ * 过滤高频中文虚词（的、与、是……）。它们几乎出现在每个段落里，
+ * 却无法区分结果，单独占用了索引约 7% 的条目；查询时同样会被忽略。
+ * 日语假名助词不在此列，学习文章需要能搜到「は」「が」等语法点。
+ *
+ * 此函数会被 VitePress 序列化到客户端，因此必须保持自包含。
+ */
+function processSearchTerm(term: string): string | null {
+  return /^(?:的|了|与|和|及|或|是|在|从|到|为|对|把|被|将|让|也|就|都|而|并|则|等|着|之|其|这|那|个|吗|呢|吧|啊|呀|地|得|又|再|还|很|即|且|但|若|如|因|所|以|于|此|些)$/.test(term)
+    ? null
+    : term
 }
 
 const posts = loadPosts(path.join(process.cwd(), 'posts'))
@@ -239,12 +275,16 @@ export default defineConfig({
             [title, description, tags, body].filter(Boolean).join('\n\n'),
             env,
           )
-          // KaTeX MathML 会附带原始 TeX <annotation>，去掉该标签避免公式语法词条膨胀搜索索引。
-          return html.replace(/<annotation[^>]*>[\s\S]*?<\/annotation>/g, '')
+          // 兜底剔除残余代码块（如缩进代码块）与 KaTeX <annotation>，避免无关源码/公式语法膨胀搜索索引。
+          return html
+            .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/g, '')
+            .replace(/<span class="lang">[^<]*<\/span>/g, '')
+            .replace(/<annotation[^>]*>[\s\S]*?<\/annotation>/g, '')
         },
         miniSearch: {
           options: {
             tokenize: tokenizeSearchText,
+            processTerm: processSearchTerm,
           },
           searchOptions: {
             combineWith: 'AND',

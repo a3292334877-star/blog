@@ -1,10 +1,12 @@
 /**
  * 文章数据加载器
- * 扫描 posts/ 目录，解析 frontmatter，提供文章列表数据
+ * 扫描 posts/ 目录，解析 frontmatter，提供文章列表数据。
+ *
+ * 结果会整体打包进客户端 chunk（文章页的上下篇/相关推荐也会加载），
+ * 因此只保留列表与导航组件真正读取的字段。RSS 由 generate-rss.mjs 单独生成。
  */
 import fs from 'node:fs'
 import path from 'node:path'
-import { createMarkdownRenderer } from 'vitepress'
 import { estimateReadingTime, toPlainText } from './post-utils.mjs'
 import { listPostFiles, parsePost } from './posts.mjs'
 
@@ -15,24 +17,20 @@ const cache = new Map()
 
 export default {
   watch: 'posts/*.md',
-  async load(asFeed = false) {
-    const cwd = process.cwd()
-    const md = await createMarkdownRenderer(cwd)
-    const postDir = path.join(cwd, 'posts')
+  load() {
+    const postDir = path.join(process.cwd(), 'posts')
 
     return listPostFiles(postDir)
-      .map((file) => getPost(md, file, postDir, asFeed))
+      .map((file) => getPost(file, postDir))
       .filter(Boolean)
       .sort((a, b) => b.create - a.create)
   },
 }
 
-function getPost(md, file, postDir, asFeed = false) {
+function getPost(file, postDir) {
   const fullPath = path.join(postDir, file)
   const timestamp = Math.floor(fs.statSync(fullPath).mtimeMs)
-  const cacheKey = `${fullPath}:${asFeed ? 'feed' : 'page'}`
-
-  const cached = cache.get(cacheKey)
+  const cached = cache.get(fullPath)
   if (cached && timestamp === cached.timestamp) {
     return cached.post
   }
@@ -48,19 +46,13 @@ function getPost(md, file, postDir, asFeed = false) {
     title: parsed.data.title,
     href: `posts/${parsed.slug}`,
     create: parsed.date,
-    update: timestamp,
     tags: parsed.tags,
     cover: parsed.cover,
-    excerpt: md.render(parsed.excerpt || ''),
     summary: toPlainText(summarySource).slice(0, 220),
     readingTime: estimateReadingTime(parsed.content),
     type: parsed.type,
-    source: parsed.data.source || '',
-  }
-  if (asFeed) {
-    post.data = parsed.data
   }
 
-  cache.set(cacheKey, { timestamp, post })
+  cache.set(fullPath, { timestamp, post })
   return post
 }

@@ -93,14 +93,7 @@ const disabled = ref(false)
 const desktopEligible = ref(false)
 const sizePercent = ref(DEFAULT_SIZE)
 const controlBottom = computed(() => Math.round(BASE_HEIGHT * sizePercent.value / 100 - 14))
-let loadTimer: ReturnType<typeof setTimeout> | null = null
-let idleHandle: number | null = null
 let sizeApplyFrame: number | null = null
-
-type IdleWindow = Window & {
-  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
-  cancelIdleCallback?: (handle: number) => void
-}
 
 declare global {
   interface Window {
@@ -262,12 +255,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (loadTimer) clearTimeout(loadTimer)
   if (sizeApplyFrame !== null) cancelAnimationFrame(sizeApplyFrame)
-  if (idleHandle !== null) {
-    const idleWindow = window as IdleWindow
-    idleWindow.cancelIdleCallback?.(idleHandle)
-  }
 })
 </script>
 

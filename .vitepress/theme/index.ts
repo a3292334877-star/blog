@@ -1,12 +1,6 @@
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import { defineAsyncComponent } from 'vue'
 import Layout from './Layout.vue'
-import MathShowcase from './components/MathShowcase.vue'
-import ExampleBox from './components/ExampleBox.vue'
-import ExampleSolution from './components/ExampleSolution.vue'
-import StepCards from './components/StepCards.vue'
-import StepCard from './components/StepCard.vue'
-import QuizPanel from './components/QuizPanel.vue'
 import './custom.css'
 
 // 仅在个别页面使用的较重组件按需加载，避免全站每个页面都下载它们的代码。
@@ -20,6 +14,12 @@ const OdeDecisionTree = defineAsyncComponent(() => import('./components/OdeDecis
 const OdeIntegralCurves = defineAsyncComponent(() => import('./components/OdeIntegralCurves.vue'))
 const CalculusMethodTree = defineAsyncComponent(() => import('./components/CalculusMethodTree.vue'))
 const DerivativeIntegralVisual = defineAsyncComponent(() => import('./components/DerivativeIntegralVisual.vue'))
+const MathShowcase = defineAsyncComponent(() => import('./components/MathShowcase.vue'))
+const ExampleBox = defineAsyncComponent(() => import('./components/ExampleBox.vue'))
+const ExampleSolution = defineAsyncComponent(() => import('./components/ExampleSolution.vue'))
+const StepCards = defineAsyncComponent(() => import('./components/StepCards.vue'))
+const StepCard = defineAsyncComponent(() => import('./components/StepCard.vue'))
+const QuizPanel = defineAsyncComponent(() => import('./components/QuizPanel.vue'))
 
 export default {
   extends: DefaultTheme,

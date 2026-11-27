@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import '../styles/math-diagram.css'
+</script>
+
 <template>
   <div class="math-diagram-container">
     <svg viewBox="0 0 760 300" role="img" aria-label="导数切线斜率与定积分曲边梯形面积的几何对照" style="width: 100%; max-width: 720px; height: auto;">

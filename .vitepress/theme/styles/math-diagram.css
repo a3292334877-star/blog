@@ -1,0 +1,48 @@
+.math-diagram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.math-diagram-caption {
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+  text-align: center;
+}
+
+.math-diagram-container svg {
+  --dg-axis: #94a3b8;
+  --dg-label: #64748b;
+  --dg-card-bg: #ffffff;
+  --dg-pink: #e11d48;
+  --dg-amber: #f59e0b;
+  --dg-title-a: #9f1239;
+  --dg-title-b: #92400e;
+  --dg-c1: #e11d48;
+  --dg-c2: #f43f5e;
+  --dg-c3: #059669;
+  --dg-c4: #3b82f6;
+  --dg-c5: #1d4ed8;
+}
+
+.dark .math-diagram-container svg {
+  --dg-axis: #64748b;
+  --dg-label: #94a3b8;
+  --dg-card-bg: var(--vp-c-bg-soft);
+  --dg-pink: #fb7185;
+  --dg-amber: #f59e0b;
+  --dg-title-a: #fb7185;
+  --dg-title-b: #fbbf24;
+  --dg-c1: #fb7185;
+  --dg-c2: #fda4af;
+  --dg-c3: #34d399;
+  --dg-c4: #60a5fa;
+  --dg-c5: #818cf8;
+}

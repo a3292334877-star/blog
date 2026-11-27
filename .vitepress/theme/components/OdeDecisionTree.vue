@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import '../styles/math-diagram.css'
+</script>
+
 <template>
   <div class="math-diagram-container">
     <svg viewBox="0 0 760 345" role="img" aria-label="一阶微分方程题型识别与解法流向图" style="width: 100%; max-width: 720px; height: auto;">

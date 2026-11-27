@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import '../styles/math-diagram.css'
+</script>
+
 <template>
   <div class="math-diagram-container">
     <svg viewBox="0 0 680 300" role="img" aria-label="微分方程 y' + xy = 0 的积分曲线族" style="width: 100%; max-width: 660px; height: auto;">
