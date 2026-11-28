@@ -2,8 +2,21 @@
   <DefaultTheme.Layout>
     <template #layout-top>
       <CursorGlow />
-      <ReadingProgress v-if="!isHome" />
+      <ReadingProgress v-if="!isHome && !page.isNotFound" />
       <SakuraPetals v-if="isHome" />
+    </template>
+
+    <template #not-found>
+      <div class="not-found-sakura">
+        <h1>404 · 页面走丢了 🌸</h1>
+        <p>这片樱花树下暂时没有你要找的内容。它可能被移动、改名，或者还没有写完。</p>
+        <p class="not-found-links">
+          <a :href="withBase('/')">回到首页</a>
+          <a :href="withBase('/posts/')">浏览文章</a>
+          <a :href="withBase('/projects/')">查看项目</a>
+        </p>
+        <p class="not-found-tip">也可以直接使用顶部的搜索功能查找文章。</p>
+      </div>
     </template>
 
     <template #home-hero-before>
@@ -88,7 +101,7 @@ const ReadingProgress = defineAsyncComponent(() => import('./components/ReadingP
 const PostNavigation = defineAsyncComponent(() => import('./components/PostNavigation.vue'))
 const GiscusComment = defineAsyncComponent(() => import('./components/GiscusComment.vue'))
 
-const { frontmatter, site } = useData()
+const { frontmatter, site, page } = useData()
 const route = useRoute()
 const isHome = computed(() => route.path === withBase('/'))
 const normalizedRoute = computed(() => normalizeSitePath(route.path, site.value.base))

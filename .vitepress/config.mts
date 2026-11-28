@@ -140,6 +140,11 @@ const posts = loadPosts(path.join(process.cwd(), 'posts'))
 const postReadingTimes = new Map<string, number>(
   posts.map((post) => [post.slug, estimateReadingTime(post.content)]),
 )
+const latestPostTimestamp = posts.reduce((latest, post) => {
+  const gitIso = gitLastUpdated(`posts/${post.file}`)
+  const gitMs = gitIso ? +new Date(gitIso) || 0 : 0
+  return Math.max(latest, post.date, gitMs)
+}, 0)
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -167,8 +172,22 @@ export default defineConfig({
   // Sitemap
   sitemap: {
     hostname: SITE.origin,
-    // 404 页不需要被搜索引擎收录。
-    transformItems: (items) => items.filter((item) => !/(^|\/)404\/?$/.test(String(item.url))),
+    transformItems: (items) =>
+      items
+        // 404 页不需要被搜索引擎收录。
+        .filter((item) => !/(^|\/)404\/?$/.test(String(item.url)))
+        // 聚合页（首页 / 文章列表 / 标签页）的内容随新文章自动变化，同步更新 lastmod。
+        .map((item) => {
+          const clean = String(item.url).replace(/^\/+|\/+$/g, '')
+          if (latestPostTimestamp > 0 && (clean === '' || clean === 'posts' || clean === 'tags')) {
+            const existing = item.lastmod ? +new Date(item.lastmod) || 0 : 0
+            return {
+              ...item,
+              lastmod: new Date(Math.max(existing, latestPostTimestamp)).toISOString(),
+            }
+          }
+          return item
+        }),
   },
 
   themeConfig: {
@@ -474,15 +493,19 @@ export default defineConfig({
         itemListElement: breadcrumbItems,
       },
     ]
+    const readingTime = isPost ? postReadingTimes.get(slug) : undefined
     if (isPost) {
       structuredData.push({
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: title,
         description: desc,
+        inLanguage: 'zh-CN',
         url,
         mainEntityOfPage: url,
         image: cover || undefined,
+        keywords: Array.isArray(fm.tags) && fm.tags.length ? fm.tags.join(', ') : undefined,
+        timeRequired: readingTime ? `PT${readingTime}M` : undefined,
         datePublished: fm.date ? new Date(fm.date).toISOString() : undefined,
         dateModified: lastModifiedAt ? new Date(lastModifiedAt).toISOString() : undefined,
         author: {
@@ -500,7 +523,6 @@ export default defineConfig({
     }
     head.push(['script', { type: 'application/ld+json' }, JSON.stringify(structuredData).replace(/</g, '\\u003c')])
     const existingHead = Array.isArray(fm.head) ? fm.head : []
-    const readingTime = isPost ? postReadingTimes.get(slug) : undefined
     pageData.frontmatter = {
       ...fm,
       ...(isPost && fm.cover == null ? { cover: defaultCover } : {}),

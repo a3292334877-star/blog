@@ -113,8 +113,12 @@ body {
 }
 
 .not-found-sakura { max-width: 720px; margin: 12vh auto; padding: 64px 28px; text-align: center; border: 1px solid var(--sakura-pink); border-radius: 26px; background: linear-gradient(135deg, var(--sakura-light), var(--vp-c-bg)); box-shadow: var(--site-shadow-lg); }
-.not-found-sakura h1 { color: var(--accent-color); font-family: var(--vp-font-family-title); }
-.not-found-sakura a { display: inline-block; margin: 8px; padding: 9px 15px; border-radius: 999px; background: var(--sakura-light); color: var(--accent-color); }
+.not-found-sakura h1 { margin: 0 0 16px; font-size: clamp(28px, 5vw, 38px); line-height: 1.25; color: var(--accent-color); font-family: var(--vp-font-family-title); }
+.not-found-sakura p { margin: 12px 0; color: var(--vp-c-text-2); line-height: 1.75; }
+.not-found-sakura .not-found-links { margin: 20px 0 14px; }
+.not-found-sakura .not-found-tip { font-size: 14px; color: var(--vp-c-text-3); }
+.not-found-sakura a { display: inline-block; margin: 6px 8px; padding: 9px 18px; border-radius: 999px; background: var(--sakura-light); border: 1px solid color-mix(in srgb, var(--sakura-pink) 45%, transparent); color: var(--accent-color); font-weight: 600; transition: transform .2s, background-color .2s; }
+.not-found-sakura a:hover { transform: translateY(-2px); background: var(--accent-solid); color: #fff; }
 
 /* 首页个性化层次：让樱花主题的卡片像同一套手账界面 */
 .home-main > section:not(.home-hero) {

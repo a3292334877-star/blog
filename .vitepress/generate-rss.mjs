@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { SITE as SITE_CONFIG, SITE_URL, absoluteAsset, toSocialImage } from './site.constants.mjs'
 import { gitLastUpdated } from './last-updated.mjs'
+import { toPlainText } from './post-utils.mjs'
 import { loadPosts } from './posts.mjs'
 
 const SITE = {
@@ -38,11 +39,20 @@ function main() {
     const cover = coverAsset
       ? (String(coverAsset).startsWith('http') ? String(coverAsset) : absoluteAsset(coverAsset))
       : null
-    const desc = post.data.description || (post.excerpt || '').trim() || SITE.desc
+    const rawDesc = post.data.description || (post.excerpt || '').trim() || SITE.desc
+    const desc = toPlainText(rawDesc) || SITE.desc
     // 真实更新时间取 Git 提交时间，且不能早于发布时间。
     const gitDate = gitLastUpdated(`posts/${post.file}`)
     const updated = gitDate ? Math.max(+new Date(gitDate) || post.date, post.date) : post.date
-    return { title: post.data.title, date: post.date, slug: post.slug, excerpt: desc, cover, updated }
+    return {
+      title: post.data.title,
+      date: post.date,
+      slug: post.slug,
+      excerpt: desc,
+      tags: post.tags,
+      cover,
+      updated,
+    }
   })
 
   const updated = posts.length > 0
@@ -50,6 +60,9 @@ function main() {
     : rfc3339(Date.now())
 
   const items = posts.map(p => {
+    const categories = (p.tags || [])
+      .map(tag => `\n      <category term="${escapeXml(String(tag))}"/>`)
+      .join('')
     const media = p.cover
       ? `\n      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="${escapeXml(p.cover)}" medium="image"/>`
       : ''
@@ -59,9 +72,9 @@ function main() {
       <link href="${SITE.url}/posts/${p.slug}"/>
       <id>${SITE.url}/posts/${p.slug}</id>
       <published>${rfc3339(p.date)}</published>
-      <updated>${rfc3339(p.updated)}</updated>
-      <summary type="html">${escapeXml(p.excerpt)}</summary>${media}
-      <author><name>${SITE.author}</name></author>
+      <updated>${rfc3339(p.updated)}</updated>${categories}
+      <summary type="text">${escapeXml(p.excerpt)}</summary>${media}
+      <author><name>${escapeXml(SITE.author)}</name></author>
     </entry>`
   }).join('')
 
@@ -73,7 +86,7 @@ function main() {
   <link href="${SITE.url}"/>
   <id>${SITE.url}/</id>
   <updated>${updated}</updated>
-  <author><name>${SITE.author}</name></author>
+  <author><name>${escapeXml(SITE.author)}</name></author>
   ${items}
 </feed>`
 
