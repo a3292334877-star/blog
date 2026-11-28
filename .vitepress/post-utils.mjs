@@ -7,6 +7,7 @@
 
 export function inferPostType(tags = [], title = '') {
   const key = `${title} ${tags.join(' ')}`
+  if (/项目/.test(key)) return '个人项目'
   if (/真题|专插本|考点|考试/.test(key)) return '资料整理'
   if (/教程|指南|入门|技巧|基础|学习/.test(key)) return '教程'
   if (/随笔|生活|日常/.test(key)) return '随笔'

@@ -23,21 +23,27 @@
       <div class="doc-banner" :style="docBannerStyle" v-if="docBannerStyle">
         <nav class="doc-breadcrumb" aria-label="面包屑导航">
           <a :href="withBase('/')">首页</a>
-          <template v-if="route.path.startsWith('/posts/')">
+          <template v-for="crumb in parentBreadcrumbs" :key="crumb.href">
             <span aria-hidden="true">/</span>
-            <a :href="withBase('/posts/')">文章</a>
+            <a :href="crumb.href">{{ crumb.label }}</a>
           </template>
           <span class="doc-breadcrumb-current-separator" aria-hidden="true">/</span>
           <span class="doc-breadcrumb-current" aria-current="page">{{ frontmatter.title }}</span>
         </nav>
         <h1 class="doc-title">{{ frontmatter.title }}</h1>
-        <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags">
+        <div class="doc-meta" v-if="frontmatter.date || frontmatter.tags || frontmatter.readingTime">
           <span v-if="frontmatter.date" class="doc-date">发布于 {{ formatDate(frontmatter.date) }}</span>
+          <span v-if="frontmatter.readingTime" class="doc-reading">约 {{ frontmatter.readingTime }} 分钟阅读</span>
           <span v-if="frontmatter.type || frontmatter.tags" class="doc-type">{{ frontmatter.type || inferredType }}</span>
           <span v-if="frontmatter.source" class="doc-source">来源：{{ frontmatter.source }}</span>
           <span v-if="frontmatter.lastUpdated" class="doc-updated">更新于 {{ formatDate(frontmatter.lastUpdated) }}</span>
           <span v-if="frontmatter.tags" class="doc-tags">
-            <a v-for="t in frontmatter.tags" :key="t" :href="tagHref(t)">{{ t }}</a>
+            <template v-if="isPostPage">
+              <a v-for="t in frontmatter.tags" :key="t" :href="tagHref(t)">{{ t }}</a>
+            </template>
+            <template v-else>
+              <span v-for="t in frontmatter.tags" :key="t" class="doc-tag-chip">{{ t }}</span>
+            </template>
           </span>
         </div>
       </div>
@@ -64,7 +70,7 @@ import BackToTop from './components/BackToTop.vue'
 import CursorGlow from './components/CursorGlow.vue'
 import CopyToast from './components/CopyToast.vue'
 import { inferPostType } from '../post-utils.mjs'
-import { normalizeSitePath } from './utils'
+import { normalizeSitePath, resolveSitePath } from './utils'
 
 const MusicPlayer = defineAsyncComponent(() => import('./components/MusicPlayer.vue'))
 
@@ -85,9 +91,26 @@ const GiscusComment = defineAsyncComponent(() => import('./components/GiscusComm
 const { frontmatter, site } = useData()
 const route = useRoute()
 const isHome = computed(() => route.path === withBase('/'))
-const isPostPage = computed(() => {
-  const normalized = normalizeSitePath(route.path, site.value.base)
-  return normalized.startsWith('posts/') && normalized !== 'posts'
+const normalizedRoute = computed(() => normalizeSitePath(route.path, site.value.base))
+const isPostPage = computed(() => normalizedRoute.value.startsWith('posts/') && normalizedRoute.value !== 'posts')
+const parentBreadcrumbs = computed(() => {
+  const current = normalizedRoute.value
+  if (current.startsWith('posts/') && current !== 'posts') {
+    return [{ label: '文章', href: withBase('/posts/') }]
+  }
+  if (current.startsWith('projects/') && current !== 'projects') {
+    return [{ label: '项目', href: withBase('/projects/') }]
+  }
+  if (current === 'learn/standard-japanese') {
+    return [{ label: '学习路线', href: withBase('/learn/') }]
+  }
+  if (current.startsWith('learn/standard-japanese/')) {
+    return [
+      { label: '学习路线', href: withBase('/learn/') },
+      { label: '标日同步手册', href: withBase('/learn/standard-japanese/') },
+    ]
+  }
+  return []
 })
 
 // Image lightbox — re-attach on route change
@@ -129,7 +152,8 @@ const docBannerStyle = computed<Record<string, string> | null>(() => {
   const cover = frontmatter.value.cover
   if (cover) {
     // 对 cover 中的反斜杠和双引号转义，防止 url("...") 闭合注入
-    const safe = String(cover).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+    const resolved = resolveSitePath(String(cover))
+    const safe = resolved.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
     return {
       backgroundImage: `linear-gradient(110deg, rgba(30,21,29,.88), rgba(62,37,48,.72) 56%, rgba(28,22,31,.84)), url("${safe}")`,
       backgroundColor: '#2f252c',

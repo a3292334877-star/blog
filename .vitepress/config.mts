@@ -4,6 +4,7 @@ import matter from 'gray-matter'
 import { katex } from '@mdit/plugin-katex'
 import { SITE, absoluteAsset, absoluteUrl, toSocialImage } from './site.constants.mjs'
 import { gitLastUpdated } from './last-updated.mjs'
+import { estimateReadingTime } from './post-utils.mjs'
 import { loadPosts } from './posts.mjs'
 
 /**
@@ -136,6 +137,9 @@ function processSearchTerm(term: string): string | null {
 }
 
 const posts = loadPosts(path.join(process.cwd(), 'posts'))
+const postReadingTimes = new Map<string, number>(
+  posts.map((post) => [post.slug, estimateReadingTime(post.content)]),
+)
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -176,8 +180,8 @@ export default defineConfig({
       label: '本页目录',
     },
     docFooter: {
-      prev: false,
-      next: false,
+      prev: '上一页',
+      next: '下一页',
     },
     darkModeSwitchLabel: '外观',
     lightModeSwitchTitle: '切换到浅色模式',
@@ -431,13 +435,36 @@ export default defineConfig({
       }
     }
 
+    const relPath = String(pageData.relativePath)
+    const isPostsSection = relPath.startsWith('posts/')
+    const isProjectDetail = relPath.startsWith('projects/') && relPath !== 'projects/index.md'
+    const isLearnJapaneseIndex = relPath === 'learn/standard-japanese/index.md'
+    const isLearnJapaneseSubpage = relPath.startsWith('learn/standard-japanese/') && !isLearnJapaneseIndex
+
+    const parentCrumbs: Array<{ name: string; url: string }> = []
+    if (isPost) {
+      parentCrumbs.push({ name: '文章', url: absoluteUrl('posts/') })
+    } else if (isProjectDetail) {
+      parentCrumbs.push({ name: '项目', url: absoluteUrl('projects/') })
+    } else if (isLearnJapaneseIndex) {
+      parentCrumbs.push({ name: '学习路线', url: absoluteUrl('learn/') })
+    } else if (isLearnJapaneseSubpage) {
+      parentCrumbs.push(
+        { name: '学习路线', url: absoluteUrl('learn/') },
+        { name: '标日同步手册', url: absoluteUrl('learn/standard-japanese/') },
+      )
+    }
+
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: '首页', item: absoluteUrl() },
-      ...(isPost
-        ? [{ '@type': 'ListItem', position: 2, name: '文章', item: absoluteUrl('posts/') }]
-        : []),
+      ...parentCrumbs.map((crumb, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 2,
+        name: crumb.name,
+        item: crumb.url,
+      })),
       ...(!isHome
-        ? [{ '@type': 'ListItem', position: isPost ? 3 : 2, name: title, item: url }]
+        ? [{ '@type': 'ListItem', position: parentCrumbs.length + 2, name: title, item: url }]
         : []),
     ]
     const structuredData: Record<string, any>[] = [
@@ -473,9 +500,13 @@ export default defineConfig({
     }
     head.push(['script', { type: 'application/ld+json' }, JSON.stringify(structuredData).replace(/</g, '\\u003c')])
     const existingHead = Array.isArray(fm.head) ? fm.head : []
+    const readingTime = isPost ? postReadingTimes.get(slug) : undefined
     pageData.frontmatter = {
       ...fm,
       ...(isPost && fm.cover == null ? { cover: defaultCover } : {}),
+      ...(readingTime && fm.readingTime == null ? { readingTime } : {}),
+      ...(isPostsSection && fm.prev == null ? { prev: false } : {}),
+      ...(isPostsSection && fm.next == null ? { next: false } : {}),
       ...(lastUpdated ? { lastUpdated } : {}),
       head: [...existingHead, ...head],
     }

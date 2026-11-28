@@ -219,7 +219,8 @@ body {
   flex-wrap: wrap;
 }
 
-.doc-banner .doc-tags a {
+.doc-banner .doc-tags a,
+.doc-banner .doc-tags .doc-tag-chip {
   color: rgba(255,255,255,0.85);
   padding: 2px 10px;
   background: rgba(255,255,255,0.2);
