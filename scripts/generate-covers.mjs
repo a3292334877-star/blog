@@ -113,6 +113,62 @@ const COVERS = [
     gradient: ['#0e7490', '#1e1b4b'],
     decor: decorCpp,
   },
+  {
+    slug: '2026-zhuanchaben-c-programming',
+    title: '2026 专插本《计算机基础与程序设计》真题',
+    subtitle: '专插本 · C语言 · 2026',
+    gradient: ['#0284c7', '#1e3a8a'],
+    decor: decorCodeWindow,
+  },
+  {
+    slug: '2026-zhuanchaben-math',
+    title: '2026 专插本《高等数学》真题详解',
+    subtitle: '专插本 · 高等数学 · 2026',
+    gradient: ['#334155', '#0f172a'],
+    decor: decorIntegral,
+  },
+  {
+    slug: 'calculus-basics',
+    title: '微积分基础核心讲义',
+    subtitle: '高等数学 · 微积分 · 教程',
+    gradient: ['#be185d', '#4c1d95'],
+    decor: decorIntegral,
+  },
+  {
+    slug: 'differential-equations-basics',
+    title: '常微分方程入门与题型拆解',
+    subtitle: '高等数学 · 微分方程 · 教程',
+    gradient: ['#0f766e', '#1e293b'],
+    decor: decorOdeCurves,
+  },
+  {
+    slug: 'japan-master-application',
+    title: '日本修士留学申请全流程指南',
+    subtitle: '日本留学 · 修士申请 · 经验',
+    gradient: ['#e11d48', '#881337'],
+    decor: decorToriiCampus,
+  },
+  {
+    slug: 'systematic-japanese-learning-guide',
+    title: '从零开始学日语：系统学习手册',
+    subtitle: '日语 · 自学 · JLPT',
+    gradient: ['#db2777', '#6b21a8'],
+    decor: decorJapanese,
+  },
+  {
+    slug: 'japanese-grammar-watershed',
+    title: '从中级直达 N1 的日语核心壁垒',
+    subtitle: '日语 · 语法 · N1',
+    gradient: ['#9d174d', '#3b0764'],
+    decor: decorJapanese,
+  },
+  {
+    slug: 'cet6-practical-guide',
+    title: '英语六级（CET-6）高分实战指南',
+    subtitle: '英语 · 六级 · 考试技巧',
+    gradient: ['#b45309', '#451a03'],
+    decor: decorEnglishCet,
+  },
 ]
 
 const AUTO_PALETTES = [
@@ -145,7 +201,11 @@ function inferDecor(title, tags) {
     [/高精度|bigint/, decorBigint],
     [/数据结构|并查集|树/, decorTree],
     [/矩阵|线性代数/, decorMatrix],
+    [/微分方程|ode/, decorOdeCurves],
     [/高数|数学|微积分/, decorIntegral],
+    [/留学|修士|日本申请/, decorToriiCampus],
+    [/日语|假名|jlpt|n1|n2/, decorJapanese],
+    [/英语|六级|四级|cet/, decorEnglishCet],
     [/java/, decorCoffee],
     [/c\+\+/, decorCpp],
     [/c语言|编程|代码|算法/, decorCodeWindow],
@@ -472,11 +532,108 @@ function decorCoffee() {
   `
 }
 
+/** 微分方程：斜率场 + 积分曲线族 */
+function decorOdeCurves() {
+  const slopes = []
+  for (let gx = 845; gx <= 1065; gx += 44) {
+    for (let gy = 148; gy <= 316; gy += 42) {
+      const dx = (gx - 955) / 110
+      const dy = (232 - gy) / 90
+      const slope = -dx * dy * 0.85
+      const len = 12
+      const norm = Math.hypot(1, slope)
+      const ux = (len / norm).toFixed(1)
+      const uy = ((-slope * len) / norm).toFixed(1)
+      slopes.push(`<line x1="${(gx - Number(ux)).toFixed(1)}" y1="${(gy - Number(uy)).toFixed(1)}" x2="${(gx + Number(ux)).toFixed(1)}" y2="${(gy + Number(uy)).toFixed(1)}" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>`)
+    }
+  }
+  function bellPath(amp) {
+    const pts = []
+    for (let i = 0; i <= 24; i++) {
+      const x = 830 + (250 * i) / 24
+      const t = (x - 955) / 48
+      const y = 232 - amp * Math.exp(-t * t)
+      pts.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`)
+    }
+    return pts.join(' ')
+  }
+  return `
+  <text x="955" y="114" font-size="22" fill="rgba(255,255,255,0.88)" font-family="serif" font-style="italic" text-anchor="middle">dy/dx = f(x, y)</text>
+  <line x1="825" y1="232" x2="1085" y2="232" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+  <line x1="955" y1="128" x2="955" y2="342" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+  ${slopes.join('\n  ')}
+  <path d="${bellPath(86)}" fill="none" stroke="#ffd700" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="${bellPath(48)}" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+  <path d="${bellPath(-82)}" fill="none" stroke="rgba(255,255,255,0.78)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  `
+}
+
+/** 日语假名与语法卡片 */
+function decorJapanese() {
+  return `
+  <text x="1015" y="305" font-size="172" font-weight="800" fill="rgba(255,255,255,0.12)" text-anchor="middle">語</text>
+  <rect x="818" y="108" width="136" height="136" rx="22" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/>
+  <text x="886" y="196" font-size="82" font-weight="700" fill="#fff" text-anchor="middle">あ</text>
+  <text x="886" y="228" font-size="12" letter-spacing="2" fill="rgba(255,255,255,0.78)" font-family="'Fira Code',monospace" text-anchor="middle">GOJUON</text>
+  <rect x="932" y="196" width="146" height="106" rx="20" fill="rgba(15,23,42,0.34)" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/>
+  <text x="1005" y="246" font-size="34" font-weight="800" fill="#ffd700" font-family="'Fira Code',monospace" text-anchor="middle">ア · N1</text>
+  <text x="1005" y="278" font-size="14" fill="rgba(255,255,255,0.86)" text-anchor="middle">語彙 · 文法 · 読解</text>
+  <rect x="822" y="324" width="252" height="36" rx="18" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
+  <text x="948" y="348" font-size="15" fill="#fff" letter-spacing="3" text-anchor="middle">は · が · を · に · で</text>
+  ${sakuraPetal(1054, 132, 24, 24)}
+  ${sakuraPetal(832, 286, 20, -28)}
+  `
+}
+
+/** 日本留学：鸟居剪影 + 旭日与樱花 + 研究计划标签 */
+function decorToriiCampus() {
+  return `
+  <circle cx="948" cy="206" r="84" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.38)" stroke-width="1.5"/>
+  <!-- 鸟居剪影 -->
+  <path d="M 836 154 Q 948 136 1060 154 L 1052 168 Q 948 152 844 168 Z" fill="rgba(255,255,255,0.94)"/>
+  <rect x="858" y="186" width="180" height="12" rx="4" fill="rgba(255,255,255,0.88)"/>
+  <rect x="941" y="162" width="14" height="26" rx="2" fill="rgba(255,255,255,0.82)"/>
+  <rect x="882" y="164" width="16" height="138" rx="3" fill="rgba(255,255,255,0.9)"/>
+  <rect x="998" y="164" width="16" height="138" rx="3" fill="rgba(255,255,255,0.9)"/>
+  <rect x="872" y="298" width="36" height="10" rx="3" fill="rgba(255,255,255,0.75)"/>
+  <rect x="988" y="298" width="36" height="10" rx="3" fill="rgba(255,255,255,0.75)"/>
+  <!-- 标签 -->
+  <rect x="832" y="326" width="112" height="32" rx="16" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+  <text x="888" y="347" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">研究計画書</text>
+  <rect x="956" y="326" width="108" height="32" rx="16" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+  <text x="1010" y="347" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">修士入試</text>
+  ${sakuraPetal(834, 122, 22, -18)}
+  ${sakuraPetal(1062, 126, 24, 32)}
+  ${sakuraPetal(1056, 268, 19, -12)}
+  `
+}
+
+/** 英语六级：Aa 字标 + 听力声波 + 模块标签 */
+function decorEnglishCet() {
+  const heights = [22, 42, 60, 34, 72, 48, 28, 64, 44, 26, 54, 36]
+  const bars = heights.map((h, i) => {
+    const x = 830 + i * 20
+    const y = Math.round(278 - h / 2)
+    const fill = i % 3 === 1 ? '#ffd700' : 'rgba(255,255,255,0.82)'
+    return `<rect x="${x}" y="${y}" width="10" height="${h}" rx="5" fill="${fill}"/>`
+  }).join('\n  ')
+  return `
+  <rect x="822" y="108" width="128" height="114" rx="20" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.52)" stroke-width="1.8"/>
+  <text x="886" y="186" font-size="66" font-weight="700" fill="#fff" font-family="Georgia,serif" text-anchor="middle">Aa</text>
+  <rect x="964" y="114" width="114" height="46" rx="12" fill="rgba(0,0,0,0.28)" stroke="rgba(255,255,255,0.45)" stroke-width="1.4"/>
+  <text x="1021" y="144" font-size="22" font-weight="800" fill="#ffd700" font-family="'Fira Code',monospace" text-anchor="middle">CET-6</text>
+  <rect x="964" y="172" width="114" height="46" rx="12" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.4)" stroke-width="1.4"/>
+  <text x="1021" y="201" font-size="16" font-weight="700" fill="#fff" font-family="'Fira Code',monospace" text-anchor="middle">TARGET 550+</text>
+  ${bars}
+  <text x="948" y="346" font-size="13" font-weight="700" letter-spacing="1.8" fill="rgba(255,255,255,0.82)" font-family="'Fira Code',monospace" text-anchor="middle">LISTENING · READING · WRITING</text>
+  `
+}
+
 // ============================================================
 // 工具：单片樱花花瓣
 // ============================================================
 function sakuraPetal(cx, cy, size, rotate) {
-  return `<g transform="translate(${cx} ${cy}) rotate(${rotate}) scale(${size / 30})">
+  return `<g transform="translate(${cx} ${cy}) rotate(${rotate}) scale(${(size / 30).toFixed(2)})">
     <path d="M 0 -14 C 5 -12 7 -6 3 -2 C 6 0 7 3 2 4 C 4 7 1 11 -4 8 C -2 11 -7 11 -7 5 C -10 7 -13 3 -9 -1 C -13 -4 -10 -11 -5 -8 C -7 -12 -1 -14 0 -14 Z" fill="rgba(255,255,255,0.85)"/>
   </g>`
 }
@@ -572,7 +729,7 @@ function makeSvg({ title, subtitle, gradient, decor, date, issue }) {
   <line x1="80" y1="104" x2="1120" y2="104" stroke="#fff" stroke-opacity="0.28"/>
 
   <g>
-    <rect x="80" y="154" width="${Math.min(360, Math.max(128, visualWidth(subtitle) * 13 + 34))}" height="38" rx="19" fill="#fff" opacity="0.18"/>
+    <rect x="80" y="154" width="${Math.round(Math.min(440, Math.max(128, visualWidth(subtitle) * 16.6 + 38)))}" height="38" rx="19" fill="#fff" opacity="0.18"/>
     <text x="98" y="179" font-size="15" font-weight="700" letter-spacing="1.2" fill="#fff">${esc(subtitle)}</text>
   </g>
 

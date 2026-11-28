@@ -6,30 +6,38 @@
     <!-- 标签云 -->
     <div class="cloud">
       <button
-        v-for="(count, tag) in tagMap"
+        v-for="[tag, arr] in sortedTags"
         :key="tag"
+        type="button"
         :class="['tag', { active: active === tag }]"
-        :style="{ fontSize: 0.8 + (count.length / maxCount) * 0.5 + 'rem' }"
+        :aria-pressed="active === tag"
+        :style="{ fontSize: (0.8 + (arr.length / maxCount) * 0.5).toFixed(3) + 'rem' }"
         @click="select(tag)"
-      >{{ tag }} <span class="n">{{ count.length }}</span></button>
+      >{{ tag }} <span class="n">{{ arr.length }}</span></button>
     </div>
 
     <!-- 筛选文章 -->
-    <div v-if="active" class="filtered">
+    <div v-if="active && tagMap[active]" class="filtered">
       <h2>{{ active }} <span class="n">{{ tagMap[active].length }} 篇</span></h2>
       <a v-for="p in tagMap[active]" :key="p.href" :href="resolveSitePath(p.href)" class="link">
-        <span>{{ p.title }}</span>
-        <time>{{ fmt(p.create) }}</time>
+        <span class="link-title">{{ p.title }}</span>
+        <span class="link-meta">
+          <span class="link-reading">{{ p.readingTime }} 分钟</span>
+          <time>{{ fmt(p.create) }}</time>
+        </span>
       </a>
     </div>
 
     <!-- 全部分组 -->
     <div v-else>
-      <div v-for="(arr, tag) in tagMap" :key="tag" class="group">
+      <div v-for="[tag, arr] in sortedTags" :key="tag" class="group">
         <h2>{{ tag }} <span class="n">{{ arr.length }} 篇</span></h2>
         <a v-for="p in arr" :key="p.href" :href="resolveSitePath(p.href)" class="link">
-          <span>{{ p.title }}</span>
-          <time>{{ fmt(p.create) }}</time>
+          <span class="link-title">{{ p.title }}</span>
+          <span class="link-meta">
+            <span class="link-reading">{{ p.readingTime }} 分钟</span>
+            <time>{{ fmt(p.create) }}</time>
+          </span>
         </a>
       </div>
     </div>
@@ -54,6 +62,10 @@ const tagMap = computed(() => {
   }
   return m
 })
+
+const sortedTags = computed(() =>
+  Object.entries(tagMap.value).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'zh-CN')),
+)
 
 function syncFromUrl() {
   const q = new URLSearchParams(window.location.search).get('q')
@@ -121,11 +133,16 @@ h2 {
 h2 .n { font-size: 13px; color: var(--vp-c-text-3); font-weight: 400; background: none; }
 
 .link {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
   padding: 10px 16px; border-radius: 8px; color: var(--vp-c-text-1);
   transition: all 0.2s;
 }
 .link:hover { background: rgba(217, 122, 140, 0.08); color: var(--accent-color); }
-.link span { font-size: 15px; }
-.link time { font-size: 13px; color: var(--vp-c-text-3); white-space: nowrap; margin-left: 16px; }
+.link-title { font-size: 15px; min-width: 0; }
+.link-meta { display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.link-reading { font-size: 12px; color: var(--vp-c-text-3); }
+.link time { font-size: 13px; color: var(--vp-c-text-3); white-space: nowrap; }
+@media (max-width: 560px) {
+  .link-reading { display: none; }
+}
 </style>

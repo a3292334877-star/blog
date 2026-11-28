@@ -2,8 +2,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" font-family="'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#db2777"/>
-      <stop offset="1" stop-color="#831843"/>
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#1e293b"/>
     </linearGradient>
     <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#050816" stop-opacity="0.34"/>
@@ -27,7 +27,7 @@
   <line x1="80" y1="104" x2="1120" y2="104" stroke="#fff" stroke-opacity="0.28"/>
 
   <g>
-    <rect x="80" y="154" width="206.9" height="38" rx="19" fill="#fff" opacity="0.18"/>
+    <rect x="80" y="154" width="259" height="38" rx="19" fill="#fff" opacity="0.18"/>
     <text x="98" y="179" font-size="15" font-weight="700" letter-spacing="1.2" fill="#fff">高等数学 · 微积分 · 专升本</text>
   </g>
 
@@ -37,18 +37,42 @@
 
   <rect x="760" y="76" width="368" height="440" rx="32" fill="#fff" opacity="0.09" stroke="#fff" stroke-opacity="0.28"/>
   <g clip-path="url(#art-clip)" transform="translate(-10 28) scale(0.96)">
-  <!-- 大积分号 -->
-  <text x="900" y="280" font-size="200" fill="rgba(255,255,255,0.92)" font-family="serif" font-style="italic" font-weight="400">∫</text>
-  <!-- 积分上下限 -->
-  <text x="935" y="130" font-size="22" fill="rgba(255,255,255,0.85)" font-family="serif">∞</text>
-  <text x="935" y="300" font-size="22" fill="rgba(255,255,255,0.85)" font-family="serif">0</text>
-  <!-- 被积函数 -->
-  <text x="955" y="200" font-size="38" fill="#fff" font-family="serif" font-style="italic">f(x)dx</text>
-  <!-- 函数曲线 -->
-  <path d="M 830 330 Q 920 240 1010 300 T 1080 270" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-dasharray="6 4"/>
-  <!-- 坐标轴 -->
-  <line x1="830" y1="340" x2="1080" y2="340" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-  <line x1="830" y1="120" x2="830" y2="340" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+  <text x="955" y="114" font-size="22" fill="rgba(255,255,255,0.88)" font-family="serif" font-style="italic" text-anchor="middle">dy/dx = f(x, y)</text>
+  <line x1="825" y1="232" x2="1085" y2="232" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+  <line x1="955" y1="128" x2="955" y2="342" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+  <line x1="835.6" y1="155.5" x2="854.4" y2="140.5" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="833.8" y1="194.4" x2="856.2" y2="185.6" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="833.0" y1="232.0" x2="857.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="833.8" y1="269.6" x2="856.2" y2="278.4" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="835.6" y1="308.5" x2="854.4" y2="323.5" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="878.2" y1="153.2" x2="899.8" y2="142.8" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="877.3" y1="192.8" x2="900.7" y2="187.2" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="877.0" y1="232.0" x2="901.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="877.3" y1="271.2" x2="900.7" y2="276.8" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="878.2" y1="310.8" x2="899.8" y2="321.2" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="921.1" y1="149.9" x2="944.9" y2="146.1" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="921.0" y1="190.9" x2="945.0" y2="189.1" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="921.0" y1="232.0" x2="945.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="921.0" y1="273.1" x2="945.0" y2="274.9" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="921.1" y1="314.1" x2="944.9" y2="317.9" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="965.1" y1="146.1" x2="988.9" y2="149.9" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="965.0" y1="189.1" x2="989.0" y2="190.9" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="965.0" y1="232.0" x2="989.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="965.0" y1="274.9" x2="989.0" y2="273.1" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="965.1" y1="317.9" x2="988.9" y2="314.1" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1010.2" y1="142.8" x2="1031.8" y2="153.2" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1009.3" y1="187.2" x2="1032.7" y2="192.8" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1009.0" y1="232.0" x2="1033.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1009.3" y1="276.8" x2="1032.7" y2="271.2" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1010.2" y1="321.2" x2="1031.8" y2="310.8" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1055.6" y1="140.5" x2="1074.4" y2="155.5" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1053.8" y1="185.6" x2="1076.2" y2="194.4" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1053.0" y1="232.0" x2="1077.0" y2="232.0" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1053.8" y1="278.4" x2="1076.2" y2="269.6" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="1055.6" y1="323.5" x2="1074.4" y2="308.5" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M 830.0 231.9 L 840.4 231.7 L 850.8 231.2 L 861.3 230.1 L 871.7 227.8 L 882.1 223.4 L 892.5 216.2 L 902.9 205.5 L 913.3 191.5 L 923.8 175.7 L 934.2 160.8 L 944.6 150.0 L 955.0 146.0 L 965.4 150.0 L 975.8 160.8 L 986.3 175.7 L 996.7 191.5 L 1007.1 205.5 L 1017.5 216.2 L 1027.9 223.4 L 1038.3 227.8 L 1048.8 230.1 L 1059.2 231.2 L 1069.6 231.7 L 1080.0 231.9" fill="none" stroke="#ffd700" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 830.0 231.9 L 840.4 231.8 L 850.8 231.6 L 861.3 230.9 L 871.7 229.6 L 882.1 227.2 L 892.5 223.2 L 902.9 217.2 L 913.3 209.4 L 923.8 200.6 L 934.2 192.2 L 944.6 186.2 L 955.0 184.0 L 965.4 186.2 L 975.8 192.2 L 986.3 200.6 L 996.7 209.4 L 1007.1 217.2 L 1017.5 223.2 L 1027.9 227.2 L 1038.3 229.6 L 1048.8 230.9 L 1059.2 231.6 L 1069.6 231.8 L 1080.0 231.9" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+  <path d="M 830.0 232.1 L 840.4 232.3 L 850.8 232.7 L 861.3 233.8 L 871.7 236.0 L 882.1 240.2 L 892.5 247.0 L 902.9 257.3 L 913.3 270.6 L 923.8 285.7 L 934.2 299.9 L 944.6 310.2 L 955.0 314.0 L 965.4 310.2 L 975.8 299.9 L 986.3 285.7 L 996.7 270.6 L 1007.1 257.3 L 1017.5 247.0 L 1027.9 240.2 L 1038.3 236.0 L 1048.8 233.8 L 1059.2 232.7 L 1069.6 232.3 L 1080.0 232.1" fill="none" stroke="rgba(255,255,255,0.78)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <text x="1102" y="492" text-anchor="end" font-size="13" letter-spacing="2" fill="#fff" opacity="0.58">VISUAL INDEX / 15</text>
 

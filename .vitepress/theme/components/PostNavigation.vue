@@ -42,9 +42,14 @@ const older = computed(() => currentIndex.value >= 0 && currentIndex.value < pos
 const related = computed(() => {
   if (!current.value) return []
   const tags = new Set(current.value.tags)
+  const currentType = current.value.type
   return posts
     .filter((post) => post.href !== current.value?.href)
-    .map((post) => ({ post, score: post.tags.filter((tag: string) => tags.has(tag)).length }))
+    .map((post) => {
+      const tagMatches = post.tags.filter((tag: string) => tags.has(tag)).length
+      const typeBonus = post.type === currentType ? 0.5 : 0
+      return { post, score: tagMatches + typeBonus }
+    })
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || b.post.create - a.post.create)
     .slice(0, 3)
