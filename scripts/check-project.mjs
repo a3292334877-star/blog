@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { basename, dirname, extname, join, relative, resolve } from 'node:path'
 import matter from 'gray-matter'
 import { SITE } from '../.vitepress/site.constants.mjs'
+import { parseAnime, parseShuoshuo } from '../.vitepress/content-parsers.mjs'
 
 const root = resolve(import.meta.dirname, '..')
 const errors = []
@@ -97,6 +98,9 @@ try {
 } catch (error) {
   fail(`public/translate/sw.js: ${error.message}`)
 }
+
+if (!parseAnime(root).length) fail('anime/index.md: no anime entries parsed')
+if (!parseShuoshuo(root).length) fail('shuoshuo/index.md: no shuoshuo entries parsed')
 
 if (errors.length) {
   console.error(`Project check failed with ${errors.length} error(s):`)

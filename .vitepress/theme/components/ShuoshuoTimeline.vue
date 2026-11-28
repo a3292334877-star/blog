@@ -101,6 +101,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+// @ts-expect-error VitePress 在构建时注入 data 导出，.mjs 源文件里没有这个具名导出。
+import { data as shuoshuoList } from '../../shuoshuo.data.mjs'
 
 interface ShuoshuoItem {
   date: string // YYYY-MM-DD
@@ -111,91 +113,8 @@ interface ShuoshuoItem {
   tagType: 'daily' | 'study' | 'milestone' | 'mood'
 }
 
-const rawData = [
-  {
-    date: '2026-07-29',
-    content: '感觉每一天都没什么事干，我现在到底该做什么呢？',
-    tag: '思考',
-    tagType: 'mood' as const,
-  },
-  {
-    date: '2026-07-22',
-    content: '也是不出所料的挂了，不过项目都练熟了，下一次一定过！',
-    tag: '驾考',
-    tagType: 'daily' as const,
-  },
-  {
-    date: '2026-07-20',
-    content: '科三好焦虑啊，就练了两天就因为教练给的压力太大在家自学了，希望周三能一把过~~~~',
-    tag: '驾考',
-    tagType: 'daily' as const,
-  },
-  {
-    date: '2026-07-15',
-    content: '终于回家惹！放假的日子最舒服啦 🏡',
-    tag: '日常',
-    tagType: 'daily' as const,
-  },
-  {
-    date: '2026-06-24',
-    content: '到底是回家过暑假还是打暑假工呢？好难抉择啊！',
-    tag: '日常',
-    tagType: 'daily' as const,
-  },
-  {
-    date: '2026-06-14',
-    content: '英语四级过咯，接下来就要准备六级了，再准备雅思托福，准备去国外闯荡了！🎉',
-    tag: '考试通关',
-    tagType: 'milestone' as const,
-  },
-  {
-    date: '2026-06-01',
-    content: '今天刷完了 LeetCode 的哈希表专题，整理了笔记发到博客上。C++ 的 unordered_map 自定义哈希这个坑，以前被卡过好多次。',
-    tag: '算法刷题',
-    tagType: 'study' as const,
-  },
-  {
-    date: '2026-05-28',
-    content: '在写一个 Flutter 项目，Provider 的状态管理终于弄懂了。之前一直用 setState，代码一多就乱。',
-    tag: 'Flutter',
-    tagType: 'study' as const,
-  },
-  {
-    date: '2026-04-20',
-    content: '蓝桥杯省赛结束，以省三收尾，虽然名次不是很高，但我会再接再厉的！💪',
-    tag: '竞赛',
-    tagType: 'milestone' as const,
-  },
-  {
-    date: '2026-03-08',
-    content: '18 岁生日，成年了，我终于长大啦！🎂✨',
-    tag: '生日成人礼',
-    tagType: 'milestone' as const,
-  },
-  {
-    date: '2026-01-31',
-    content: 'N1 成绩出来了，179 分！努力终究没有白费，日本留学目标又迈近了一大步 🇯🇵',
-    tag: '日语N1',
-    tagType: 'milestone' as const,
-  },
-  {
-    date: '2025-09-01',
-    content: '大学开学了，选择了计算机科学与技术，充满期待！🎒💻',
-    tag: '开学启程',
-    tagType: 'milestone' as const,
-  },
-]
-
-const shuoshuoList: ShuoshuoItem[] = rawData.map((d) => {
-  const [y, m, day] = d.date.split('-')
-  return {
-    ...d,
-    year: y,
-    displayDate: `${m}月${day}日`,
-  }
-})
-
-const years = Array.from(new Set(shuoshuoList.map((item) => item.year))).sort((a, b) => b.localeCompare(a))
+const years = Array.from(new Set<string>(shuoshuoList.map((item: ShuoshuoItem) => item.year)))
+  .sort((a, b) => b.localeCompare(a))
 
 const selectedYear = ref('all')
 const searchQuery = ref('')

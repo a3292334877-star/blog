@@ -2,10 +2,9 @@
  * 站点统计数据加载器
  * 计算总字数、运行时间、近期新增文章数
  */
-import fs from 'node:fs'
 import path from 'node:path'
-import matter from 'gray-matter'
 import { loadPosts } from './posts.mjs'
+import { parseProjects, parseShuoshuo } from './content-parsers.mjs'
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -37,50 +36,12 @@ export default {
     const weekNew = posts.filter((p) => p.date >= weekAgo).length
     const monthNew = posts.filter((p) => p.date >= monthAgo).length
 
-    // 项目数量
-    const projectDir = path.join(cwd, 'projects')
-    let projectCount = 0
-    let projectDates = []
-    try {
-      const projectFiles = fs
-        .readdirSync(projectDir)
-        .filter((f) => f.endsWith('.md') && f !== 'index.md')
-      projectCount = projectFiles.length
-      projectDates = projectFiles
-        .map((f) => {
-          const raw = fs.readFileSync(path.join(projectDir, f), 'utf-8')
-          return +new Date(matter(raw).data.date) || 0
-        })
-        .filter((date) => date > 0)
-    } catch { /* 目录不存在时忽略 */ }
-
-    // 说说使用「年份 + 月-日」标题，提取日期后一起参与“最近更新”计算。
-    const shuoshuoDates = []
-    const shuoshuoFile = path.join(cwd, 'shuoshuo', 'index.md')
-    if (fs.existsSync(shuoshuoFile)) {
-      let year = 0
-      const lines = fs.readFileSync(shuoshuoFile, 'utf-8').split(/\r?\n/)
-      for (const line of lines) {
-        const yearMatch = line.match(/^##\s+(\d{4})\s*$/)
-        if (yearMatch) {
-          year = Number(yearMatch[1])
-          continue
-        }
-        const dateMatch = line.match(/^###\s+(\d{2})-(\d{2})\s*$/)
-        if (year && dateMatch) {
-          shuoshuoDates.push(Date.UTC(
-            year,
-            Number(dateMatch[1]) - 1,
-            Number(dateMatch[2]),
-            12,
-          ))
-        }
-      }
-    }
+    const projects = parseProjects(cwd)
+    const shuoshuoDates = parseShuoshuo(cwd).map((item) => item.timestamp)
 
     const contentDates = [
       ...posts.map((p) => p.date),
-      ...projectDates,
+      ...projects.map((p) => p.date),
       ...shuoshuoDates,
     ]
 
@@ -91,7 +52,7 @@ export default {
       weekNew,
       monthNew,
       lastUpdate: contentDates.length ? Math.max(...contentDates) : now,
-      projectCount,
+      projectCount: projects.length,
     }
   },
 }
