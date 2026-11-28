@@ -13,11 +13,13 @@ export function useCountUp(
   target: Ref<number | null>,
   duration = 1200,
   animateOnMount = false,
+  observeTarget?: Ref<HTMLElement | null>,
 ): Ref<number> {
   // 静态数据在 SSR 与客户端首次渲染时保持一致，避免 hydration mismatch。
   // 异步数据（初始为 null）仍会在抵达后从 0 开始动画。
   const display = ref(target.value ?? 0)
   let rafId: number | null = null
+  let observer: IntersectionObserver | null = null
   let startTime = 0
   let startVal = 0
   let endVal = 0
@@ -64,14 +66,38 @@ export function useCountUp(
     },
   )
 
-  // 静态数据（如站点统计）不会触发 watch，挂载后主动滚一次。
+  // 静态数据（如站点统计）不会触发 watch；若传入元素引用则等滚入视口后再触发动画。
   onMounted(() => {
     if (!animateOnMount || target.value === null || target.value === undefined) return
-    display.value = 0
-    start(target.value)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const run = () => {
+      if (target.value === null || target.value === undefined) return
+      display.value = 0
+      start(target.value)
+    }
+
+    const el = observeTarget?.value
+    if (el && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return
+          observer?.disconnect()
+          observer = null
+          run()
+        },
+        { threshold: 0.15 },
+      )
+      observer.observe(el)
+      return
+    }
+
+    run()
   })
 
   onUnmounted(() => {
+    observer?.disconnect()
+    observer = null
     if (rafId !== null) cancelAnimationFrame(rafId)
   })
 

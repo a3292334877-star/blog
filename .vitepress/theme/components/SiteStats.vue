@@ -1,5 +1,5 @@
 <template>
-  <section class="site-stats">
+  <section ref="statsSection" class="site-stats">
     <h2 class="section-heading">
       <span class="icon">📊</span> 站点统计
     </h2>
@@ -84,24 +84,25 @@ import { data as stats } from '../../site.data.mjs'
 import { useVisitorCounter } from '../composables/useVisitorCounter'
 import { useCountUp } from '../composables/useCountUp'
 
+const statsSection = ref<HTMLElement | null>(null)
 const { uv, pv } = useVisitorCounter()
 
 // 异步数字（来自 Supabase，可能为 null）：在 uv/pv 到达后触发 count-up
 const uvDisplay = useCountUp(uv, 1500)
 const pvDisplay = useCountUp(pv, 1500)
 
-// 静态数字（构建时已确定），用 ref 包一下喂给 useCountUp
+// 静态数字（构建时已确定），滚入视口后再触发 count-up
 const wordsRef = ref(stats.totalWords)
 const runDaysRef = ref(stats.runDays)
 const monthNewRef = ref(stats.monthNew)
 const weekNewRef = ref(stats.weekNew)
 const projectCountRef = ref(stats.projectCount)
 
-const wordsDisplay = useCountUp(wordsRef, 1200, true)
-const runDaysDisplay = useCountUp(runDaysRef, 1000, true)
-const monthNewDisplay = useCountUp(monthNewRef, 800, true)
-const weekNewDisplay = useCountUp(weekNewRef, 800, true)
-const projectCountDisplay = useCountUp(projectCountRef, 800, true)
+const wordsDisplay = useCountUp(wordsRef, 1200, true, statsSection)
+const runDaysDisplay = useCountUp(runDaysRef, 1000, true, statsSection)
+const monthNewDisplay = useCountUp(monthNewRef, 800, true, statsSection)
+const weekNewDisplay = useCountUp(weekNewRef, 800, true, statsSection)
+const projectCountDisplay = useCountUp(projectCountRef, 800, true, statsSection)
 
 function fmtNum(n: number) {
   return n.toLocaleString('zh-CN')

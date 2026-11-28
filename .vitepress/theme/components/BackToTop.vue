@@ -49,7 +49,7 @@ function scrollToTop() {
 .back-to-top:hover {
   color: var(--accent-color);
   border-color: var(--accent-color);
-  box-shadow: 0 4px 16px rgba(254, 150, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(217, 122, 140, 0.28);
 }
 
 .back-to-top.visible {

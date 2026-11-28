@@ -279,6 +279,9 @@
 
   function speak(value, language) {
     if (!value) return showToast("当前没有可朗读的内容");
+    if (typeof speechSynthesis === "undefined" || typeof SpeechSynthesisUtterance === "undefined") {
+      return showToast("当前浏览器不支持语音朗读");
+    }
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(value);
     utterance.lang = language === "auto" ? detectedLanguage || "zh-CN" : language;
@@ -314,7 +317,9 @@
   }
 
   function saveHistory() {
-    localStorage.setItem(historyKey, JSON.stringify(history));
+    try {
+      localStorage.setItem(historyKey, JSON.stringify(history));
+    } catch (_) {}
   }
 
   function toggleCurrentFavorite() {
@@ -422,7 +427,9 @@
 
   function toggleTheme() {
     const dark = document.documentElement.classList.toggle("dark");
-    localStorage.setItem(themeKey, dark ? "dark" : "light");
+    try {
+      localStorage.setItem(themeKey, dark ? "dark" : "light");
+    } catch (_) {}
   }
 
   function showToast(message) {

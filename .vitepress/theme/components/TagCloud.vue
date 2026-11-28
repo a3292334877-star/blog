@@ -106,7 +106,7 @@ h1 { font-size: 30px; margin-bottom: 8px; }
 }
 .tag:hover, .tag.active {
   color: var(--accent-color); border-color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(254,150,0,0.15);
+  box-shadow: 0 4px 12px rgba(217, 122, 140, 0.2);
 }
 .tag.active { background: var(--accent-solid); color: #fff; }
 .n {
@@ -125,7 +125,7 @@ h2 .n { font-size: 13px; color: var(--vp-c-text-3); font-weight: 400; background
   padding: 10px 16px; border-radius: 8px; color: var(--vp-c-text-1);
   transition: all 0.2s;
 }
-.link:hover { background: rgba(254,150,0,0.05); color: var(--accent-color); }
+.link:hover { background: rgba(217, 122, 140, 0.08); color: var(--accent-color); }
 .link span { font-size: 15px; }
 .link time { font-size: 13px; color: var(--vp-c-text-3); white-space: nowrap; margin-left: 16px; }
 </style>

@@ -38,6 +38,16 @@ const QUIZ_PANEL_PAGES = new Set([
   'posts/ruankao-intermediate-guide.md',
 ])
 
+const NO_COMMENT_PAGES = new Set([
+  'index.md',
+  '404.md',
+  'posts/index.md',
+  'tags/index.md',
+  'friends/index.md',
+  'about/index.md',
+  'projects/index.md',
+])
+
 /** 仅在特定页面使用的异步组件 chunk，避免在全站所有页面提前 modulepreload。 */
 const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
   HomeHero: (page) => page === 'index.md',
@@ -50,9 +60,9 @@ const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
   SiteStats: (page) => page === 'index.md',
   SakuraPetals: (page) => page === 'index.md',
   Live2DWidget: (page) => page === 'index.md',
-  ReadingProgress: (page) => page !== 'index.md',
-  PostNavigation: (page) => page !== 'index.md',
-  GiscusComment: (page) => page !== 'index.md',
+  ReadingProgress: (page) => page !== 'index.md' && page !== '404.md',
+  PostNavigation: (page) => page.startsWith('posts/') && page !== 'posts/index.md',
+  GiscusComment: (page) => !NO_COMMENT_PAGES.has(page),
   BlogList: (page) => page === 'index.md' || page === 'posts/index.md',
   BlogTimeline: (page) => page === 'posts/index.md',
   TagCloud: (page) => page === 'tags/index.md',

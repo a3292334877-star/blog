@@ -91,7 +91,7 @@ function fmtShort(ts: number) {
 .dot {
   width: 14px; height: 14px; border-radius: 50%;
   background: var(--accent-color);
-  box-shadow: 0 0 0 4px rgba(254,150,0,0.2);
+  box-shadow: 0 0 0 4px rgba(217, 122, 140, 0.22);
   flex-shrink: 0;
 }
 .text { font-size: 20px; font-weight: 700; color: var(--accent-color); }
@@ -121,7 +121,7 @@ function fmtShort(ts: number) {
 .item:last-child .mline { display: none; }
 .item:hover .mdot {
   background: var(--accent-color);
-  box-shadow: 0 0 0 4px rgba(254,150,0,0.15);
+  box-shadow: 0 0 0 4px rgba(217, 122, 140, 0.18);
   transform: scale(1.3);
 }
 

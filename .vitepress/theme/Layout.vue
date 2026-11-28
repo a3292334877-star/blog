@@ -43,8 +43,8 @@
       </div>
     </template>
     <template #doc-after>
-      <PostNavigation />
-      <GiscusComment />
+      <PostNavigation v-if="isPostPage" />
+      <GiscusComment v-if="frontmatter.comments !== false" />
     </template>
 
     <template #layout-bottom>
@@ -64,6 +64,7 @@ import BackToTop from './components/BackToTop.vue'
 import CursorGlow from './components/CursorGlow.vue'
 import CopyToast from './components/CopyToast.vue'
 import { inferPostType } from '../post-utils.mjs'
+import { normalizeSitePath } from './utils'
 
 const MusicPlayer = defineAsyncComponent(() => import('./components/MusicPlayer.vue'))
 
@@ -81,9 +82,13 @@ const ReadingProgress = defineAsyncComponent(() => import('./components/ReadingP
 const PostNavigation = defineAsyncComponent(() => import('./components/PostNavigation.vue'))
 const GiscusComment = defineAsyncComponent(() => import('./components/GiscusComment.vue'))
 
-const { frontmatter } = useData()
+const { frontmatter, site } = useData()
 const route = useRoute()
 const isHome = computed(() => route.path === withBase('/'))
+const isPostPage = computed(() => {
+  const normalized = normalizeSitePath(route.path, site.value.base)
+  return normalized.startsWith('posts/') && normalized !== 'posts'
+})
 
 // Image lightbox — re-attach on route change
 let zoom: { detach: () => void } | null = null
