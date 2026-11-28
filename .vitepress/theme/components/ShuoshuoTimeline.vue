@@ -41,8 +41,16 @@
             v-model="searchQuery"
             type="text"
             placeholder="搜索碎碎念内容或标签..."
+            aria-label="搜索碎碎念内容或标签"
             class="search-mini-input"
           />
+          <button
+            v-if="searchQuery"
+            type="button"
+            class="search-mini-clear"
+            aria-label="清空搜索"
+            @click="searchQuery = ''"
+          >✕</button>
         </div>
       </div>
     </div>
@@ -60,7 +68,7 @@
             v-for="(item, index) in group.items"
             :key="item.date + index"
             class="timeline-card"
-            :style="{ animationDelay: (index * 60) + 'ms' }"
+            :style="{ animationDelay: Math.min(index, 8) * 45 + 'ms' }"
           >
             <!-- 左侧时间与点 -->
             <div class="node-axis">
@@ -333,8 +341,14 @@ const groupedShuoshuo = computed(() => {
   box-shadow: 0 2px 8px rgba(217, 122, 140, 0.3);
 }
 
+.search-mini {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .search-mini-input {
-  padding: 6px 14px;
+  padding: 6px 30px 6px 14px;
   border-radius: 12px;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
@@ -343,6 +357,20 @@ const groupedShuoshuo = computed(() => {
   outline: none;
   min-width: 220px;
   transition: border-color 0.2s;
+}
+
+.search-mini-clear {
+  position: absolute;
+  right: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--vp-c-text-3);
+  font-size: 12px;
+  padding: 4px;
+  cursor: pointer;
+}
+.search-mini-clear:hover {
+  color: var(--vp-c-text-1);
 }
 
 .search-mini-input:focus {

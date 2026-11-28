@@ -195,6 +195,7 @@ const lineRefs = new Map<number, HTMLElement>()
 let audio: HTMLAudioElement | null = null
 let sourceAttached = false
 let lyricsLoaded = false
+let pendingSeekTime: number | null = null
 
 function splitLyricText(rawText: string): { main: string; sub: string } {
   const text = rawText.trim()
@@ -338,7 +339,14 @@ const onWaiting = () => { buffering.value = true }
 const onCanPlay = () => { buffering.value = false }
 const onTimeUpdate = () => { if (audio) currentTime.value = audio.currentTime }
 const onDurationChange = () => {
-  if (audio && Number.isFinite(audio.duration)) duration.value = audio.duration
+  if (!audio) return
+  if (Number.isFinite(audio.duration)) duration.value = audio.duration
+  if (pendingSeekTime !== null && audio.readyState >= 1) {
+    const targetTime = pendingSeekTime
+    pendingSeekTime = null
+    audio.currentTime = targetTime
+    currentTime.value = targetTime
+  }
 }
 const onError = (e: Event) => {
   console.error('音乐加载失败:', audio?.error?.message || e)
@@ -346,7 +354,14 @@ const onError = (e: Event) => {
   buffering.value = false
 }
 
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && lyricsMode.value === 'drawer') {
+    lyricsMode.value = 'pill'
+  }
+}
+
 onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
   try {
     const rawVol = localStorage.getItem(VOLUME_STORAGE_KEY)
     if (rawVol !== null && rawVol !== '') {
@@ -375,6 +390,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  pendingSeekTime = null
   if (!audio) return
   audio.pause()
   audio.removeEventListener('play', onPlay)
@@ -436,17 +453,14 @@ function closeLyrics() {
 function seekTo(time: number) {
   if (!audio) return
   attachAudioSource()
-  const seekAndPlay = () => {
-    if (!audio) return
+  if (audio.readyState >= 1) {
+    pendingSeekTime = null
     audio.currentTime = time
     currentTime.value = time
     if (audio.paused) startPlayback()
-  }
-  if (audio.readyState >= 1) {
-    seekAndPlay()
   } else {
-    audio.addEventListener('loadedmetadata', seekAndPlay, { once: true })
-    startPlayback()
+    pendingSeekTime = time
+    if (audio.paused) startPlayback()
   }
 }
 
@@ -796,6 +810,33 @@ function formatClock(sec: number): string {
 .lyrics-pop-leave-to {
   opacity: 0;
   transform: translateY(10px) scale(0.98);
+}
+
+@media (max-width: 640px) {
+  .music-toggle,
+  .lyrics-toggle {
+    bottom: 24px;
+    width: 40px;
+    height: 40px;
+  }
+  .music-toggle {
+    right: 74px;
+    font-size: 19px;
+  }
+  .lyrics-toggle {
+    right: 124px;
+    font-size: 13px;
+  }
+  .lyrics-pill,
+  .lyrics-drawer {
+    right: 16px;
+    bottom: 76px;
+    max-width: calc(100vw - 32px);
+  }
+  .lyrics-drawer {
+    width: calc(100vw - 32px);
+    max-height: min(420px, calc(100vh - 130px));
+  }
 }
 
 @keyframes music-spin {

@@ -16,7 +16,7 @@
       <h2>相关文章</h2>
       <div class="related-grid">
         <a v-for="post in related" :key="post.href" :href="resolveSitePath(post.href)" class="related-card">
-          <img v-if="post.cover" :src="resolveSitePath(post.cover)" :alt="post.title" loading="lazy">
+          <img v-if="post.cover" :src="resolveSitePath(post.cover)" :alt="post.title" loading="lazy" decoding="async">
           <strong>{{ post.title }}</strong>
           <span>{{ post.summary }} · 阅读 {{ post.readingTime }} 分钟</span>
         </a>

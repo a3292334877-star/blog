@@ -13,7 +13,7 @@
         </div>
 
         <div v-for="(p, i) in group" :key="p.href" class="item"
-          :style="{ animationDelay: i * 50 + 'ms' }">
+          :style="{ animationDelay: Math.min(i, 8) * 40 + 'ms' }">
           <div class="marker">
             <span class="mdot"></span>
             <span class="mline"></span>

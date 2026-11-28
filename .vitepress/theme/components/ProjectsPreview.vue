@@ -14,7 +14,7 @@
         :style="{ animationDelay: i * 100 + 'ms' }"
       >
         <div class="project-cover" v-if="p.cover">
-          <img :src="resolveSitePath(p.cover)" :alt="p.title" loading="lazy" />
+          <img :src="resolveSitePath(p.cover)" :alt="p.title" loading="lazy" decoding="async" />
         </div>
         <div class="project-cover project-cover--placeholder" v-else>
           <span>📦</span>

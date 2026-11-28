@@ -69,6 +69,7 @@ const SCOPED_PRELOAD_CHUNKS: Record<string, (page: string) => boolean> = {
   StepCards: (page) => STEP_CARD_PAGES.has(page),
   StepCard: (page) => STEP_CARD_PAGES.has(page),
   QuizPanel: (page) => QUIZ_PANEL_PAGES.has(page),
+  MusicPlayer: () => false,
   'medium-zoom': () => false,
   VPLocalSearchBox: () => false,
 }
@@ -98,9 +99,9 @@ function tokenizeSearchText(text: string): string[] {
     .toLowerCase()
 
   if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
-    return Array.from(
-      new Intl.Segmenter('zh-CN', { granularity: 'word' }).segment(normalized),
-    )
+    const fn = tokenizeSearchText as typeof tokenizeSearchText & { _seg?: Intl.Segmenter }
+    fn._seg ??= new Intl.Segmenter('zh-CN', { granularity: 'word' })
+    return Array.from(fn._seg.segment(normalized))
       .filter((part) => part.isWordLike)
       .map((part) => part.segment)
   }
@@ -112,14 +113,14 @@ function tokenizeSearchText(text: string): string[] {
 }
 
 /**
- * 过滤高频中文虚词（的、与、是……）。它们几乎出现在每个段落里，
- * 却无法区分结果，单独占用了索引约 7% 的条目；查询时同样会被忽略。
- * 日语假名助词不在此列，学习文章需要能搜到「は」「が」等语法点。
+ * 过滤高频中文虚词（的、与、是……）、下划线占位符以及 1～2 位孤立数字。
+ * 它们几乎出现在每个段落或题干中，却无法区分结果；查询时同样会被忽略。
+ * 日语假名助词和 3 位以上数字（年份、状态码等）不在此列，保留可检索性。
  *
  * 此函数会被 VitePress 序列化到客户端，因此必须保持自包含。
  */
 function processSearchTerm(term: string): string | null {
-  return /^(?:的|了|与|和|及|或|是|在|从|到|为|对|把|被|将|让|也|就|都|而|并|则|等|着|之|其|这|那|个|吗|呢|吧|啊|呀|地|得|又|再|还|很|即|且|但|若|如|因|所|以|于|此|些)$/.test(term)
+  return /^(?:的|了|与|和|及|或|是|在|从|到|为|对|把|被|将|让|也|就|都|而|并|则|等|着|之|其|这|那|个|吗|呢|吧|啊|呀|地|得|又|再|还|很|即|且|但|若|如|因|所|以|于|此|些|_+|\d{1,2}(?:[.,:/-]\d+)*)$/.test(term)
     ? null
     : term
 }
@@ -275,10 +276,11 @@ export default defineConfig({
             [title, description, tags, body].filter(Boolean).join('\n\n'),
             env,
           )
-          // 兜底剔除残余代码块（如缩进代码块）与 KaTeX <annotation>，避免无关源码/公式语法膨胀搜索索引。
+          // 兜底剔除残余代码块（如缩进代码块）与 KaTeX MathML，避免无关源码/公式符号膨胀搜索索引。
           return html
             .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/g, '')
             .replace(/<span class="lang">[^<]*<\/span>/g, '')
+            .replace(/<math\b[^>]*>[\s\S]*?<\/math>/g, ' ')
             .replace(/<annotation[^>]*>[\s\S]*?<\/annotation>/g, '')
         },
         miniSearch: {

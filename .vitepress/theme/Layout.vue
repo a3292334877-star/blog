@@ -61,10 +61,11 @@ import DefaultTheme from 'vitepress/theme-without-fonts'
 import { useData, useRoute, withBase } from 'vitepress'
 import { computed, watch, nextTick, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import BackToTop from './components/BackToTop.vue'
-import MusicPlayer from './components/MusicPlayer.vue'
 import CursorGlow from './components/CursorGlow.vue'
 import CopyToast from './components/CopyToast.vue'
 import { inferPostType } from '../post-utils.mjs'
+
+const MusicPlayer = defineAsyncComponent(() => import('./components/MusicPlayer.vue'))
 
 const HomeHero = defineAsyncComponent(() => import('./components/HomeHero.vue'))
 const AboutStrip = defineAsyncComponent(() => import('./components/AboutStrip.vue'))

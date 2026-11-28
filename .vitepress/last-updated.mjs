@@ -7,25 +7,41 @@
  */
 import { execFileSync } from 'node:child_process'
 
-const cache = new Map()
+let fileDatesCache = null
+
+function loadGitFileDates() {
+  if (fileDatesCache) return fileDatesCache
+  const map = new Map()
+  try {
+    const output = execFileSync(
+      'git',
+      ['-c', 'core.quotePath=false', 'log', '--format=__COMMIT__%cI', '--name-only'],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+        maxBuffer: 16 * 1024 * 1024,
+      },
+    )
+    let currentDate = null
+    for (const rawLine of output.split(/\r?\n/)) {
+      const line = rawLine.trim()
+      if (!line) continue
+      if (line.startsWith('__COMMIT__')) {
+        currentDate = line.slice('__COMMIT__'.length)
+      } else if (currentDate && !map.has(line)) {
+        map.set(line, currentDate)
+      }
+    }
+  } catch {
+    // 非 Git 环境（如源码压缩包）保持空映射
+  }
+  fileDatesCache = map
+  return map
+}
 
 export function gitLastUpdated(relativePath) {
   if (!relativePath) return null
-  if (cache.has(relativePath)) return cache.get(relativePath)
-
-  let value = null
-  try {
-    const output = execFileSync('git', ['log', '-1', '--format=%cI', '--', relativePath], {
-      cwd: process.cwd(),
-      stdio: ['ignore', 'pipe', 'ignore'],
-    })
-      .toString()
-      .trim()
-    if (output) value = output
-  } catch {
-    value = null
-  }
-
-  cache.set(relativePath, value)
-  return value
+  const normalized = String(relativePath).replaceAll('\\', '/').replace(/^\.\//, '')
+  return loadGitFileDates().get(normalized) ?? null
 }

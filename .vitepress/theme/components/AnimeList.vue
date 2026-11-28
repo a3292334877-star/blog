@@ -8,6 +8,7 @@
           :key="tab.id"
           class="tab-btn"
           :class="{ active: currentTab === tab.id }"
+          :aria-pressed="currentTab === tab.id"
           @click="currentTab = tab.id"
         >
           <span class="tab-icon">{{ tab.icon }}</span>
@@ -22,9 +23,10 @@
           v-model="searchQuery"
           type="text"
           placeholder="搜索番名、简评、标签或制作组..."
+          aria-label="搜索番名、简评、标签或制作组"
           class="search-input"
         />
-        <button v-if="searchQuery" class="clear-btn" @click="searchQuery = ''">✕</button>
+        <button v-if="searchQuery" type="button" class="clear-btn" aria-label="清空搜索" @click="searchQuery = ''">✕</button>
       </div>
     </div>
 

@@ -333,10 +333,9 @@ h1 strong::after {
   .eyebrow span { width: 20px; }
   .hero-lead { margin-top: 11px; }
   .typewriter-line { min-height: 22px; margin-top: 5px; font-size: 12px; }
-  .hero-actions { margin-top: 14px; margin-right: 52px; gap: 8px; }
+  .hero-actions { margin-top: 14px; gap: 8px; }
   .hero-action { min-height: 43px; padding: 0 14px; flex: 1 1 130px; }
   .hero-badges { display: none; }
-  :global(body:has(.home-hero) .music-toggle) { right: 16px; }
 }
 
 @media (max-height: 680px) and (min-width: 821px) {

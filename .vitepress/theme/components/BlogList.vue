@@ -15,6 +15,7 @@
       <label>年份
         <select v-model="selectedYear"><option v-for="item in years" :key="item">{{ item }}</option></select>
       </label>
+      <button v-if="hasActiveFilters" type="button" class="filter-reset" @click="resetFilters">重置</button>
     </div>
 
     <div class="post-grid">
@@ -22,10 +23,10 @@
         v-for="(p, i) in visiblePosts"
         :key="p.href"
         class="post-card"
-        :style="{ animationDelay: i * 80 + 'ms' }"
+        :style="{ animationDelay: Math.min(i, 5) * 60 + 'ms' }"
       >
         <a :href="resolveSitePath(p.href)" class="card-cover" v-if="p.cover">
-          <img :src="resolveSitePath(p.cover)" :alt="p.title" loading="lazy" />
+          <img :src="resolveSitePath(p.cover)" :alt="p.title" loading="lazy" decoding="async" />
         </a>
         <a :href="resolveSitePath(p.href)" class="card-cover card-cover--placeholder" v-else aria-hidden="true">
           <span class="placeholder-icon">🌸</span>
@@ -53,7 +54,10 @@
       </article>
     </div>
 
-    <div v-if="!visiblePosts.length" class="empty">还没有文章~</div>
+    <div v-if="!visiblePosts.length" class="empty">
+      <p>{{ hasActiveFilters ? '没有符合条件的文章~' : '还没有文章~' }}</p>
+      <button v-if="hasActiveFilters" type="button" class="empty-reset" @click="resetFilters">重置筛选</button>
+    </div>
   </section>
 </template>
 
@@ -79,12 +83,22 @@ const selectedYear = ref('全部')
 const types = computed<string[]>(() => ['全部', ...new Set<string>(posts.map((p) => String(p.type)))])
 const tags = computed<string[]>(() => ['全部', ...new Set<string>(posts.flatMap((p) => (p.tags || []).map(String)))])
 const years = computed<string[]>(() => ['全部', ...new Set<string>(posts.map((p) => String(new Date(p.create).getFullYear())))])
+const hasActiveFilters = computed(() =>
+  selectedType.value !== '全部' || selectedTag.value !== '全部' || selectedYear.value !== '全部',
+)
+
+function resetFilters() {
+  selectedType.value = '全部'
+  selectedTag.value = '全部'
+  selectedYear.value = '全部'
+}
+
 const filteredPosts = computed(() => posts.filter((p) =>
   (selectedType.value === '全部' || p.type === selectedType.value)
   && (selectedTag.value === '全部' || p.tags?.includes(selectedTag.value))
   && (selectedYear.value === '全部' || String(new Date(p.create).getFullYear()) === selectedYear.value),
 ))
-const visiblePosts = computed(() => props.limit > 0 && selectedType.value === '全部' && selectedTag.value === '全部' && selectedYear.value === '全部'
+const visiblePosts = computed(() => props.limit > 0 && !hasActiveFilters.value
   ? filteredPosts.value.slice(0, props.limit) : filteredPosts.value)
 
 function syncFilters() {
@@ -139,6 +153,25 @@ function fmtDate(ts: number) {
 .post-filters { display: flex; gap: 12px; margin: -10px 0 22px; flex-wrap: wrap; }
 .post-filters label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--vp-c-text-2); }
 .post-filters select { border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); color: var(--vp-c-text-1); padding: 6px 10px; }
+.filter-reset,
+.empty-reset {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--sakura-light);
+  color: var(--accent-color);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.filter-reset:hover,
+.empty-reset:hover {
+  border-color: var(--accent-color);
+}
+.empty-reset {
+  margin-top: 12px;
+}
 
 /* 2 列卡片网格，窄屏自动单列 */
 .post-grid {
