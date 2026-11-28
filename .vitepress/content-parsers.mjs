@@ -41,7 +41,7 @@ export function parseAnime(cwd) {
       ? cells[3].split(/[,，、]/).map((t) => t.trim()).filter(Boolean)
       : []
     const isKyoAni = rawTags.some((t) => /京阿尼/.test(t)) || /京阿尼|京都动画/.test(remark)
-    const tags = rawTags.filter((t) => !/^🍡?\s*京阿尼$/.test(t))
+    const tags = rawTags.filter((t) => !/^(?:🍡\s*)?京阿尼$/u.test(t))
 
     items.push({
       name,
